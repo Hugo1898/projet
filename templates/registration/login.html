@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}
+    Connexion
+{% endblock %}
+
+{% block content %}
+
+<h1>Se connecter</h1>
+
+    <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="connexion">
+        <input type="hidden" name="next" value="{{ next }}">
+    </form>
+
+{% endblock %}
