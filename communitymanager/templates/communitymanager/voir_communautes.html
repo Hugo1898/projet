@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}
+    Communautes
+{% endblock %}
+
+{% block content %}
+
+<h1>Communautes</h1>
+    {% for com in communities %}
+        <a href="/communitymanager/communaute/{{ com.id }}/"> <h5> {{ com.nom }} </h5> </a>
+        {% if com in abonnement %}
+            <h6> abonné </h6>
+            <a href="/communitymanager/communautes/desabo/{{ com.id }}/"> se désabonner</a>
+        {% else %}
+            <h6> non abonné </h6>
+            <a href="/communitymanager/communautes/abo/{{ com.id }}/"> s'abonner</a>
+
+        {% endif %}
+    {% endfor %}
+
+{% endblock %}

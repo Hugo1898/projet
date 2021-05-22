@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}
+    Posts de {{ post.titre }}
+{% endblock %}
+
+{% block content %}
+
+<h1>{{ post.titre }}</h1>
+<p> {{ post.description }}</p>
+<p> {{ post.auteur }}</p>
+<p> {{ post.date_creation }}</p>
+<h3> Commentaires </h3>
+{% for coment in coments %}
+    <h5> {{ coment.date_creation }} </h5>
+    <p> {{ coment.contenu }}</p>
+    <p> {{ coment.auteur }}</p>
+{% endfor %}
+<h4> Ajouter un commentaire </h4>
+    <form method="POST" action="">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Commenter"/>
+    </form>
+{% endblock %}
