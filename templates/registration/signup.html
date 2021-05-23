@@ -13,21 +13,28 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </head>
 
-<title> Connexion </title>
+<title> Sign Up </title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
 
-<h1>Se connecter</h1>
+<h1>Créer votre compte</h1>
 
-<form method="post" action="{% url 'login' %}">
+<form method="post" action="">
     {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="connexion">
-    <input type="hidden" name="next" value="{{ next }}">
+    {% for field in form %}
+        <p>
+            {{ field.label_tag }}<br>
+            {{ field }}
+            {% if field.help_text %}
+            <small style="color: grey">{{ field.help_text }}</small>
+            {% endif %}
+            {% for error in field.errors %}
+                <p style="color: red">{{ error }}</p>
+            {% endfor %}
+        </p>
+    {% endfor %}
+    <input type="submit" value="Connexion">
 </form>
-
-<p> Ou créer un compte : <a href="/signup/"> ici </a> </p>
-
 </body>
 </html>

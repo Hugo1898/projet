@@ -18,6 +18,7 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib.auth.views import LoginView, logout_then_login
+from communitymanager import views
 
 
 urlpatterns = [
@@ -25,6 +26,7 @@ urlpatterns = [
     path('communitymanager/', include('communitymanager.urls')),
     path('connexion/', LoginView.as_view(template_name='registration/login.html'), name="login"),
     path('deconnexion/', logout_then_login, name="logout"),
+    path('signup/', views.signup, name='signup'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

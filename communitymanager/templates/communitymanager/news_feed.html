@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 {% block title %}
-    Posts de {{ com.nom }}
+    Fil d'actualité
 {% endblock %}
 
 {% block content %}
 
-<h1>{{ com.nom }}</h1>
+<h1>Fil d'actualité</h1>
     {% for post in posts %}
         <a href="/communitymanager/post/{{ post.id }}/"> <h5> {{ post.titre }} </h5> </a>
         {% if user == post.auteur %}

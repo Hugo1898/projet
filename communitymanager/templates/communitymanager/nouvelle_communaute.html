@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}
+    Nouveau Club
+{% endblock %}
+
+{% block content %}
+
+<h1> Création d'un nouveau club </h1>
+<form method="POST" action="">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Créer"/>
+        </form>
+
+{% endblock %}
