@@ -132,5 +132,5 @@ MEDIA_URL = '/media/'
 
 LOGIN_URL = '/connexion/'
 
-LOGIN_REDIRECT_URL = '/communitymanager/news_feed/'
+LOGIN_REDIRECT_URL = '/communitymanager/communautes/'
 
