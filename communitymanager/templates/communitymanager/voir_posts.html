@@ -5,15 +5,33 @@
 
 {% block content %}
 
-<h1>{{ com.nom }}</h1>
-    {% for post in posts %}
-        <a href="/communitymanager/post/{{ post.id }}/"> <h5> {{ post.titre }} </h5> </a>
-        {% if user == post.auteur %}
-        <a href="/communitymanager/modif_post/{{ post.id }}/"> <h5> modifier le post </h5> </a>
-        {% endif %}
-        <p> {{ post.description }}</p>
-        <p> {{ post.auteur }}</p>
-        <p> {{ post.date_creation }}</p>
-    {% endfor %}
+<div class="container">
+    <h2 style="font-weight: bold">{{ com.nom }}</h2>
+    <br>
+    <table class="table table-striped">
+        <tbody>
+        {% for post in posts %}
+            <tr>
+            <td>
+            <a href="/communitymanager/post/{{ post.id }}/"> <h4 style="font-weight: bold"> {{ post.titre }} </h4> </a>
+            <p> {{ post.description }}</p>
+            </td>
+            <td>
+            <p> <kbd style="font-weight: bold"> {{ com.nom }} </kbd> </p>
+            {% if user == post.auteur %}
+                <p> Par {{ post.auteur }}
+                <a href="/communitymanager/modif_post/{{ post.id }}/">
+                <i class="fa fa-pencil-square-o" ></i> </a>
+                </p>
+            {% else %}
+                <p> Par {{ post.auteur }} </p>
+            {% endif %}
+            <p> <i class='fas'>&#xf073;</i>  Le {{ post.date_creation }}</p>
+            </td>
+        {% endfor %}
+        </tbody>
+  </table>
+</div>
+
 
 {% endblock %}

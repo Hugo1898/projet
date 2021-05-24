@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
           integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 
@@ -17,17 +19,35 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-<header>Clubs</header>
-     <nav>
-         <ul>
-         <li><a href="/communitymanager/news_feed/">Fil d'actualité</a></li>
-         <li><a href="/communitymanager/communautes/">Liste des clubs</a></li>
-         <li><a href="/communitymanager/nouveau_post/">Créer un post</a></li>
-         <li><a href="/communitymanager/nouvelle_communaute/">Créer un club</a></li>
-         </ul>
-         <a href="/deconnexion/">Se déconnecter</a>
-     </nav>
+<div class="container p-3 my-3 bg-dark text-white">
+<br>
+<h1 style="font-weight: bold">CLUB-ED</h1>
+<br>
+</div>
+<div class="container p-3 my-3">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs bg-light" role="tablist">
+        <li class="nav-item">
+        <a class="nav-link" role="tab" id="fil" href="/communitymanager/news_feed/">Fil d'actualité</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" role="tab" id="clubs" href="/communitymanager/communautes/">Liste des clubs</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" role="tab" id="post" href="/communitymanager/nouveau_post/">Créer un post</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" role="tab" id="com" href="/communitymanager/nouvelle_communaute/">Créer un club</a>
+        </li>
+         <li class="nav-item">
+        <a class="nav-link" role="tab" id="logout" href="/deconnexion/">
+            <span class="glyphicon glyphicon-log-out"></span> </a>
+        </li>
+    </ul>
 
-{% block content %} {% endblock %}
+    <br>
+    {% block content %}  {% endblock %}
+
+</div>
 </body>
 </html>
