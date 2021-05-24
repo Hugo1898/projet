@@ -4,21 +4,52 @@
 {% endblock %}
 
 {% block content %}
+<br>
+<div class="card" style="background-color: rgba(0, 0, 0, 0.1);">
+<table class="table mb-0">
+    <tbody>
+        <tr>
+        <td>
+        <h4> {{ post.titre }} </h4>
+        <p> {{ post.description }}</p>
+        </td>
+        <td>
+        <p> <kbd> {{ post.communaute.nom }} </kbd> </p>
+        {% if user == post.auteur %}
+            <p> Par {{ post.auteur }}
+            <a href="/communitymanager/modif_post/{{ post.id }}/">
+            <i class="fa fa-pencil-square-o" ></i> </a>
+            </p>
+        {% else %}
+            <p> Par {{ post.auteur }} </p>
+        {% endif %}
+        <p> <i class='fas'>&#xf073;</i>  Le {{ post.date_creation }}</p>
+        </td>
+        </tr>
+    </tbody>
+</table>
+</div>
 
-<h1>{{ post.titre }}</h1>
-<p> {{ post.description }}</p>
-<p> {{ post.auteur }}</p>
-<p> {{ post.date_creation }}</p>
-<h3> Commentaires </h3>
-{% for coment in coments %}
-    <h5> {{ coment.date_creation }} </h5>
-    <p> {{ coment.contenu }}</p>
-    <p> {{ coment.auteur }}</p>
-{% endfor %}
-<h4> Ajouter un commentaire </h4>
-    <form method="POST" action="">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Commenter"/>
-    </form>
+<h5 style="font-weight: bold">Commentaires : </h5>
+<div class="card">
+<table class="table table-striped">
+    <tbody>
+    {% for coment in coments %}
+        <tr>
+        <td>
+        <p> {{ coment.contenu }}</p>
+        <p style="font-style: italic; color: grey"> {{ coment.auteur }}, le {{ coment.date_creation }} </p>
+        </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+
+<form method="POST" action="">
+    {% csrf_token %}
+    <h5> Ajouter un commentaire  : {{ form.contenu }} </h5>
+    <input type="submit" value="Commenter"/>
+</form>
+<br>
 {% endblock %}

@@ -5,32 +5,32 @@
 
 {% block content %}
 
-<div class="container">
-    <h2 style="font-weight: bold">Clubs</h2>
-    <br>
-    <table class="table table-striped">
-        <tbody>
-        {% for com in communities %}
-            <tr>
-            <td>
-            <a href="/communitymanager/communaute/{{ com.id }}/">
-                <h4 style="font-weight: bold" > {{ com.nom }} </h4> </a>
-            <p> {{ com.description }}</p>
-            </td>
-            <td>
-            {% if com in abonnement %}
-                <a href="/communitymanager/communautes/desabo/{{ com.id }}/">
-                <i class='fas fa-star' style='font-size:24px; color:#ffc800'></i>
-                </a>
-            {% else %}
-                <a href="/communitymanager/communautes/abo/{{ com.id }}/">
-                <i class='fas fa-star' style='font-size:24px'></i>
-                </a>
-            </td>
-            {% endif %}
-        {% endfor %}
-        </tbody>
-  </table>
+<h2>Clubs</h2>
+<br>
+<div class="card">
+<table class="table table-striped">
+    <tbody>
+    {% for com in communities %}
+        <tr>
+        <td>
+        <a href="/communitymanager/communaute/{{ com.id }}/">
+            <h4> {{ com.nom }} </h4> </a>
+        <p> {{ com.description }}</p>
+        </td>
+        <td>
+        {% if com in abonnement %}
+            <a href="/communitymanager/communautes/desabo/{{ com.id }}/">
+            <i class='fas fa-star' style='font-size:24px; color:#ffc800'></i>
+            </a>
+        {% else %}
+            <a href="/communitymanager/communautes/abo/{{ com.id }}/">
+            <i class='fas fa-star' style='font-size:24px; color:grey'></i>
+            </a>
+        </td>
+        {% endif %}
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
 </div>
-
 {% endblock %}

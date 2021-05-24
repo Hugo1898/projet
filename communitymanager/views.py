@@ -29,7 +29,7 @@ def abonnement(request, action, com_id):
 @login_required
 def communaute(request, com_id):
     com = get_object_or_404(Communaute, pk=com_id)
-    posts = Post.objects.filter(communaute=com_id)
+    posts = Post.objects.filter(communaute=com_id).order_by('-date_creation')
     user = request.user
     return render(request, 'communitymanager/voir_posts.html', locals())
 

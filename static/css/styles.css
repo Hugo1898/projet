@@ -1,0 +1,29 @@
+h1 {
+    font-weight: bold
+}
+
+h2 {
+    font-weight: bold
+}
+
+h4 {
+    font-weight: bold
+}
+
+h5 {
+    font-weight: bold
+}
+
+kbd {
+    font-weight: bold
+}
+
+
+.navbar-nav > li > a {
+    padding-left:0px !important; padding-right:25px !important;
+}
+
+.table {
+    margin-bottom: 0px;
+}
+
