@@ -5,25 +5,46 @@
 
 {% block content %}
 
+<div class="row justify-content-center ">
 <h2> Création d'un nouveau club </h2>
+</div>
+<hr style="margin-top: 10px"/>
 <br>
+
 <form method="POST" action="">
     {% csrf_token %}
-    {% for field in form %}
-        {% if field != form.nom %}
-        <p>
-            {{ field.label_tag }}<br>
-            {{ field }}
-        </p>
-        {% else %}
-        <p>
-            {{ field.label_tag }}
-            {{ field }}
-        </p>
-        {% endif %}
-        <br>
-    {% endfor %}
+    <div class="card" style="background-color: rgba(0, 0, 0, 0.1);">
+    <table class="table mb-0">
+        <tbody>
+            <tr>
+            <td>
+            <p>
+            {{ form.nom.label_tag }}
+            {{ form.nom }}
+            </p>
+            <br>
+            <p>
+            {{ form.abonnes.label_tag }}<br>
+            {{ form.abonnes }}
+            </p>
+            </td>
+            <td>
+            <div class="centered">
+            <p>
+            {{ form.description.label_tag }}<br>
+            {{ form.description }}
+            </p>
+            </div>
+            </td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+    <br>
+    <div class="centered">
     <input class="btn btn-primary" type="submit" value="Envoyer"/>
+    </div>
 </form>
 
 {% endblock %}
+

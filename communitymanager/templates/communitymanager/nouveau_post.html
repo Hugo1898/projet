@@ -4,26 +4,63 @@
 {% endblock %}
 
 {% block content %}
-
-<h2> Création d'un nouveau post </h2>
+<div class="row justify-content-center ">
+{% if mod %}
+    <h2> Modification d'un post </h2>
+{% else %}
+    <h2> Création d'un nouveau post </h2>
+{% endif %}
+</div>
+<hr style="margin-top: 10px"/>
 <br>
+
+
 <form method="POST" action="">
     {% csrf_token %}
-    {% for field in form %}
-        {% if field == form.description %}
-        <p>
-            {{ field.label_tag }}<br>
-            {{ field }}
-        </p>
-        {% else %}
-        <p>
-            {{ field.label_tag }}
-            {{ field }}
-        </p>
-        {% endif %}
-        <br>
-    {% endfor %}
+    <div class="card" style="background-color: rgba(0, 0, 0, 0.1);">
+    <table class="table mb-0">
+        <tbody>
+            <tr>
+            <td>
+            <p>
+            {{ form.titre.label_tag }}
+            {{ form.titre }}
+            </p>
+            <br>
+            <p>
+            {{ form.description.label_tag }}<br>
+            {{ form.description }}
+            </p>
+            </td>
+            <td>
+            <p>
+            {{ form.communaute.label_tag }}
+            {{ form.communaute }}
+            </p>
+            <br>
+            <p>
+            {{ form.priorite.label_tag }}
+            {{ form.priorite }}
+            </p>
+            <br>
+            <p>
+            {{ form.evenementiel.label_tag }}
+            {{ form.evenementiel }}
+            </p>
+            <br>
+            </p>
+            {{ form.date_evenement.label_tag }}
+            {{ form.date_evenement }}
+            </p>
+            </td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+    <br>
+    <div class="centered">
     <input class="btn btn-primary" type="submit" value="Envoyer"/>
+    </div>
 </form>
 
 {% endblock %}

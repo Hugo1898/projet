@@ -61,6 +61,7 @@ def commentaire(request, post_id, contenu):
 @login_required
 def nouveau_post(request):
     form = PostForm(request.POST or None)
+    mod = False
     if form.is_valid():
         post = form.save(commit=False)
         post.auteur = request.user
@@ -74,6 +75,7 @@ def nouveau_post(request):
 def modif_post(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
     form = PostForm(request.POST or None, instance=post)
+    mod = True
     if form.is_valid():
         postm = form.save(commit=False)
         postm.auteur = request.user
