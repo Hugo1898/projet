@@ -49,7 +49,7 @@
 <form method="POST" action="" style="margin-left: 0px !important;">
     {% csrf_token %}
     <h5> Ajouter un commentaire  : {{ form.contenu }} </h5>
-    <input type="submit" value="Commenter"/>
+    <input class="btn btn-primary" type="submit" value="Commenter"/>
 </form>
 
 {% endblock %}
