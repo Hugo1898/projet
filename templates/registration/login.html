@@ -1,33 +1,65 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
-
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
           integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
 </head>
 
-<title> Connexion </title>
+<title>{% block title %}Connexion{% endblock %}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
+
 <body>
 
-<h1>Se connecter</h1>
+<header class="sticky-top">
+<div class="container-fluid bg-dark text-white" style="padding-bottom: 62px; padding-top: 5px">
+    <h1>CLUB-ED</h1>
 
+</div>
+</header>
+
+<div class="row justify-content-center ">
+<h1>Se connecter</h1>
+</div>
+<hr/>
+
+<div class="row justify-content-center">
 <form method="post" action="{% url 'login' %}">
     {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="connexion">
+    {% for field in form %}
+        <p>
+            {{ field.label_tag }}<br>
+            {{ field }}
+        </p>
+        <br>
+    {% endfor %}
+    <div class="centered">
+    <input class="btn btn-primary" type="submit" value="connexion">
+    </div>
     <input type="hidden" name="next" value="{{ next }}">
 </form>
 
-<p> Ou créer un compte : <a href="/signup/"> ici </a> </p>
+</form>
+</div>
+
+<br>
+<div class="row justify-content-center ">
+<p>  <a href="/signup/"> Créer un compte </a> </p>
+</div>
+
+
 
 </body>
 </html>

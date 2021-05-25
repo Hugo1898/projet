@@ -27,3 +27,13 @@ kbd {
     margin-bottom: 0px;
 }
 
+.container-fluid  form {
+    margin-left: 25px;
+}
+
+.centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+

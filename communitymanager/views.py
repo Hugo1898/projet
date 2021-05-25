@@ -60,10 +60,11 @@ def commentaire(request, post_id, contenu):
 
 @login_required
 def nouveau_post(request):
-    form = PostForm(request.POST or None, auteur_id=request.user.id)
-    form.fields['auteur'].widget = forms.HiddenInput()
+    form = PostForm(request.POST or None)
     if form.is_valid():
-        post = form.save()
+        post = form.save(commit=False)
+        post.auteur = request.user
+        post.save()
         return redirect('post', post_id=post.id)
 
     return render(request, 'communitymanager/nouveau_post.html', locals())
@@ -72,10 +73,11 @@ def nouveau_post(request):
 @login_required
 def modif_post(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
-    form = PostForm(request.POST or None, auteur_id=request.user.id, instance=post)
-    form.fields['auteur'].widget = forms.HiddenInput()
+    form = PostForm(request.POST or None, instance=post)
     if form.is_valid():
-        form.save()
+        postm = form.save(commit=False)
+        postm.auteur = request.user
+        postm.save()
         return redirect('post', post_id=post_id)
 
     return render(request, 'communitymanager/nouveau_post.html', locals())

@@ -8,13 +8,15 @@ class CommentaireForm(forms.Form):
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = '__all__'
+        exclude = ["auteur"]
 
+    """
     def __init__(self, *args, **kwargs):
         auteur_id = kwargs.pop('auteur_id')
         super(PostForm, self).__init__(*args, **kwargs)
         auteur = User.objects.get(id=auteur_id)
         self.fields['auteur'].initial = auteur
+    """
 
 class CommunauteForm(forms.ModelForm):
     class Meta:

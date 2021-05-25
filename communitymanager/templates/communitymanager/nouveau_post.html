@@ -6,10 +6,24 @@
 {% block content %}
 
 <h2> Création d'un nouveau post </h2>
-<form method="POST" action="">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit" value="Envoyer"/>
-        </form>
 <br>
+<form method="POST" action="">
+    {% csrf_token %}
+    {% for field in form %}
+        {% if field == form.description %}
+        <p>
+            {{ field.label_tag }}<br>
+            {{ field }}
+        </p>
+        {% else %}
+        <p>
+            {{ field.label_tag }}
+            {{ field }}
+        </p>
+        {% endif %}
+        <br>
+    {% endfor %}
+    <input class="btn btn-primary" type="submit" value="Envoyer"/>
+</form>
+
 {% endblock %}
