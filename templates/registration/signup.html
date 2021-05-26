@@ -36,25 +36,24 @@
 <hr style="margin-top: 10px"/>
 
 <div class="row justify-content-center">
+<div class="centered">
 <form method="post" action="">
     {% csrf_token %}
     {% for field in form %}
         <p>
-            <div class="centered">
-            <p>{{ field.label_tag }} {{ field }}</p>
-            </div>
-            {% for error in field.errors %}
-                <div class="centered">
-                <p style="color: red">{{ error }}</p>
-                </div>
-
-            {% endfor %}
+        {{ field.label_tag }} {{ field }}
         </p>
+        {% for error in field.errors %}
+            <p style="color: red">{{ error }}</p>
+        {% endfor %}
+        <br>
     {% endfor %}
+
     <div class="centered">
     <input class="btn btn-primary" type="submit" value="connexion">
     </div>
 </form>
+</div>
 </div>
 
 <br>

@@ -28,7 +28,7 @@ class Priorite(models.Model):
 class Post(models.Model):
     titre = models.CharField(max_length=200)
     description = models.TextField()
-    date_creation = models.DateTimeField(auto_now_add=True)
+    date_creation = models.DateTimeField(auto_now=True)
     communaute = models.ForeignKey('Communaute', on_delete=models.CASCADE)
     priorite = models.ForeignKey('Priorite', on_delete=models.CASCADE)
     evenementiel = models.BooleanField()
@@ -43,7 +43,7 @@ class Post(models.Model):
 
 
 class Commentaire(models.Model):
-    date_creation = models.DateTimeField(auto_now_add=True)
+    date_creation = models.DateTimeField(auto_now=True)
     contenu = models.TextField()
     auteur = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey('Post', on_delete=models.CASCADE)

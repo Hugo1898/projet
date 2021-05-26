@@ -23,7 +23,7 @@
             <tr>
             <td>
             <p>
-            {{ form.titre.label_tag }}
+            <text style="font-weight: bold"> Titre du post : </text>
             {{ form.titre }}
             </p>
             <br>
@@ -34,22 +34,22 @@
             </td>
             <td>
             <p>
-            {{ form.communaute.label_tag }}
+            <text style="font-weight: bold"> Club : </text>
             {{ form.communaute }}
             </p>
             <br>
             <p>
-            {{ form.priorite.label_tag }}
+            <text style="font-weight: bold"> Niveau de priorité du post : </text>
             {{ form.priorite }}
             </p>
             <br>
             <p>
-            {{ form.evenementiel.label_tag }}
+            <text style="font-weight: bold"> Est-ce un évènement ? </text>
             {{ form.evenementiel }}
             </p>
             <br>
-            </p>
-            {{ form.date_evenement.label_tag }}
+            <p>
+            <text style="font-weight: bold">  Si c'est le cas, fournir la date de l'évènement :</text>
             {{ form.date_evenement }}
             </p>
             </td>

@@ -23,7 +23,10 @@
         {% else %}
             <p> Par {{ post.auteur }} </p>
         {% endif %}
-        <p> <i class='fas'>&#xf073;</i>  Le {{ post.date_creation }}</p>
+        {% if post.evenementiel %}
+        <p> <i class='fas'>&#xf073;</i> Prévu le {{ post.date_evenement }}</p>
+        {% endif %}
+        <small style="color: grey">Dernière modification : {{ post.date_creation }}</small>
         </td>
         </tr>
     </tbody>
