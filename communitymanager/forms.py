@@ -10,13 +10,15 @@ class PostForm(forms.ModelForm):
         model = Post
         exclude = ["auteur"]
 
-    """
-    def __init__(self, *args, **kwargs):
-        auteur_id = kwargs.pop('auteur_id')
-        super(PostForm, self).__init__(*args, **kwargs)
-        auteur = User.objects.get(id=auteur_id)
-        self.fields['auteur'].initial = auteur
-    """
+    def clean(self):
+
+        cleaned_data = super(PostForm, self).clean()
+        date_evenement = cleaned_data['date_evenement']
+        evenementiel = cleaned_data['evenementiel']
+
+        if date_evenement < timezone.now() and evenementiel :
+            raise forms.ValidationError('Votre événement doit se passer dans le futur !')
+        return cleaned_data
 
 class CommunauteForm(forms.ModelForm):
     class Meta:

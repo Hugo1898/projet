@@ -52,6 +52,9 @@
             <text style="font-weight: bold">  Si c'est le cas, fournir la date de l'évènement :</text>
             {{ form.date_evenement }}
             </p>
+            {% if form.errors %}
+                <p style="color: red"> Votre événement doit se passer dans le futur ! </p>
+            {% endif %}
             </td>
             </tr>
         </tbody>

@@ -130,3 +130,15 @@ def signup(request):
 @register.filter
 def get_item(dictionary, key):
     return dictionary.get(key)
+
+@register.filter
+def get_color(dictionary, key):
+    key = str(key)
+    switcher = {
+        "blanche" : "beige",
+        "jaune" : "gold",
+        "orange" : "darkorange",
+        "rouge" : "#a50505",
+        "écarlate" : "#ff0101"
+    }
+    return switcher.get(key)

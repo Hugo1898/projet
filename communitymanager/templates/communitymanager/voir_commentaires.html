@@ -14,7 +14,13 @@
         <p> {{ post.description }}</p>
         </td>
         <td>
-        <p> <kbd> {{ post.communaute.nom }} </kbd> </p>
+        <p>
+            <i class="fas fa-circle" style="color: {{ post|get_color:post.priorite }}"></i>
+            &nbsp &nbsp
+            <kbd>
+                <a style="color: white" href="/communitymanager/communaute/{{ post.communaute.id }}/"> {{ post.communaute.nom }} </a>
+            </kbd>
+        </p>
         {% if user == post.auteur %}
             <p> Par {{ post.auteur }}
             &nbsp &nbsp
