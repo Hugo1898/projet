@@ -36,6 +36,12 @@
 <hr style="margin-top: 10px">
 
 <div class="row justify-content-center">
+{% if form.errors %}
+        <p style="color: red">Nom d'utilisateur ou mot de passe incorrect(s)</p>
+{% endif %}
+</div>
+
+<div class="row justify-content-center">
 <form method="post" action="{% url 'login' %}">
     {% csrf_token %}
     {% for field in form %}
