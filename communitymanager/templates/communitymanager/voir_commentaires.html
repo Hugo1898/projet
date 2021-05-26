@@ -17,11 +17,23 @@
         <p> <kbd> {{ post.communaute.nom }} </kbd> </p>
         {% if user == post.auteur %}
             <p> Par {{ post.auteur }}
+            &nbsp &nbsp
             <a href="/communitymanager/modif_post/{{ post.id }}/">
             <i class="fa fa-pencil-square-o" ></i> </a>
+            &nbsp &nbsp
+            <kbd style="background-color: #b4b0b0">
+            {{ count }}
+            <i class="fas fa-comment"></i>
+            </kbd>
             </p>
         {% else %}
-            <p> Par {{ post.auteur }} </p>
+            <p> Par {{ post.auteur }}
+            &nbsp &nbsp
+            <kbd style="background-color: #b4b0b0">
+            {{ count }}
+            <i class="fas fa-comment"></i>
+            </kbd>
+            </p>
         {% endif %}
         {% if post.evenementiel %}
         <p> <i class='fas'>&#xf073;</i> Prévu le {{ post.date_evenement }}</p>
@@ -49,9 +61,10 @@
 </table>
 </div>
 
-<form method="POST" action="" style="margin-left: 0px !important;">
+<form method="POST" action="" style="margin-left: 0px !important; margin-top: 5px">
     {% csrf_token %}
-    <h5> Ajouter un commentaire  : {{ form.contenu }} </h5>
+    <text style="font-weight:bold"> Ajouter un commentaire : </text>
+    {{ form.contenu }}
     <input class="btn btn-primary" type="submit" value="Commenter"/>
 </form>
 

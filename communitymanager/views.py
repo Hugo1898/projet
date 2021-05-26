@@ -2,6 +2,8 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import *
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import *
+from django.template.defaultfilters import register
+
 from .forms import *
 
 
@@ -30,6 +32,9 @@ def abonnement(request, action, com_id):
 def communaute(request, com_id):
     com = get_object_or_404(Communaute, pk=com_id)
     posts = Post.objects.filter(communaute=com_id).order_by('-date_creation')
+    counts = {}
+    for post in posts:
+        counts[post.titre] = Commentaire.objects.filter(post=post).count()
     user = request.user
     return render(request, 'communitymanager/voir_posts.html', locals())
 
@@ -44,6 +49,7 @@ def post(request, post_id):
 
     post = get_object_or_404(Post, pk=post_id)
     coments = Commentaire.objects.filter(post=post_id).order_by('date_creation')
+    count = coments.count()
     return render(request, 'communitymanager/voir_commentaires.html', locals())
 
 
@@ -88,8 +94,13 @@ def modif_post(request, post_id):
 @login_required
 def news_feed(request):
     communautes = request.user.communautes.all()
+    coments = Commentaire.objects.all()
     posts = Post.objects.all().order_by('-date_creation').filter(communaute__in=communautes)
+    counts = {}
+    for post in posts:
+        counts[post.titre] = Commentaire.objects.filter(post=post).count()
     return render(request, 'communitymanager/news_feed.html', locals())
+
 
 @login_required
 def nouvelle_communaute(request):
@@ -114,3 +125,8 @@ def signup(request):
     else:
         form = UserCreationForm()
     return render(request, 'registration/signup.html', {'form': form})
+
+
+@register.filter
+def get_item(dictionary, key):
+    return dictionary.get(key)

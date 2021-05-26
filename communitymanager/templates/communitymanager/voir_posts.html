@@ -7,6 +7,7 @@
 
 <h2>{{ com.nom }}</h2>
 <br>
+<br>
 <div class="card">
 <table class="table table-striped">
     <tbody>
@@ -17,14 +18,26 @@
         <p> {{ post.description }}</p>
         </td>
         <td>
-        <p> <kbd> {{ com.nom }} </kbd> </p>
+        <p> <kbd> {{ post.communaute.nom }} </kbd> </p>
         {% if user == post.auteur %}
             <p> Par {{ post.auteur }}
+            &nbsp &nbsp
             <a href="/communitymanager/modif_post/{{ post.id }}/">
             <i class="fa fa-pencil-square-o" ></i> </a>
+            &nbsp &nbsp
+            <kbd style="background-color: #b4b0b0">
+            {{ counts|get_item:post.titre }}
+            <i class="fas fa-comment"></i>
+            </kbd>
             </p>
         {% else %}
-            <p> Par {{ post.auteur }} </p>
+            <p> Par {{ post.auteur }}
+            &nbsp &nbsp
+            <kbd style="background-color: #b4b0b0">
+            {{ counts|get_item:post.titre }}
+            <i class="fas fa-comment"></i>
+            </kbd>
+            </p>
         {% endif %}
         {% if post.evenementiel %}
         <p> <i class='fas'>&#xf073;</i> Prévu le {{ post.date_evenement }}</p>
