@@ -53,6 +53,8 @@ class Commentaire(models.Model):
     contenu = models.TextField()
     auteur = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey('Post', on_delete=models.CASCADE)
+    visible = models.BooleanField(default=True)
+
 
     class Meta:
         verbose_name = "Commentaire"
