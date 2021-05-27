@@ -11,6 +11,11 @@ from .forms import *
 def communautes(request):
     communities = Communaute.objects.all()
     abonnement = Communaute.objects.filter(abonnes=request.user)
+
+    for com in communities:
+        com.user_is_manager = False
+        if request.user in com.managers.all():
+            com.user_is_manager = True
     return render(request, 'communitymanager/voir_communautes.html', locals())
 
 
@@ -105,6 +110,18 @@ def news_feed(request):
 @login_required
 def nouvelle_communaute(request):
     form = CommunauteForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return redirect('communautes')
+
+    return render(request, 'communitymanager/nouvelle_communaute.html', locals())
+
+@login_required
+def modif_communaute(request, communaute_id):
+    commmunaute = get_object_or_404(Communaute, pk=communaute_id)
+    form = CommunauteForm(request.POST or None, instance=commmunaute)
+
+    mod = True
     if form.is_valid():
         form.save()
         return redirect('communautes')

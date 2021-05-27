@@ -7,6 +7,9 @@ class Communaute(models.Model):
     nom = models.CharField(max_length=200)
     abonnes = models.ManyToManyField(User, related_name="communautes")
     description = models.TextField()
+    managers = models.ManyToManyField(User, related_name="communautes_managed")
+    open = models.BooleanField(default=True)
+
 
     class Meta:
         verbose_name = "Communaute"
