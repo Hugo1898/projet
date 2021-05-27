@@ -16,6 +16,7 @@ def communautes(request):
         com.user_is_manager = False
         if request.user in com.managers.all():
             com.user_is_manager = True
+
     return render(request, 'communitymanager/voir_communautes.html', locals())
 
 
@@ -79,6 +80,7 @@ def nouveau_post(request):
         post.save()
         return redirect('post', post_id=post.id)
 
+    communautes = Communaute.objects.all()
     return render(request, 'communitymanager/nouveau_post.html', locals())
 
 
@@ -92,7 +94,6 @@ def modif_post(request, post_id):
         postm.auteur = request.user
         postm.save()
         return redirect('post', post_id=post_id)
-
     return render(request, 'communitymanager/nouveau_post.html', locals())
 
 
@@ -127,6 +128,13 @@ def modif_communaute(request, communaute_id):
         return redirect('communautes')
 
     return render(request, 'communitymanager/nouvelle_communaute.html', locals())
+
+@login_required
+def delete_communaute(request, communaute_id):
+    communaute = get_object_or_404(Communaute, pk=communaute_id)
+    if request.user in communaute.managers.all():
+        communaute.delete()
+    return redirect('communautes')
 
 
 def signup(request):

@@ -12,5 +12,6 @@ urlpatterns = [
     path('news_feed/', views.news_feed, name='news_feed'),
     path('nouvelle_communaute/', views.nouvelle_communaute, name='nouvelle_communaute'),
     path('modif_communaute/<int:communaute_id>/', views.modif_communaute, name='modif_communaute'),
+    path('delete_communaute/<int:communaute_id>/', views.delete_communaute, name='delete_communaute'),
 
 ]

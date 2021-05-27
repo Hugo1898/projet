@@ -34,7 +34,11 @@
                             {% if com.user_is_manager %}
                                 &nbsp &nbsp
                                 <a href="/communitymanager/modif_communaute/{{ com.id }}/">
-                                    <i class="fa fa-pencil-square-o"></i> </a>
+                                    <i class="fa fa-pencil-square-o"></i></a>
+                                &nbsp &nbsp
+                                &nbsp &nbsp
+                                <a href="/communitymanager/delete_communaute/{{ com.id }}/">
+                                    <i class="fa fa-trash"></i></a>
                                 &nbsp &nbsp
                             {% endif %}
 

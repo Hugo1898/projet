@@ -33,16 +33,20 @@
                         </p>
                     </td>
                     <td>
+                        {% if not mod %}
                         <p>
                             <text style="font-weight: bold"> Club :</text>
                             <select class=form name="communaute">
-                             <option value=1>Un</option>
-                             <option value=2>Deux</option>
-                             <option value=4>Trois</option>
-                             <option value=5>Escalade</option>
-
+                                <option value="" selected disabled hidden>----</option>
+                                 {% for com in communautes %}
+                                     {{ com.id }}
+                                     {% if com.open %}
+                                        <option value={{ com.id }}>{{ com.nom }}</option>
+                                     {% endif %}
+                                 {% endfor %}
                             </select>
                         </p>
+                        {% endif %}
                         <br>
                         <p>
                             <text style="font-weight: bold"> Niveau de priorité du post :</text>
