@@ -37,10 +37,24 @@ def abonnement(request, action, com_id):
 @login_required
 def communaute(request, com_id):
     com = get_object_or_404(Communaute, pk=com_id)
+
     if request.user in com.managers.all():
-        posts = Post.objects.filter(communaute=com_id).order_by('-date_creation')
+        posts = Post.objects.filter(communaute=com_id).order_by('-sticky', '-date_creation')
     else:
-        posts = Post.objects.filter(communaute=com_id, visible=True).order_by('-date_creation')
+        posts = Post.objects.filter(communaute=com_id, visible=True).order_by('-sticky', '-date_creation')
+
+        """
+    if request.user in com.managers.all():
+        posts_not_sticky = Post.objects.filter(communaute=com_id, sticky=False).order_by('-date_creation')
+        posts_sticky = Post.objects.filter(communaute=com_id, sticky=True).order_by('-date_creation')
+
+    else:
+        posts_not_sticky = Post.objects.filter(communaute=com_id, visible=True, sticky=False).order_by('-date_creation')
+        posts_sticky = Post.objects.filter(communaute=com_id, visible=True, sticky=True).order_by('-date_creation')
+    posts = posts_not_sticky | posts_sticky
+    posts.order_by(caca)
+    """
+    print(posts)
 
     counts = {}
     for post in posts:

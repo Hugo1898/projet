@@ -14,6 +14,8 @@
     </h4>
     </button>
     {% endif %}
+
+
     <br>
     <br>
     <div class="card">
@@ -23,6 +25,11 @@
                 <tr>
                     <td>
                         <h4>
+                            {% if  post.sticky %}
+                                <i class="fa fa-grin-hearts"></i>
+                                <i class="fa fa-tape"></i>
+                                <i class="fa fa-grin-hearts"></i>
+                            {% endif %}
                             {% if  not post.visible %}
                                 Hidden <i class="fa fa-eye-slash"></i>
                             {% endif %}
