@@ -1,0 +1,489 @@
+- model: communitymanager.priorite
+  pk: 1
+  fields:
+    label: blanche
+- model: communitymanager.priorite
+  pk: 2
+  fields:
+    label: rouge
+- model: communitymanager.priorite
+  pk: 4
+  fields:
+    label: jaune
+- model: communitymanager.priorite
+  pk: 5
+  fields:
+    label: orange
+- model: communitymanager.priorite
+  pk: 6
+  fields:
+    label: "\xE9carlate"
+- model: auth.permission
+  pk: 1
+  fields:
+    name: Can add log entry
+    content_type: 1
+    codename: add_logentry
+- model: auth.permission
+  pk: 2
+  fields:
+    name: Can change log entry
+    content_type: 1
+    codename: change_logentry
+- model: auth.permission
+  pk: 3
+  fields:
+    name: Can delete log entry
+    content_type: 1
+    codename: delete_logentry
+- model: auth.permission
+  pk: 4
+  fields:
+    name: Can view log entry
+    content_type: 1
+    codename: view_logentry
+- model: auth.permission
+  pk: 5
+  fields:
+    name: Can add permission
+    content_type: 2
+    codename: add_permission
+- model: auth.permission
+  pk: 6
+  fields:
+    name: Can change permission
+    content_type: 2
+    codename: change_permission
+- model: auth.permission
+  pk: 7
+  fields:
+    name: Can delete permission
+    content_type: 2
+    codename: delete_permission
+- model: auth.permission
+  pk: 8
+  fields:
+    name: Can view permission
+    content_type: 2
+    codename: view_permission
+- model: auth.permission
+  pk: 9
+  fields:
+    name: Can add group
+    content_type: 3
+    codename: add_group
+- model: auth.permission
+  pk: 10
+  fields:
+    name: Can change group
+    content_type: 3
+    codename: change_group
+- model: auth.permission
+  pk: 11
+  fields:
+    name: Can delete group
+    content_type: 3
+    codename: delete_group
+- model: auth.permission
+  pk: 12
+  fields:
+    name: Can view group
+    content_type: 3
+    codename: view_group
+- model: auth.permission
+  pk: 13
+  fields:
+    name: Can add user
+    content_type: 4
+    codename: add_user
+- model: auth.permission
+  pk: 14
+  fields:
+    name: Can change user
+    content_type: 4
+    codename: change_user
+- model: auth.permission
+  pk: 15
+  fields:
+    name: Can delete user
+    content_type: 4
+    codename: delete_user
+- model: auth.permission
+  pk: 16
+  fields:
+    name: Can view user
+    content_type: 4
+    codename: view_user
+- model: auth.permission
+  pk: 17
+  fields:
+    name: Can add content type
+    content_type: 5
+    codename: add_contenttype
+- model: auth.permission
+  pk: 18
+  fields:
+    name: Can change content type
+    content_type: 5
+    codename: change_contenttype
+- model: auth.permission
+  pk: 19
+  fields:
+    name: Can delete content type
+    content_type: 5
+    codename: delete_contenttype
+- model: auth.permission
+  pk: 20
+  fields:
+    name: Can view content type
+    content_type: 5
+    codename: view_contenttype
+- model: auth.permission
+  pk: 21
+  fields:
+    name: Can add session
+    content_type: 6
+    codename: add_session
+- model: auth.permission
+  pk: 22
+  fields:
+    name: Can change session
+    content_type: 6
+    codename: change_session
+- model: auth.permission
+  pk: 23
+  fields:
+    name: Can delete session
+    content_type: 6
+    codename: delete_session
+- model: auth.permission
+  pk: 24
+  fields:
+    name: Can view session
+    content_type: 6
+    codename: view_session
+- model: auth.permission
+  pk: 25
+  fields:
+    name: Can add Communaute
+    content_type: 7
+    codename: add_communaute
+- model: auth.permission
+  pk: 26
+  fields:
+    name: Can change Communaute
+    content_type: 7
+    codename: change_communaute
+- model: auth.permission
+  pk: 27
+  fields:
+    name: Can delete Communaute
+    content_type: 7
+    codename: delete_communaute
+- model: auth.permission
+  pk: 28
+  fields:
+    name: Can view Communaute
+    content_type: 7
+    codename: view_communaute
+- model: auth.permission
+  pk: 29
+  fields:
+    name: Can add Post
+    content_type: 8
+    codename: add_post
+- model: auth.permission
+  pk: 30
+  fields:
+    name: Can change Post
+    content_type: 8
+    codename: change_post
+- model: auth.permission
+  pk: 31
+  fields:
+    name: Can delete Post
+    content_type: 8
+    codename: delete_post
+- model: auth.permission
+  pk: 32
+  fields:
+    name: Can view Post
+    content_type: 8
+    codename: view_post
+- model: auth.permission
+  pk: 33
+  fields:
+    name: Can add Priorite
+    content_type: 9
+    codename: add_priorite
+- model: auth.permission
+  pk: 34
+  fields:
+    name: Can change Priorite
+    content_type: 9
+    codename: change_priorite
+- model: auth.permission
+  pk: 35
+  fields:
+    name: Can delete Priorite
+    content_type: 9
+    codename: delete_priorite
+- model: auth.permission
+  pk: 36
+  fields:
+    name: Can view Priorite
+    content_type: 9
+    codename: view_priorite
+- model: auth.permission
+  pk: 37
+  fields:
+    name: Can add Commentaire
+    content_type: 10
+    codename: add_commentaire
+- model: auth.permission
+  pk: 38
+  fields:
+    name: Can change Commentaire
+    content_type: 10
+    codename: change_commentaire
+- model: auth.permission
+  pk: 39
+  fields:
+    name: Can delete Commentaire
+    content_type: 10
+    codename: delete_commentaire
+- model: auth.permission
+  pk: 40
+  fields:
+    name: Can view Commentaire
+    content_type: 10
+    codename: view_commentaire
+- model: auth.user
+  pk: 1
+  fields:
+    password: pbkdf2_sha256$120000$XEEXUqBNDAgr$4Irgsk2zdSnGfKjYJMmi+180LsWij2D1on86Q1Oc4vA=
+    last_login: 2021-05-27 06:29:46.360656+00:00
+    is_superuser: true
+    username: hugom
+    first_name: Hugo
+    last_name: MIRANDA QUEIROS
+    email: hugomirandaqueiros@gmail.com
+    is_staff: true
+    is_active: true
+    date_joined: 2021-05-18 08:58:54+00:00
+    groups: []
+    user_permissions: []
+- model: auth.user
+  pk: 2
+  fields:
+    password: pbkdf2_sha256$120000$kxTJez16RieS$CUXzBrGMbERa6eC8eqxUZmE/7zDkAJiTrUCWdR57Ns4=
+    last_login: null
+    is_superuser: false
+    username: barbie
+    first_name: barbie
+    last_name: chaite
+    email: ''
+    is_staff: false
+    is_active: true
+    date_joined: 2021-05-18 09:01:58+00:00
+    groups: []
+    user_permissions: []
+- model: auth.user
+  pk: 6
+  fields:
+    password: pbkdf2_sha256$120000$D2lpzCRoJQRz$MnFRTpDnCGaMNnId+OyEfkYraqRadthIewXRcj7lr0c=
+    last_login: 2021-05-23 15:13:33.512000+00:00
+    is_superuser: false
+    username: mimi
+    first_name: ''
+    last_name: ''
+    email: ''
+    is_staff: false
+    is_active: true
+    date_joined: 2021-05-23 15:13:23.586000+00:00
+    groups: []
+    user_permissions: []
+- model: auth.user
+  pk: 9
+  fields:
+    password: pbkdf2_sha256$120000$NNrafJqQKfGO$JNgWA2XdHFND0OUxYctqxEER/7MTJmM8RLgFq0wCh1o=
+    last_login: 2021-05-23 18:04:30+00:00
+    is_superuser: false
+    username: Alice
+    first_name: ''
+    last_name: ''
+    email: ''
+    is_staff: false
+    is_active: true
+    date_joined: 2021-05-23 18:04:15+00:00
+    groups: []
+    user_permissions: []
+- model: communitymanager.commentaire
+  pk: 1
+  fields:
+    date_creation: 2021-05-22 21:50:47.286269+00:00
+    contenu: Ouai le surf c'est le feuuu !!
+    auteur: 1
+    post: 1
+- model: communitymanager.commentaire
+  pk: 2
+  fields:
+    date_creation: 2021-05-22 22:39:02.968791+00:00
+    contenu: Je surfe sur la vague
+    auteur: 1
+    post: 1
+- model: communitymanager.commentaire
+  pk: 3
+  fields:
+    date_creation: 2021-05-22 22:39:40.405703+00:00
+    contenu: le sable fin, j'adore !!
+    auteur: 1
+    post: 1
+- model: communitymanager.commentaire
+  pk: 4
+  fields:
+    date_creation: 2021-05-22 22:51:50.963029+00:00
+    contenu: "J'apporte ma bou\xE9e licorne !"
+    auteur: 1
+    post: 2
+- model: communitymanager.commentaire
+  pk: 6
+  fields:
+    date_creation: 2021-05-23 18:05:31.753755+00:00
+    contenu: Moi j'avais un poney qui s'appelait "Petit Tonnerre" !
+    auteur: 9
+    post: 7
+- model: communitymanager.commentaire
+  pk: 7
+  fields:
+    date_creation: 2021-05-24 18:08:27.740809+00:00
+    contenu: coucou
+    auteur: 1
+    post: 1
+- model: communitymanager.commentaire
+  pk: 9
+  fields:
+    date_creation: 2021-05-25 17:42:10.743639+00:00
+    contenu: T'as trop raison !!
+    auteur: 1
+    post: 15
+- model: communitymanager.commentaire
+  pk: 10
+  fields:
+    date_creation: 2021-05-25 17:44:22.619842+00:00
+    contenu: "J'ai h\xE2te d'y \xEAtre !!"
+    auteur: 1
+    post: 16
+- model: communitymanager.commentaire
+  pk: 11
+  fields:
+    date_creation: 2021-05-26 07:22:03.337204+00:00
+    contenu: "Ca va \xEAtre trop bon :)"
+    auteur: 1
+    post: 16
+- model: communitymanager.post
+  pk: 1
+  fields:
+    titre: Le surf
+    description: le surf c'est la vie !!! Vive la plage !!
+    date_creation: 2021-05-26 08:00:28.667841+00:00
+    communaute: 1
+    priorite: 5
+    evenementiel: false
+    date_evenement: 2021-05-22 20:28:42+00:00
+    auteur: 1
+- model: communitymanager.post
+  pk: 2
+  fields:
+    titre: Vive la plage
+    description: Viens te baigner !!
+    date_creation: 2021-05-22 20:49:55.398811+00:00
+    communaute: 1
+    priorite: 6
+    evenementiel: false
+    date_evenement: 2021-05-22 20:49:26+00:00
+    auteur: 2
+- model: communitymanager.post
+  pk: 7
+  fields:
+    titre: Vive les Poneys
+    description: Petit poney !!
+    date_creation: 2021-05-26 10:28:46.370533+00:00
+    communaute: 2
+    priorite: 6
+    evenementiel: false
+    date_evenement: 2021-06-23 14:04:08+00:00
+    auteur: 1
+- model: communitymanager.post
+  pk: 9
+  fields:
+    titre: Team petit poney
+    description: Petit poney, petit poneyyy, il est tout gris et tout petit, petit
+      poneyyy...
+    date_creation: 2021-05-23 18:07:48.090248+00:00
+    communaute: 2
+    priorite: 2
+    evenementiel: false
+    date_evenement: 2021-05-23 18:06:02+00:00
+    auteur: 9
+- model: communitymanager.post
+  pk: 11
+  fields:
+    titre: La vague
+    description: "Pr\xE9parer vous \xE0 surfer !"
+    date_creation: 2021-05-26 19:03:29.697640+00:00
+    communaute: 1
+    priorite: 6
+    evenementiel: true
+    date_evenement: 2021-05-28 16:43:37+00:00
+    auteur: 1
+- model: communitymanager.post
+  pk: 15
+  fields:
+    titre: "Vive les cr\xEApes"
+    description: "Les cr\xEApes c'est la vie !!"
+    date_creation: 2021-05-26 08:01:21.189459+00:00
+    communaute: 4
+    priorite: 1
+    evenementiel: false
+    date_evenement: 2021-05-25 17:41:29+00:00
+    auteur: 1
+- model: communitymanager.post
+  pk: 16
+  fields:
+    titre: "Les cr\xEApes bretonnes"
+    description: "Atelier demain \xE0 midi pour apprendre \xE0 faire des cr\xEApes
+      !!"
+    date_creation: 2021-05-26 19:03:57.322428+00:00
+    communaute: 4
+    priorite: 4
+    evenementiel: true
+    date_evenement: 2021-05-29 17:42:24+00:00
+    auteur: 1
+- model: communitymanager.communaute
+  pk: 1
+  fields:
+    nom: "Les surfers de l'extr\xEAme"
+    description: Les dompteurs de vagues.
+    abonnes:
+    - 1
+    - 6
+- model: communitymanager.communaute
+  pk: 2
+  fields:
+    nom: Les poneys lovers
+    description: Les amoureux des poneys.
+    abonnes:
+    - 1
+    - 2
+    - 6
+    - 9
+- model: communitymanager.communaute
+  pk: 4
+  fields:
+    nom: "Les cr\xEApes lovers"
+    description: "Les amoureux des cr\xEApes."
+    abonnes:
+    - 1
+    - 2
+    - 6
