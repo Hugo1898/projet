@@ -119,15 +119,18 @@ def nouvelle_communaute(request):
 
 @login_required
 def modif_communaute(request, communaute_id):
-    commmunaute = get_object_or_404(Communaute, pk=communaute_id)
-    form = CommunauteForm(request.POST or None, instance=commmunaute)
+    communaute = get_object_or_404(Communaute, pk=communaute_id)
+    if request.user in communaute.managers.all():
 
-    mod = True
-    if form.is_valid():
-        form.save()
-        return redirect('communautes')
+        form = CommunauteForm(request.POST or None, instance=communaute)
 
-    return render(request, 'communitymanager/nouvelle_communaute.html', locals())
+        mod = True
+        if form.is_valid():
+            form.save()
+            return redirect('communautes')
+
+        return render(request, 'communitymanager/nouvelle_communaute.html', locals())
+    return redirect('communautes')
 
 @login_required
 def delete_communaute(request, communaute_id):
