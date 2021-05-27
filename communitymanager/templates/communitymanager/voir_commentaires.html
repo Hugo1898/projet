@@ -59,6 +59,15 @@
             {% for coment in coments %}
                 <tr>
                     <td>
+                        {% if coment.user_is_manager%}
+                            <a href="/communitymanager/visibility_comment/{{ coment.id }}/">
+                                {% if  not coment.visible %}
+                                    <i class="fa fa-eye"></i> </a>
+                                {% else %}
+                                    <i class="fa fa-eye-slash"></i> </a>
+                                {% endif %}
+                            &nbsp &nbsp
+                        {% endif %}
                         <p> {{ coment.contenu }}</p>
                         <p style="font-style: italic; color: grey"> {{ coment.auteur }},
                             le {{ coment.date_creation }} </p>

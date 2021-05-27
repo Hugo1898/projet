@@ -43,19 +43,6 @@ def communaute(request, com_id):
     else:
         posts = Post.objects.filter(communaute=com_id, visible=True).order_by('-sticky', '-date_creation')
 
-        """
-    if request.user in com.managers.all():
-        posts_not_sticky = Post.objects.filter(communaute=com_id, sticky=False).order_by('-date_creation')
-        posts_sticky = Post.objects.filter(communaute=com_id, sticky=True).order_by('-date_creation')
-
-    else:
-        posts_not_sticky = Post.objects.filter(communaute=com_id, visible=True, sticky=False).order_by('-date_creation')
-        posts_sticky = Post.objects.filter(communaute=com_id, visible=True, sticky=True).order_by('-date_creation')
-    posts = posts_not_sticky | posts_sticky
-    posts.order_by(caca)
-    """
-    print(posts)
-
     counts = {}
     for post in posts:
         counts[post.titre] = Commentaire.objects.filter(post=post).count()
@@ -77,8 +64,19 @@ def post(request, post_id):
         return redirect(reverse('commentaire', kwargs={"post_id": post_id, "contenu": contenu}))
 
     post = get_object_or_404(Post, pk=post_id)
-    coments = Commentaire.objects.filter(post=post_id).order_by('date_creation')
+
+    if request.user in post.communaute.managers.all():
+        coments = Commentaire.objects.filter(post=post_id).order_by('-date_creation')
+    else:
+        coments = Commentaire.objects.filter(post=post_id, visible=True).order_by('-date_creation')
+
     count = coments.count()
+
+    # Pour vérifier si l'user est manager de la communaute du commentaire
+    for coment in coments:
+        coment.user_is_manager = False
+        if request.user in coment.post.communaute.managers.all():
+            coment.user_is_manager = True
     return render(request, 'communitymanager/voir_commentaires.html', locals())
 
 
@@ -166,9 +164,16 @@ def delete_communaute(request, communaute_id):
     return redirect('communautes')
 
 @login_required
+def delete_post(request, post_id):
+    post = get_object_or_404(Post, pk=post_id)
+    com_id=post.communaute.id
+    if request.user in post.communaute.managers.all():
+        post.delete()
+    return redirect('communaute', com_id=com_id)
+
+@login_required
 def visibility_post(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
-    print(post.communaute.id)
     if request.user in post.communaute.managers.all():
         if (post.visible):
             post.visible=False
@@ -176,6 +181,17 @@ def visibility_post(request, post_id):
             post.visible=True
         post.save()
     return redirect('communaute', com_id=post.communaute.id)
+
+@login_required
+def visibility_comment(request, commentaire_id):
+    commentaire = get_object_or_404(Commentaire, pk=commentaire_id)
+    if request.user in commentaire.post.communaute.managers.all():
+        if (commentaire.visible):
+            commentaire.visible=False
+        elif (not commentaire.visible):
+            commentaire.visible=True
+        commentaire.save()
+    return redirect('post', post_id=commentaire.post.id)
 
 def signup(request):
     if request.method == 'POST':

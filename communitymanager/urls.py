@@ -15,5 +15,7 @@ urlpatterns = [
     path('delete_communaute/<int:communaute_id>/', views.delete_communaute, name='delete_communaute'),
     path('visibility_post/<int:post_id>/', views.visibility_post, name='visibility_post'),
     path('nouveau_post/<int:sticky_post>/', views.nouveau_post, name='nouveau_sticky_post'),
+    path('visibility_comment/<int:commentaire_id>/', views.visibility_comment, name='visibility_comment'),
+    path('delete_post/<int:post_id>/', views.delete_post, name='delete_post'),
 
 ]
