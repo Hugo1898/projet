@@ -4,66 +4,72 @@
 {% endblock %}
 
 {% block content %}
-<div class="row justify-content-center ">
-{% if mod %}
-    <h2> Modification d'un post </h2>
-{% else %}
-    <h2> Création d'un nouveau post </h2>
-{% endif %}
-</div>
-<hr style="margin-top: 10px"/>
-<br>
-
-
-<form method="POST" action="">
-    {% csrf_token %}
-    <div class="card" style="background-color: rgba(0, 0, 0, 0.1);">
-    <table class="table mb-0">
-        <tbody>
-            <tr>
-            <td>
-            <p>
-            <text style="font-weight: bold"> Titre du post : </text>
-            {{ form.titre }}
-            </p>
-            <br>
-            <p>
-            {{ form.description.label_tag }}<br>
-            {{ form.description }}
-            </p>
-            </td>
-            <td>
-            <p>
-            <text style="font-weight: bold"> Club : </text>
-            {{ form.communaute }}
-            </p>
-            <br>
-            <p>
-            <text style="font-weight: bold"> Niveau de priorité du post : </text>
-            {{ form.priorite }}
-            </p>
-            <br>
-            <p>
-            <text style="font-weight: bold"> Est-ce un évènement ? </text>
-            {{ form.evenementiel }}
-            </p>
-            <br>
-            <p>
-            <text style="font-weight: bold">  Si c'est le cas, fournir la date de l'évènement :</text>
-            {{ form.date_evenement }}
-            </p>
-            {% if form.errors %}
-                <p style="color: red"> Votre événement doit se passer dans le futur ! </p>
-            {% endif %}
-            </td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="row justify-content-center ">
+        {% if mod %}
+            <h2> Modification d'un post </h2>
+        {% else %}
+            <h2> Création d'un nouveau post </h2>
+        {% endif %}
     </div>
+    <hr style="margin-top: 10px"/>
     <br>
-    <div class="centered">
-    <input class="btn btn-primary" type="submit" value="Envoyer"/>
-    </div>
-</form>
+
+
+    <form method="POST" action="">
+        {% csrf_token %}
+        <div class="card" style="background-color: rgba(0, 0, 0, 0.1);">
+            <table class="table mb-0">
+                <tbody>
+                <tr>
+                    <td>
+                        <p>
+                            <text style="font-weight: bold"> Titre du post :</text>
+                            {{ form.titre }}
+                        </p>
+                        <br>
+                        <p>
+                            {{ form.description.label_tag }}<br>
+                            {{ form.description }}
+                        </p>
+                    </td>
+                    <td>
+                        <p>
+                            <text style="font-weight: bold"> Club :</text>
+                            <select class=form name="communaute">
+                             <option value=1>Un</option>
+                             <option value=2>Deux</option>
+                             <option value=4>Trois</option>
+                             <option value=5>Escalade</option>
+
+                            </select>
+                        </p>
+                        <br>
+                        <p>
+                            <text style="font-weight: bold"> Niveau de priorité du post :</text>
+                            {{ form.priorite }}
+                        </p>
+                        <br>
+                        <p>
+                            <text style="font-weight: bold"> Est-ce un évènement ?</text>
+                            {{ form.evenementiel }}
+                        </p>
+                        <br>
+                        <p>
+                            <text style="font-weight: bold"> Si c'est le cas, fournir la date de l'évènement :</text>
+                            {{ form.date_evenement }}
+                        </p>
+                        {% if form.errors %}
+                            <p style="color: red"> Votre événement doit se passer dans le futur ! </p>
+                        {% endif %}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <br>
+        <div class="centered">
+            <input class="btn btn-primary" type="submit" value="Envoyer"/>
+        </div>
+    </form>
 
 {% endblock %}
