@@ -13,5 +13,7 @@ urlpatterns = [
     path('nouvelle_communaute/', views.nouvelle_communaute, name='nouvelle_communaute'),
     path('modif_communaute/<int:communaute_id>/', views.modif_communaute, name='modif_communaute'),
     path('delete_communaute/<int:communaute_id>/', views.delete_communaute, name='delete_communaute'),
+    path('visibility_post/<int:post_id>/', views.visibility_post, name='visibility_post'),
+    path('nouveau_post/<int:sticky_post>/', views.nouveau_post, name='nouveau_sticky_post'),
 
 ]

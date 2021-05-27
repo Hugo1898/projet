@@ -37,6 +37,9 @@ class Post(models.Model):
     evenementiel = models.BooleanField()
     date_evenement = models.DateTimeField(default=timezone.now)
     auteur = models.ForeignKey(User, on_delete=models.CASCADE)
+    visible = models.BooleanField(default=True)
+    sticky = models.BooleanField(default=False)
+
 
     class Meta:
         verbose_name = "Post"
