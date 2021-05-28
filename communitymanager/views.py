@@ -142,3 +142,8 @@ def get_color(dictionary, key):
         "écarlate" : "#ff0101"
     }
     return switcher.get(key)
+
+@login_required
+def calendrier(request):
+    posts = Post.objects.all().filter(evenementiel=True)
+    return render(request, 'communitymanager/calendrier.html', locals())
