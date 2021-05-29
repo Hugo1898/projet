@@ -24,3 +24,6 @@ class CommunauteForm(forms.ModelForm):
     class Meta:
         model = Communaute
         fields = '__all__'
+
+
+

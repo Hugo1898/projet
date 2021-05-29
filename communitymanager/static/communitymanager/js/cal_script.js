@@ -6097,3 +6097,26 @@ function HorizontalPositionCache(getElement) {
 ;;
 
 })(jQuery);
+
+
+function getValue() {
+	var com = document.getElementById("commu").value;
+
+	var prio = document.getElementById("prio").value;
+
+	var input_init = document.getElementById("init_date").value;
+	var date_init = new Date(input_init);
+	var j_d = date_init.getDate()
+	var m_d = date_init.getMonth() + 1;
+	var y_d = date_init.getFullYear();
+
+	var input_fin = document.getElementById("fin_date").value;
+	var date_fin = new Date(input_fin);
+	var j_f = date_fin.getDate()
+	var m_f = date_fin.getMonth() + 1;
+	var y_f = date_fin.getFullYear();
+
+
+	document.location.href = "/communitymanager/calendrier/" +
+		com +"/"+ prio +"/"+ j_d +"/"+ m_d +"/"+ y_d +"/"+ j_f +"/"+ m_f +"/"+ y_f ;
+   }

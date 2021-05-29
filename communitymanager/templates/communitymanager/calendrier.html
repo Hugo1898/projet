@@ -120,12 +120,16 @@
                 {% for post in posts %}
                     {
                     title: '<i class="fas fa-circle" style="color: {{ post|get_color:post.priorite }}"></i> {{ post.titre }}',
+
                     start: new Date({{ post.date_evenement.year}}, {{ post.date_evenement.month}} - 1,
                     {{ post.date_evenement.day}}, {{ post.date_evenement.hour}} + 2, {{ post.date_evenement.minute}}),
-                    end : new Date({{ post.date_evenement.year}}, {{ post.date_evenement.month}} - 1,
-                    {{ post.date_evenement.day}}, {{ post.date_evenement.hour}} + 3, {{ post.date_evenement.minute}}),
+
+                    /*end : new Date({{ post.date_evenement.year}}, {{ post.date_evenement.month}} - 1,
+                    {{ post.date_evenement.day}}, {{ post.date_evenement.hour}} + 4, {{ post.date_evenement.minute}}),*/
+
                     allDay: false,
-                    	url: "{% url 'post'  post.id %}",
+
+                    url: "{% url 'post'  post.id %}",
                     },
                 {% endfor %}
             ],
@@ -133,21 +137,12 @@
 
 
     });
+
+
     </script>
 
     <style>
 
-	#wrap {
-		width: 1100px;
-		margin: 0 auto;
-        margin-bottom: 40px;
-		margin-top: 40px;
-		text-align: center;
-		font-size: 14px;
-		font-family: 'Roboto', sans-serif;
-		background:url(http://www.digiphotohub.com/wp-content/uploads/2015/09/bigstock-Abstract-Blurred-Background-Of-92820527.jpg);
-
-		}
 
 	#external-events {
 		float: left;
@@ -203,11 +198,61 @@
 
 {% block content %}
 
-<div id='wrap'>
+<div class="container-fluid" style="margin-top: 10px">
+    <div class="row" style="margin-bottom: 10px">
+        <div class="col">
+        <label for="commu">Filtrer par club :</label>
+        <select id="commu" class="custom-select mb-3">
+            {% if com_id == 0 %}
+            <option selected value ="0">Sélectionnez le club à afficher</option>
+            {% else %}
+            <option selected value="{{ choix_com.id }}">{{ choix_com.nom }}</option>
+            <option value ="0">Aucun filtre</option>
+            {% endif %}
+            {% for com in coms %}
+                {% if  com_id != com.id %}
+                <option value="{{ com.id }}">{{ com.nom }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+        </div>
+        <div class="col">
+            <label for="prio">Filtrer par priorité :</label>
+            <select id="prio" class="custom-select mb-3">
+                {% if prio_deg == 0 %}
+                <option selected value ="0">Sélectionnez la priorité minimale des évènements</option>
+                {% else %}
+                <option selected value="{{ choix_prio.degre }}">{{ choix_prio.label }}</option>
+                <option value ="0">Aucun filtre</option>
+                {% endif %}
+                {% for priorite in priorites %}
+                    {% if  prio_deg != priorite.degre %}
+                    <option value="{{ priorite.degre }}">{{ priorite.label }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <div class="row" style="margin-bottom: 10px">
+        <div class="col">
+            <label for="init_date">Filtrer par date minimale :</label>
+            <input class="form-control" type="date" value="{{ date_d }}" id="init_date">
+        </div>
+        <div class="col">
+            <label for="fin_date">Filtrer par date maximale :</label>
+            <input class="form-control" type="date" value="{{ date_f }}" id="fin_date">
+        </div>
+    </div>
+</div>
+
+<div class="centered" style="margin-top: 10px">
+<button class="btn btn-primary" onclick="getValue()">Afficher</button>
+</div>
+<hr>
+<div class="container-fluid" style="margin-top: 30px">
 
 <div id='calendar'></div>
-
-<div style='clear:both'></div>
 
 </div>
 

@@ -5,7 +5,7 @@ from django.shortcuts import *
 from django.template.defaultfilters import register
 
 from .forms import *
-
+from .utils import *
 
 @login_required
 def communautes(request):
@@ -144,6 +144,19 @@ def get_color(dictionary, key):
     return switcher.get(key)
 
 @login_required
-def calendrier(request):
-    posts = Post.objects.all().filter(evenementiel=True)
+def calendrier(request, com_id, prio_deg, j_d, m_d, y_d, j_f, m_f, y_f):
+
+    coms = Communaute.objects.all()
+    priorites = Priorite.objects.all().order_by("degre")
+
+    if prio_deg != 0:
+        choix_prio = get_object_or_404(Priorite, degre=prio_deg)
+
+    if com_id != 0:
+        choix_com = get_object_or_404(Communaute, pk=com_id)
+
+    date_d = conv_date(j_d, m_d, y_d)
+    date_f = conv_date(j_f, m_f, y_f)
+    posts = filter(com_id, prio_deg, date_d, date_f)
+
     return render(request, 'communitymanager/calendrier.html', locals())
