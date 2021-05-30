@@ -42,6 +42,17 @@
                                 &nbsp &nbsp
                             {% endif %}
 
+                            {% if request.user.is_superuser %}
+                                &nbsp &nbsp
+                                <a href="/communitymanager/modif_communaute/{{ com.id }}/">
+                                    <i class="fa fa-pencil-square-o"></i></a>
+                                &nbsp &nbsp
+                                &nbsp &nbsp
+                                <a href="/communitymanager/delete_communaute/{{ com.id }}/">
+                                    <i class="fa fa-trash"></i></a>
+                                &nbsp &nbsp
+                            {% endif %}
+
                         </p>
                     </td>
                 </tr>
