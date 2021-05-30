@@ -44,12 +44,19 @@
 
                             {% if request.user.is_superuser %}
                                 &nbsp &nbsp
-                                <a href="/communitymanager/modif_communaute/{{ com.id }}/">
-                                    <i class="fa fa-pencil-square-o"></i></a>
+                                <!-- Pour suspendre la communauté de manière visible-->
+                                <a href="/communitymanager/suspend_communaute/{{ com.id }}/1/">
+                                    <i class="fa fa-lock"></i> Visible</a>
                                 &nbsp &nbsp
                                 &nbsp &nbsp
-                                <a href="/communitymanager/delete_communaute/{{ com.id }}/">
-                                    <i class="fa fa-trash"></i></a>
+                                <!-- Pour suspendre la communauté de manière invisible-->
+                                 <a href="/communitymanager/suspend_communaute/{{ com.id }}/2/">
+                                    <i class="fa fa-lock"></i> Invisible</a>
+                                &nbsp &nbsp
+                                &nbsp &nbsp
+                                <!-- Pour réouvrir la communauté-->
+                                 <a href="/communitymanager/suspend_communaute/{{ com.id }}/0/">
+                                    <i class="fa fa-lock-open"></i></a>
                                 &nbsp &nbsp
                             {% endif %}
 

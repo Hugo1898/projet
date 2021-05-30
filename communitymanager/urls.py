@@ -17,5 +17,6 @@ urlpatterns = [
     path('nouveau_post/<int:sticky_post>/', views.nouveau_post, name='nouveau_sticky_post'),
     path('visibility_comment/<int:commentaire_id>/', views.visibility_comment, name='visibility_comment'),
     path('delete_post/<int:post_id>/', views.delete_post, name='delete_post'),
+    path('suspend_communaute/<int:com_id>/<int:action>/', views.suspend_communaute, name='suspend_communaute'),
 
 ]

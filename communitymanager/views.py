@@ -194,6 +194,15 @@ def visibility_comment(request, commentaire_id):
         commentaire.save()
     return redirect('post', post_id=commentaire.post.id)
 
+
+@login_required
+def suspend_communaute(request, comm_id, action):
+
+
+
+
+
+
 def signup(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
