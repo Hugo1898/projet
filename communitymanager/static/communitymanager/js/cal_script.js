@@ -6103,13 +6103,13 @@ function getValue() {
 
 	var input_init = document.getElementById("init_date").value;
 	var date_init = new Date(input_init);
-	var j_d = date_init.getDate()
+	var j_d = date_init.getDate();
 	var m_d = date_init.getMonth() + 1;
 	var y_d = date_init.getFullYear();
 
 	var input_fin = document.getElementById("fin_date").value;
 	var date_fin = new Date(input_fin);
-	var j_f = date_fin.getDate()
+	var j_f = date_fin.getDate();
 	var m_f = date_fin.getMonth() + 1;
 	var y_f = date_fin.getFullYear();
 
@@ -6117,3 +6117,43 @@ function getValue() {
 	document.location.href = "/communitymanager/calendrier/" +
 		com +"/"+ prio +"/"+ j_d +"/"+ m_d +"/"+ y_d +"/"+ j_f +"/"+ m_f +"/"+ y_f ;
    }
+
+function convDate(j, m, y, h, mi) {
+	var date = String(y) + "-"
+
+    if (m < 10) {
+		date += "0" + String(m)
+	}
+    else {
+		date += String(m)
+	}
+
+    date += "-"
+
+    if (j < 10) {
+		date += "0" + String(j)
+	}
+    else {
+		date += String(j)
+	}
+
+    date += "T"
+
+    if (h < 10) {
+		date += "0" + String(h)
+	}
+    else {
+		date += String(h)
+	}
+
+    date += ":"
+
+	if (mi < 10) {
+		date += "0" + String(mi)
+	}
+    else {
+		date += String(mi)
+	}
+
+    return date
+}

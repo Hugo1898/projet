@@ -7,6 +7,7 @@ from django.template.defaultfilters import register
 from .forms import *
 from .utils import *
 
+
 @login_required
 def communautes(request):
     communities = Communaute.objects.all()
@@ -131,20 +132,29 @@ def signup(request):
 def get_item(dictionary, key):
     return dictionary.get(key)
 
+
 @register.filter
 def get_color(dictionary, key):
     key = str(key)
     switcher = {
-        "blanche" : "beige",
-        "jaune" : "gold",
-        "orange" : "darkorange",
-        "rouge" : "#a50505",
-        "écarlate" : "#ff0101"
+        "blanche": "beige",
+        "jaune": "gold",
+        "orange": "darkorange",
+        "rouge": "#a50505",
+        "écarlate": "#ff0101"
     }
     return switcher.get(key)
 
+
 @login_required
 def calendrier(request, com_id, prio_deg, j_d, m_d, y_d, j_f, m_f, y_f):
+
+    form = CalendarForm(request.POST or None, auto_id="cal_%s")
+    if form.is_valid():
+        post = form.save(commit=False)
+        post.auteur = request.user
+        post.evenementiel = True
+        post.save()
 
     coms = Communaute.objects.all()
     priorites = Priorite.objects.all().order_by("degre")
