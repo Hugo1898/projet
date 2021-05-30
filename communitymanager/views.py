@@ -101,8 +101,9 @@ def nouveau_post(request, sticky_post=0):
         post.visible=True
         if (sticky_post==1) and request.user in post.communaute.managers.all():
             post.sticky=True
-        post.save()
-        return redirect('post', post_id=post.id)
+        if post.communaute.open:
+            post.save()
+            return redirect('post', post_id=post.id)
 
     communautes = Communaute.objects.all()
     return render(request, 'communitymanager/nouveau_post.html', locals())
