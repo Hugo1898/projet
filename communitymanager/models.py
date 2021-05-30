@@ -9,6 +9,7 @@ class Communaute(models.Model):
     description = models.TextField()
     managers = models.ManyToManyField(User, related_name="communautes_managed")
     open = models.BooleanField(default=True)
+    suspended = models.IntegerField(default=0)
 
 
     class Meta:
