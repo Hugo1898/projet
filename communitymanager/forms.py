@@ -23,4 +23,4 @@ class PostForm(forms.ModelForm):
 class CommunauteForm(forms.ModelForm):
     class Meta:
         model = Communaute
-        exclude = ["abonnes"]
+        exclude = ["abonnes","suspended"]

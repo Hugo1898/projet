@@ -3,13 +3,17 @@ from django.contrib.auth.decorators import *
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import *
 from django.template.defaultfilters import register
+from django.db.models import Q
 
 from .forms import *
 
 
 @login_required
 def communautes(request):
-    communities = Communaute.objects.all()
+    if request.user.is_superuser:
+        communities = Communaute.objects.all()
+    else:
+        communities = Communaute.objects.filter(Q(suspended=0) | Q(suspended=1))
     abonnement = Communaute.objects.filter(abonnes=request.user)
 
     for com in communities:
@@ -38,6 +42,10 @@ def abonnement(request, action, com_id):
 def communaute(request, com_id):
     com = get_object_or_404(Communaute, pk=com_id)
 
+    # Si la communauté est suspendue et que l'user n'est pas superuser, il ne peut pas y accéder
+    if com.suspended == 2 and not request.user.is_superuser :
+        return redirect("communautes")
+
     if request.user in com.managers.all():
         posts = Post.objects.filter(communaute=com_id).order_by('-sticky', '-date_creation')
     else:
@@ -57,13 +65,17 @@ def communaute(request, com_id):
 
 @login_required
 def post(request, post_id):
+    post = get_object_or_404(Post, pk=post_id)
+
+    # Si la communauté est suspendue et que l'user n'est pas superuser, il ne peut pas y accéder
+    if post.communaute.suspended == 2 and not request.user.is_superuser:
+        return redirect("communautes")
+
     form = CommentaireForm(request.POST or None)
 
     if form.is_valid():
         contenu = form.cleaned_data['contenu']
         return redirect(reverse('commentaire', kwargs={"post_id": post_id, "contenu": contenu}))
-
-    post = get_object_or_404(Post, pk=post_id)
 
     if request.user in post.communaute.managers.all():
         coments = Commentaire.objects.filter(post=post_id).order_by('-date_creation')
@@ -112,6 +124,11 @@ def nouveau_post(request, sticky_post=0):
 @login_required
 def modif_post(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
+
+    # Si la communauté est suspendue et que l'user n'est pas superuser, il ne peut pas modifier le post
+    if (post.communaute.suspended == 2 or 1 )and not request.user.is_superuser:
+        return redirect("communautes")
+
     form = PostForm(request.POST or None, instance=post)
     mod = True
     if form.is_valid():
@@ -124,7 +141,7 @@ def modif_post(request, post_id):
 
 @login_required
 def news_feed(request):
-    communautes = request.user.communautes.all()
+    communautes = request.user.communautes.filter(Q(suspended=0) | Q(suspended=1))
     coments = Commentaire.objects.all()
     posts = Post.objects.filter(visible=True).order_by('-date_creation').filter(communaute__in=communautes)
     counts = {}
@@ -196,9 +213,12 @@ def visibility_comment(request, commentaire_id):
 
 
 @login_required
-def suspend_communaute(request, comm_id, action):
-
-
+def suspend_communaute(request, com_id, action):
+    communaute = get_object_or_404(Communaute, pk=com_id)
+    if request.user.is_superuser and (action in {0,1,2}):
+        communaute.suspended = action
+        communaute.save()
+    return redirect('communautes')
 
 
 

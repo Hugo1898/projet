@@ -41,7 +41,9 @@
                                  {% for com in communautes %}
                                      {{ com.id }}
                                      {% if com.open %}
-                                        <option value={{ com.id }}>{{ com.nom }}</option>
+                                         {% if com.suspended == 0 %}
+                                            <option value={{ com.id }}>{{ com.nom }}</option>
+                                         {% endif %}
                                      {% endif %}
                                  {% endfor %}
                             </select>
