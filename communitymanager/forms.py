@@ -24,3 +24,12 @@ class CommunauteForm(forms.ModelForm):
     class Meta:
         model = Communaute
         fields = '__all__'
+
+
+class SearchForm(forms.Form):
+    content = forms.CharField(required=True)
+    start = forms.DateField()
+    end = forms.DateField()
+    event_date = forms.DateField()
+    subscribed_only = forms.BooleanField()
+

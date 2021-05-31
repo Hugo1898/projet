@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Advanced search result{% endblock %}</title>
+</head>
+<body>
+{% block content %}
+    <form method="POST" action="">
+    {% csrf_token %}
+    {% form as_p %}
+    <input class="btn btn-primary" type="submit" value="Envoyer"/>
+    </form>
+    <h4>Search Results : </h4>
+    <p>
+    The following community titles contain the searched items
+    {% for com in community_titles %}
+        <tr>
+        <td>
+        <a href="/communitymanager/communaute/{{ com.id }}/">
+            <h4> {{ com.nom }} </h4> </a>
+        <p> {{ com.description }}</p>
+        </td>
+        <td>
+        {% if com in abonnement %}
+            <a href="/communitymanager/communautes/desabo/{{ com.id }}/">
+            <i class='fas fa-star' style='font-size:24px; color:#ffc800'></i>
+            </a>
+        {% else %}
+            <a href="/communitymanager/communautes/abo/{{ com.id }}/">
+            <i class='fas fa-star' style='font-size:24px; color:grey'></i>
+            </a>
+        </td>
+        {% endif %}
+        </tr>
+    {% endfor %}
+    </p>
+        <p>
+    The following community descriptions contain the searched items
+    {% for com in community_desc %}
+        <tr>
+        <td>
+        <a href="/communitymanager/communaute/{{ com.id }}/">
+            <h4> {{ com.nom }} </h4> </a>
+        <p> {{ com.description }}</p>
+        </td>
+        <td>
+        {% if com in abonnement %}
+            <a href="/communitymanager/communautes/desabo/{{ com.id }}/">
+            <i class='fas fa-star' style='font-size:24px; color:#ffc800'></i>
+            </a>
+        {% else %}
+            <a href="/communitymanager/communautes/abo/{{ com.id }}/">
+            <i class='fas fa-star' style='font-size:24px; color:grey'></i>
+            </a>
+        </td>
+        {% endif %}
+        </tr>
+    {% endfor %}
+    </p>
+    <p>
+    The following post authors contain the searched items
+    <div class="card">
+    <table class="table table-striped">
+    <tbody>
+    {% for post in posts_written_by %}
+        <tr>
+        <td>
+        <a href="/communitymanager/post/{{ post.id }}/"> <h4> {{ post.titre }} </h4> </a>
+        <p> {{ post.description }}</p>
+        </td>
+        <td>
+        <p>
+            <i class="fas fa-circle" style="color: {{ post|get_color:post.priorite }}"></i>
+            &nbsp &nbsp
+            <kbd> {{ post.communaute.nom }} </kbd>
+        </p>
+        {% if user == post.auteur %}
+            <p> Par {{ post.auteur }}
+            &nbsp &nbsp
+            <a href="/communitymanager/modif_post/{{ post.id }}/">
+            <i class="fa fa-pencil-square-o" ></i> </a>
+            &nbsp &nbsp
+            <kbd style="background-color: #b4b0b0">
+            {{ counts|get_item:post.titre }}
+            <i class="fas fa-comment"></i>
+            </kbd>
+            </p>
+        {% else %}
+            <p> Par {{ post.auteur }}
+            &nbsp &nbsp
+            <kbd style="background-color: #b4b0b0">
+            {{ counts|get_item:post.titre }}
+            <i class="fas fa-comment"></i>
+            </kbd>
+            </p>
+        {% endif %}
+        {% if post.evenementiel %}
+        <p> <i class='fas'>&#xf073;</i> Prévu le {{ post.date_evenement }}</p>
+        {% endif %}
+        <small style="color: grey">Dernière modification : {{ post.date_creation }}</small>
+        </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+
+    </p>
+    <p>
+    The following post titles contain the searched items
+    <div class="card">
+    <table class="table table-striped">
+    <tbody>
+    {% for post in posts_titles_containing %}
+        <tr>
+        <td>
+        <a href="/communitymanager/post/{{ post.id }}/"> <h4> {{ post.titre }} </h4> </a>
+        <p> {{ post.description }}</p>
+        </td>
+        <td>
+        <p>
+            <i class="fas fa-circle" style="color: {{ post|get_color:post.priorite }}"></i>
+            &nbsp &nbsp
+            <kbd> {{ post.communaute.nom }} </kbd>
+        </p>
+        {% if user == post.auteur %}
+            <p> Par {{ post.auteur }}
+            &nbsp &nbsp
+            <a href="/communitymanager/modif_post/{{ post.id }}/">
+            <i class="fa fa-pencil-square-o" ></i> </a>
+            &nbsp &nbsp
+            <kbd style="background-color: #b4b0b0">
+            {{ counts|get_item:post.titre }}
+            <i class="fas fa-comment"></i>
+            </kbd>
+            </p>
+        {% else %}
+            <p> Par {{ post.auteur }}
+            &nbsp &nbsp
+            <kbd style="background-color: #b4b0b0">
+            {{ counts|get_item:post.titre }}
+            <i class="fas fa-comment"></i>
+            </kbd>
+            </p>
+        {% endif %}
+        {% if post.evenementiel %}
+        <p> <i class='fas'>&#xf073;</i> Prévu le {{ post.date_evenement }}</p>
+        {% endif %}
+        <small style="color: grey">Dernière modification : {{ post.date_creation }}</small>
+        </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+
+    </p>
+    <p>
+    The following posts contain the searched items
+    <div class="card">
+    <table class="table table-striped">
+    <tbody>
+    {% for post in posts_content_containing %}
+        <tr>
+        <td>
+        <a href="/communitymanager/post/{{ post.id }}/"> <h4> {{ post.titre }} </h4> </a>
+        <p> {{ post.description }}</p>
+        </td>
+        <td>
+        <p>
+            <i class="fas fa-circle" style="color: {{ post|get_color:post.priorite }}"></i>
+            &nbsp &nbsp
+            <kbd> {{ post.communaute.nom }} </kbd>
+        </p>
+        {% if user == post.auteur %}
+            <p> Par {{ post.auteur }}
+            &nbsp &nbsp
+            <a href="/communitymanager/modif_post/{{ post.id }}/">
+            <i class="fa fa-pencil-square-o" ></i> </a>
+            &nbsp &nbsp
+            <kbd style="background-color: #b4b0b0">
+            {{ counts|get_item:post.titre }}
+            <i class="fas fa-comment"></i>
+            </kbd>
+            </p>
+        {% else %}
+            <p> Par {{ post.auteur }}
+            &nbsp &nbsp
+            <kbd style="background-color: #b4b0b0">
+            {{ counts|get_item:post.titre }}
+            <i class="fas fa-comment"></i>
+            </kbd>
+            </p>
+        {% endif %}
+        {% if post.evenementiel %}
+        <p> <i class='fas'>&#xf073;</i> Prévu le {{ post.date_evenement }}</p>
+        {% endif %}
+        <small style="color: grey">Dernière modification : {{ post.date_creation }}</small>
+        </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+    </p>
+    <p>
+    The following comment authors contain the searched items
+    <div class="card">
+<table class="table table-striped">
+    <tbody>
+    {% for coment in comments_written_by %}
+        <tr>
+        <td>
+        <p> {{ coment.contenu }}</p>
+        <p style="font-style: italic; color: grey"> {{ coment.auteur }}, le {{ coment.date_creation }} </p>
+        </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+    </p>
+        </p>
+    <p>
+    The following comments contain the searched items
+    <div class="card">
+<table class="table table-striped">
+    <tbody>
+    {% for coment in comments_containing %}
+        <tr>
+        <td>
+        <p> {{ coment.contenu }}</p>
+        <p style="font-style: italic; color: grey"> {{ coment.auteur }}, le {{ coment.date_creation }} </p>
+        </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+    </p>
+{% endblock %}
+</body>
+</html>

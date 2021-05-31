@@ -11,4 +11,5 @@ urlpatterns = [
     path('modif_post/<int:post_id>/', views.modif_post, name='modif_post'),
     path('news_feed/', views.news_feed, name='news_feed'),
     path('nouvelle_communaute/', views.nouvelle_communaute, name='nouvelle_communaute'),
+    path('advanced_search/', views.advanced_search, name='recherche_avancee'),
 ]

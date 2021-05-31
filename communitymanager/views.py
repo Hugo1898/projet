@@ -142,3 +142,48 @@ def get_color(dictionary, key):
         "écarlate" : "#ff0101"
     }
     return switcher.get(key)
+
+
+@login_required()
+def advanced_search(request):
+    if request.method == 'POST':
+        form = SearchForm(request.POST)
+        if form.is_valid():
+            form.save()
+            # text search in all text fields
+            community_titles = Communaute.objects.filter(communaute__titre__icontains=form.content)
+            community_desc = Communaute.objects.filter(communuate__description__icontains=form.content)
+            posts_written_by = Post.objects.filter(auteur__username__icontains=form.content)
+            posts_title_containing = Post.objects.filter(communaute__post__titre__contains=form.content)
+            posts_content_containing = Post.objects.filter(communaute__post__contenu__contains=form.content)
+            comments_written_by = Commentaire.objects.filter(auteur__username__icontains=form.content)
+            comments_containing = Commentaire.objects.filter(post__commentaire__contenu__icontains=form.content)
+            # date creation filter
+            if form.start:
+                posts_written_by = Post.objects.filter(communaute__post__date_creation__gt=form.start)
+                posts_title_containing = Post.objects.filter(communaute__post__date_creation__gt=form.start)
+                posts_content_containing = Post.objects.filter(communaute__post__date_creation__gt=form.start)
+                comments_written_by = Commentaire.objects.filter(post__commentaire__date_creation__gt=form.start)
+                comments_containing = Commentaire.objects.filter(post__commentaire__date_creation__gt=form.start)
+            if form.end:
+                posts_written_by = Post.objects.filter(communaute__post__date_creation__lt=form.end)
+                posts_title_containing = Post.objects.filter(communaute__post__date_creation__lt=form.end)
+                posts_content_containing = Post.objects.filter(communaute__post__date_creation__lt=form.end)
+                comments_written_by = Commentaire.objects.filter(post__commentaire__date_creation__lt=form.end)
+                comments_containing = Commentaire.objects.filter(post__commentaire__date_creation__lt=form.end)
+            if form.subscribed_only:
+                community_titles = Communaute.objects.filter(communaute__titre__icontains=form.content)
+                community_desc = Communaute.objects.filter(communuate__description__icontains=form.content)
+                posts_written_by = Post.objects.filter(communaute__post__date_creation__gt=form.start)
+                posts_title_containing = Post.objects.filter(communaute__post__date_creation__gt=form.start)
+                posts_content_containing = Post.objects.filter(communaute__post__date_creation__gt=form.start)
+                comments_written_by = Commentaire.objects.filter(post__commentaire__date_creation__gt=form.start)
+                comments_containing = Commentaire.objects.filter(post__commentaire__date_creation__gt=form.start)
+            return render(request, 'communitymanager/search_result.html',{'community_titles':community_titles,
+                                                                          'community_desc':community_desc,
+                                                                          'posts_written_by':posts_written_by,
+                                                                          'posts_titles_containing':posts_title_containing,
+                                                                          'posts_content_containing':posts_content_containing,
+                                                                          'comments_written_by':comments_written_by,
+                                                                          'comments_containing':comments_containing})
+    return render(request, 'communitymanager/search_result.html')
