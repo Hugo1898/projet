@@ -7,6 +7,10 @@ class Communaute(models.Model):
     nom = models.CharField(max_length=200)
     abonnes = models.ManyToManyField(User, related_name="communautes")
     description = models.TextField()
+    managers = models.ManyToManyField(User, related_name="communautes_managed")
+    open = models.BooleanField(default=True)
+    suspended = models.IntegerField(default=0)
+
 
     class Meta:
         verbose_name = "Communaute"
@@ -17,6 +21,7 @@ class Communaute(models.Model):
 
 class Priorite(models.Model):
     label = models.CharField(max_length=200)
+    degre = models.IntegerField(default=0)
 
     class Meta:
         verbose_name = "Priorite"
@@ -34,6 +39,9 @@ class Post(models.Model):
     evenementiel = models.BooleanField()
     date_evenement = models.DateTimeField(default=timezone.now)
     auteur = models.ForeignKey(User, on_delete=models.CASCADE)
+    visible = models.BooleanField(default=True)
+    sticky = models.BooleanField(default=False)
+
 
     class Meta:
         verbose_name = "Post"
@@ -47,6 +55,8 @@ class Commentaire(models.Model):
     contenu = models.TextField()
     auteur = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey('Post', on_delete=models.CASCADE)
+    visible = models.BooleanField(default=True)
+
 
     class Meta:
         verbose_name = "Commentaire"

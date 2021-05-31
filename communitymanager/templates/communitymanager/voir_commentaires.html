@@ -4,74 +4,98 @@
 {% endblock %}
 
 {% block content %}
-<br>
-<div class="card" style="background-color: rgba(0, 0, 0, 0.1);">
-<table class="table mb-0">
-    <tbody>
-        <tr>
-        <td>
-        <h4> {{ post.titre }} </h4>
-        <p> {{ post.description }}</p>
-        </td>
-        <td>
-        <p>
-            <i class="fas fa-circle" style="color: {{ post|get_color:post.priorite }}"></i>
-            &nbsp &nbsp
-            <kbd>
-                <a style="color: white" href="/communitymanager/communaute/{{ post.communaute.id }}/"> {{ post.communaute.nom }} </a>
-            </kbd>
-        </p>
-        {% if user == post.auteur %}
-            <p> Par {{ post.auteur }}
-            &nbsp &nbsp
-            <a href="/communitymanager/modif_post/{{ post.id }}/">
-            <i class="fa fa-pencil-square-o" ></i> </a>
-            &nbsp &nbsp
-            <kbd style="background-color: #b4b0b0">
-            {{ count }}
-            <i class="fas fa-comment"></i>
-            </kbd>
-            </p>
-        {% else %}
-            <p> Par {{ post.auteur }}
-            &nbsp &nbsp
-            <kbd style="background-color: #b4b0b0">
-            {{ count }}
-            <i class="fas fa-comment"></i>
-            </kbd>
-            </p>
-        {% endif %}
-        {% if post.evenementiel %}
-        <p> <i class='fas'>&#xf073;</i> Prévu le {{ post.date_evenement }}</p>
-        {% endif %}
-        <small style="color: grey">Dernière modification : {{ post.date_creation }}</small>
-        </td>
-        </tr>
-    </tbody>
-</table>
-</div>
+    <br>
+    <div class="card" style="background-color: rgba(0, 0, 0, 0.1);">
+        <table class="table mb-0">
+            <tbody>
+            <tr>
+                <td>
+                    <h4> {{ post.titre }} </h4>
+                    <p> {{ post.description }}</p>
+                </td>
+                <td>
+                    <p>
+                        <i class="fas fa-circle" style="color: {{ post|get_color:post.priorite }}"></i>
+                        &nbsp &nbsp
+                        <kbd>
+                            <a style="color: white"
+                               href="/communitymanager/communaute/{{ post.communaute.id }}/"> {{ post.communaute.nom }} </a>
+                        </kbd>
+                    </p>
+                    <!-- Modification du post ssi auteur et que la communauté n'est pas suspendue par l'admin-->
+                    {% if user == post.auteur and not post.communaute.suspended%}
+                        <p> Par {{ post.auteur }}
+                            &nbsp &nbsp
+                            <a href="/communitymanager/modif_post/{{ post.id }}/">
+                                <i class="fa fa-pencil-square-o"></i> </a>
+                            &nbsp &nbsp
+                            <kbd style="background-color: #b4b0b0">
+                                {{ count }}
+                                <i class="fas fa-comment"></i>
+                            </kbd>
+                        </p>
+                    {% else %}
+                        <p> Par {{ post.auteur }}
+                            &nbsp &nbsp
+                            <kbd style="background-color: #b4b0b0">
+                                {{ count }}
+                                <i class="fas fa-comment"></i>
+                            </kbd>
+                        </p>
+                    {% endif %}
+                    {% if post.evenementiel %}
+                        <p><i class='fas'>&#xf073;</i> Prévu le {{ post.date_evenement }}</p>
+                    {% endif %}
+                    <small style="color: grey">Dernière modification : {{ post.date_creation }}</small>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
-<h5>Commentaires : </h5>
-<div class="card">
-<table class="table table-striped">
-    <tbody>
-    {% for coment in coments %}
-        <tr>
-        <td>
-        <p> {{ coment.contenu }}</p>
-        <p style="font-style: italic; color: grey"> {{ coment.auteur }}, le {{ coment.date_creation }} </p>
-        </td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
-</div>
-
-<form method="POST" action="" style="margin-left: 0px !important; margin-top: 5px">
-    {% csrf_token %}
-    <text style="font-weight:bold"> Ajouter un commentaire : </text>
-    {{ form.contenu }}
-    <input class="btn btn-primary" type="submit" value="Commenter"/>
-</form>
+    <h5>Commentaires : </h5>
+    <div class="card">
+        <table class="table table-striped">
+            <tbody>
+            {% for coment in coments %}
+                <tr>
+                    <td>
+                        {% if coment.user_is_manager and not post.communaute.suspended%}
+                            <a href="/communitymanager/visibility_comment/{{ coment.id }}/">
+                                {% if  not coment.visible %}
+                                    <i class="fa fa-eye"></i> </a>
+                                {% else %}
+                                    <i class="fa fa-eye-slash"></i> </a>
+                                {% endif %}
+                            &nbsp &nbsp
+                        {% endif %}
+                        <p> {{ coment.contenu }}</p>
+                        <p style="font-style: italic; color: grey"> {{ coment.auteur }},
+                            le {{ coment.date_creation }} </p>
+                    </td>
+                </tr>
+            {% empty %}
+                {% if post.communaute.open %}
+                    <tr>
+                        <td>
+                            <p> Soyez le premier à commenter </p>
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <!-- Possibilité d'ajouter des commentaires ssi open et suspended == 0 (d'où not suspended)-->
+    {% if post.communaute.open and not post.communaute.suspended %}
+        <form method="POST" action="" style="margin-left: 0px !important; margin-top: 5px">
+            {% csrf_token %}
+            <text style="font-weight:bold"> Ajouter un commentaire :</text>
+            {{ form.contenu }}
+            <input class="btn btn-primary" type="submit" value="Commenter"/>
+        </form>
+    {% else %}
+        <text style="font-weight:bold"> Désolé, cette communauté est fermée, vous ne pouvez plus commenter !</text>
+    {% endif %}
 
 {% endblock %}
