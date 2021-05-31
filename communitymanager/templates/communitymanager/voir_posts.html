@@ -8,13 +8,14 @@
 
     <h2>{{ com.nom }}</h2>
     {% if com.user_is_manager%}
-        {% if com.open %}
-
+        {% if com.open  %}
+            {% if com.suspended=="0" %}
     <button type="button" class="btn btn-light" >
     <a href="/communitymanager/nouveau_post/1"> <h4>
                                 Créer Sticky Post <i class="fa fa-traffic-light"></i></a>
     </h4>
     </button>
+                {% endif %}
         {% else %}
         <h4 style="font-weight:bold"> Désolé, cette communauté est fermée, vous ne pouvez plus ajouter de Sticky Post !</h4>
     {% endif %}
