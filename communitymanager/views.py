@@ -29,13 +29,21 @@ def abonnement(request, action, com_id):
 
 
 @login_required
-def communaute(request, com_id):
+def communaute(request, com_id, ordre):
     com = get_object_or_404(Communaute, pk=com_id)
-    posts = Post.objects.filter(communaute=com_id).order_by('-date_creation')
+    posts = Post.objects.filter(communaute=com_id, priorite__ordre__lte=ordre).order_by('-date_creation')
     counts = {}
     for post in posts:
         counts[post.titre] = Commentaire.objects.filter(post=post).count()
     user = request.user
+
+    priorite_form = PrioriteForm(request.POST or None)
+
+    if priorite_form.is_valid():
+        label = priorite_form.cleaned_data['label']
+        ordre = get_object_or_404(Priorite, label=label).ordre
+        return redirect('communaute', com_id, ordre)
+
     return render(request, 'communitymanager/voir_posts.html', locals())
 
 
@@ -131,14 +139,15 @@ def signup(request):
 def get_item(dictionary, key):
     return dictionary.get(key)
 
+
 @register.filter
 def get_color(dictionary, key):
     key = str(key)
     switcher = {
-        "blanche" : "beige",
-        "jaune" : "gold",
-        "orange" : "darkorange",
-        "rouge" : "#a50505",
-        "écarlate" : "#ff0101"
+        "blanche": "beige",
+        "jaune": "gold",
+        "orange": "darkorange",
+        "rouge": "#a50505",
+        "écarlate": "#ff0101"
     }
     return switcher.get(key)

@@ -9,6 +9,14 @@
 <br>
 <br>
 <div class="card">
+
+<form action="" method="post">
+{% csrf_token %}
+ {{ priorite_form.as_p }}
+ <input type="submit" value="Submit" />
+</form>
+
+
 <table class="table table-striped">
     <tbody>
     {% for post in posts %}
@@ -53,5 +61,6 @@
     </tbody>
 </table>
 </div>
+
 
 {% endblock %}

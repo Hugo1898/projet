@@ -17,6 +17,7 @@ class Communaute(models.Model):
 
 class Priorite(models.Model):
     label = models.CharField(max_length=200)
+    ordre = models.PositiveIntegerField()
 
     class Meta:
         verbose_name = "Priorite"

@@ -24,3 +24,9 @@ class CommunauteForm(forms.ModelForm):
     class Meta:
         model = Communaute
         fields = '__all__'
+
+
+class PrioriteForm(forms.ModelForm):
+    class Meta:
+        model = Priorite
+        fields = ['label']
