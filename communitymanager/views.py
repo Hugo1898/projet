@@ -105,15 +105,17 @@ def commentaire(request, post_id, contenu):
 
 
 @login_required
-def nouveau_post(request, sticky_post=0):
+def nouveau_post(request, special_post=0):
     form = PostForm(request.POST or None)
     mod = False
     if form.is_valid():
         post = form.save(commit=False)
         post.auteur = request.user
         post.visible=True
-        if (sticky_post==1) and request.user in post.communaute.managers.all():
+        if (special_post==1) and request.user in post.communaute.managers.all():
             post.sticky=True
+        if (special_post==2) and request.user.is_superuser:
+            post.avertissement=True
         if post.communaute.open:
             post.save()
             return redirect('post', post_id=post.id)
@@ -127,12 +129,13 @@ def modif_post(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
 
     # Si la communauté est suspendue et que l'user n'est pas superuser, il ne peut pas modifier le post
-    if (post.communaute.suspended == 2 or 1 )and not request.user.is_superuser:
+    if (post.communaute.suspended == (2 or 1) )and not request.user.is_superuser:
         return redirect("communautes")
 
     form = PostForm(request.POST or None, instance=post)
     mod = True
     if form.is_valid():
+        print("form valide")
         postm = form.save(commit=False)
         postm.auteur = request.user
         postm.save()

@@ -7,20 +7,39 @@
 {% block content %}
 
     <h2>{{ com.nom }}</h2>
-    {% if com.user_is_manager%}
-        {% if com.open  %}
-            {% if com.suspended=="0" %}
-    <button type="button" class="btn btn-light" >
-    <a href="/communitymanager/nouveau_post/1"> <h4>
-                                Créer Sticky Post <i class="fa fa-traffic-light"></i></a>
-    </h4>
-    </button>
-                {% endif %}
+    <!-- Sticky Post pour les Community Managers si la communauté n'est pas suspendue par l'admin
+    et est bien ouverte par le community manager -->
+    {% if com.user_is_manager %}
+        {% if not com.suspended %}
+            {% if com.open %}
+                <button type="button" class="btn btn-light">
+                    <a href="/communitymanager/nouveau_post/1">
+                        <h4>
+                            Créer Sticky Post <i class="fa fa-traffic-light"></i>
+                        </h4>
+                    </a>
+                </button>
+            {% else %}
+                <h4 style="font-weight:bold"> Désolé, cette communauté est fermée par un Community Manager, vous ne
+                    pouvez plus ajouter de Sticky
+                    Post !</h4>
+            {% endif %}
         {% else %}
-        <h4 style="font-weight:bold"> Désolé, cette communauté est fermée, vous ne pouvez plus ajouter de Sticky Post !</h4>
+            <h4 style="font-weight:bold"> Désolé, cette communauté est suspendue par un Administrateur, vous ne pouvez
+                plus ajouter de Sticky
+                Post !</h4>
+        {% endif %}
     {% endif %}
+    <!-- Avertissement Post pour les Administrateurs=Superuser -->
+    {% if request.user.is_superuser %}
+        <button type="button" class="btn btn-light">
+            <a href="/communitymanager/nouveau_post/2">
+                <h4>
+                    Créer Avertissement <i class="fa fa-traffic-light"></i>
+                </h4>
+            </a>
+        </button>
     {% endif %}
-
 
     <br>
     <br>
@@ -33,7 +52,9 @@
                         <h4>
                             {% if  post.sticky %}
                                 <div id="sticky" style="color:red">
-                                <style>#sticky a {color:red}</style>
+                                <style>#sticky a {
+                                    color: red
+                                }</style>
                                 <i class="fa fa-grin-hearts"></i>
                                 <i class="fa fa-tape"></i>
                                 <i class="fa fa-grin-hearts"></i>
@@ -66,16 +87,16 @@
                                     <i class="fas fa-comment"></i>
                                 </kbd>
                                 &nbsp &nbsp
-                        {% else %}
+                                {% else %}
                             <p> Par {{ post.auteur }}
                             &nbsp &nbsp
                             <kbd style="background-color: #b4b0b0">
                                 {{ counts|get_item:post.titre }}
                                 <i class="fas fa-comment"></i>
                             </kbd>
-                             &nbsp &nbsp
+                            &nbsp &nbsp
                         {% endif %}
-                        {% if com.user_is_manager%}
+                        {% if com.user_is_manager %}
                             <a href="/communitymanager/visibility_post/{{ post.id }}/">
                                 {% if  not post.visible %}
                                     <i class="fa fa-eye"></i> </a>
@@ -84,7 +105,7 @@
                                 {% endif %}
                             &nbsp &nbsp
                             <a href="/communitymanager/delete_post/{{ post.id }}/">
-                                    <i class="fa fa-trash"></i></a>
+                                <i class="fa fa-trash"></i></a>
                             &nbsp &nbsp
                         {% endif %}
                         </p>
