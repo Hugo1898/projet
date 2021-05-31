@@ -10,6 +10,7 @@ class Communaute(models.Model):
     managers = models.ManyToManyField(User, related_name="communautes_managed")
     open = models.BooleanField(default=True)
     suspended = models.IntegerField(default=0)
+    banned = models.ManyToManyField(User, related_name="communautes_banned")
 
 
     class Meta:
