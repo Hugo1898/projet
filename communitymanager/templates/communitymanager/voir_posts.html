@@ -31,15 +31,19 @@
                     <td>
                         <h4>
                             {% if  post.sticky %}
+                                <div id="sticky" style="color:red">
+                                <style>#sticky a {color:red}</style>
                                 <i class="fa fa-grin-hearts"></i>
                                 <i class="fa fa-tape"></i>
                                 <i class="fa fa-grin-hearts"></i>
                             {% endif %}
                             {% if  not post.visible %}
-                                <i class="fa fa-eye-slash"> </i> Hidden
+                                <i class="fa fa-eye-slash" style="color:grey"></i>
+                                <text style="color:grey">Hidden</text>
                             {% endif %}
                             <a href="/communitymanager/post/{{ post.id }}/">
                                 {{ post.titre }}</a>
+                            </div>
                         </h4>
 
                         <p> {{ post.description }}</p>
