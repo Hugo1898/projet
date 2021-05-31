@@ -13,7 +13,15 @@
     {% for post in posts %}
         <tr>
         <td>
-        <a href="/communitymanager/post/{{ post.id }}/"> <h4> {{ post.titre }} </h4> </a>
+            <h4>
+                {% if  post.sticky %}
+                        <i class="fa fa-grin-hearts"></i>
+                        <i class="fa fa-tape"></i>
+                        <i class="fa fa-grin-hearts"></i>
+                {% endif %}
+        <a href="/communitymanager/post/{{ post.id }}/">  {{ post.titre }}  </a>
+
+            </h4>
         <p> {{ post.description }}</p>
         </td>
         <td>

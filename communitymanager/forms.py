@@ -35,7 +35,7 @@ class PostForm(forms.ModelForm):
 class CommunauteForm(forms.ModelForm):
     class Meta:
         model = Communaute
-        fields = '__all__'
+        exclude = ["abonnes","suspended"]
 
 
 class CalendarForm(forms.ModelForm):
@@ -51,3 +51,4 @@ class CalendarForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["date_evenement"].input_formats = ["%Y-%m-%dT%H:%M"]
+

@@ -5,48 +5,59 @@
 
 {% block content %}
 
-<div class="row justify-content-center ">
-<h2> Création d'un nouveau club </h2>
-</div>
-<hr style="margin-top: 10px"/>
-<br>
-
-<form method="POST" action="">
-    {% csrf_token %}
-    <div class="card" style="background-color: rgba(0, 0, 0, 0.1);">
-    <table class="table mb-0">
-        <tbody>
-            <tr>
-            <td>
-            <p>
-            <text style="font-weight: bold"> Nom du club : </text>
-            {{ form.nom }}
-            </p>
-            <br>
-            <br>
-            <p>
-            <text style="font-weight: bold"> Sélectionner les abonnés : </text><br>
-            {{ form.abonnes }}<br>
-            <small style="color: cadetblue"> Maintenez la touche ctrl pour sélectionner les abonnés. </small>
-            </p>
-            </td>
-            <td>
-            <div class="centered">
-            <p>
-            {{ form.description.label_tag }}<br>
-            {{ form.description }}
-            </p>
-            </div>
-            </td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="row justify-content-center ">
+        {% if mod %}
+            <h2> Modification d'un club </h2>
+        {% else %}
+            <h2> Création d'un nouveau club </h2>
+        {% endif %}
     </div>
+    <hr style="margin-top: 10px"/>
     <br>
-    <div class="centered">
-    <input class="btn btn-primary" type="submit" value="Envoyer"/>
-    </div>
-</form>
+
+    <form method="POST" action="">
+        {% csrf_token %}
+        <div class="card" style="background-color: rgba(0, 0, 0, 0.1);">
+            <table class="table mb-0">
+                <tbody>
+                <tr>
+                    <td>
+                        <p>
+                            <text style="font-weight: bold"> Nom du club :</text>
+                            {{ form.nom }}
+                        </p>
+                        <br>
+                        <br>
+                        <p>
+                            <text style="font-weight: bold"> Sélectionner les Community Managers :</text>
+                            <br>
+                            {{ form.managers }}<br>
+                            <small style="color: cadetblue"> Maintenez la touche ctrl pour sélectionner les
+                                managers. </small>
+                        </p>
+
+                        <p>
+                            <text style="font-weight: bold"> Communauté ouverte ? </text>
+                            {{ form.open }}
+                        </p>
+                    </td>
+                    <td>
+                        <div class="centered">
+                            <p>
+                                {{ form.description.label_tag }}<br>
+                                {{ form.description }}
+                            </p>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <br>
+        <div class="centered">
+            <input class="btn btn-primary" type="submit" value="Envoyer"/>
+        </div>
+    </form>
 
 {% endblock %}
 

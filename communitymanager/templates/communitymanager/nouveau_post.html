@@ -4,63 +4,77 @@
 {% endblock %}
 
 {% block content %}
-<div class="row justify-content-center ">
-{% if mod %}
-    <h2> Modification d'un post </h2>
-{% else %}
-    <h2> Création d'un nouveau post </h2>
-{% endif %}
-</div>
-<hr style="margin-top: 10px"/>
-<br>
+    <div class="row justify-content-center ">
+        {% if mod %}
+            <h2> Modification d'un post </h2>
+        {% else %}
+            <h2> Création d'un nouveau post </h2>
+        {% endif %}
 
-
-<form method="POST" action="">
-    {% csrf_token %}
-    <div class="card" style="background-color: rgba(0, 0, 0, 0.1);">
-    <table class="table mb-0">
-        <tbody>
-            <tr>
-            <td>
-            <p>
-            <text style="font-weight: bold"> Titre du post : </text>
-            {{ form.titre }}
-            </p>
-            <br>
-            <p>
-            {{ form.description.label_tag }}<br>
-            {{ form.description }}
-            </p>
-            </td>
-            <td>
-            <p>
-            <text style="font-weight: bold"> Club : </text>
-            {{ form.communaute }}
-            </p>
-            <br>
-            <p>
-            <text style="font-weight: bold"> Niveau de priorité du post : </text>
-            {{ form.priorite }}
-            </p>
-            <br>
-            <p>
-            <text style="font-weight: bold"> Est-ce un évènement ? </text>
-            {{ form.evenementiel }}
-            </p>
-            <br>
-            <p>
-            <text style="font-weight: bold">  Si c'est le cas, fournir la date de l'évènement :</text>
-            {{ form.date_evenement }}
-            </p>
-            </td>
-            </tr>
-        </tbody>
-    </table>
     </div>
+    <hr style="margin-top: 10px"/>
     <br>
-    <div class="centered">
-    <input class="btn btn-primary" type="submit" value="Envoyer"/>
-    </div>
-</form>
+
+
+    <form method="POST" action="">
+        {% csrf_token %}
+        <div class="card" style="background-color: rgba(0, 0, 0, 0.1);">
+            <table class="table mb-0">
+                <tbody>
+                <tr>
+                    <td>
+                        <p>
+                            <text style="font-weight: bold"> Titre du post :</text>
+                            {{ form.titre }}
+                        </p>
+                        <br>
+                        <p>
+                            {{ form.description.label_tag }}<br>
+                            {{ form.description }}
+                        </p>
+                    </td>
+                    <td>
+                        {% if not mod %}
+                            <p>
+                                <text style="font-weight: bold"> Club :</text>
+                                <select class=form name="communaute">
+                                    <option value="" selected disabled hidden>----</option>
+                                    {% for com in communautes %}
+                                        {{ com.id }}
+                                        {% if com.open %}
+                                            {% if com.suspended == 0 %}
+                                                <option value={{ com.id }}>{{ com.nom }}</option>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </p>
+                        {% endif %}
+                        <br>
+                        <p>
+                            <text style="font-weight: bold"> Niveau de priorité du post :</text>
+                            {{ form.priorite }}
+                        </p>
+                        <br>
+                        <p>
+                            <text style="font-weight: bold"> Est-ce un évènement ?</text>
+                            {{ form.evenementiel }}
+                        </p>
+                        <br>
+                        <br>
+                        <p>
+                            <text style="font-weight: bold"> Si c'est le cas, fournir la date de l'évènement :</text>
+                            {{ form.date_evenement }}
+                        </p>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <br>
+        <div class="centered">
+            <input class="btn btn-primary" type="submit" value="Envoyer"/>
+        </div>
+    </form>
 
 {% endblock %}
