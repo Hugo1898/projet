@@ -23,7 +23,7 @@
                         </kbd>
                     </p>
                     <!-- Modification du post ssi auteur non banned et que la communauté n'est pas suspendue par l'admin-->
-                    {% if user == post.auteur and not post.communaute.suspended and user not in post.communaute.banned %}
+                    {% if user == post.auteur and not post.communaute.suspended and post.communaute.open and user not in post.communaute.banned.all %}
                         <p> Par {{ post.auteur }}
                             &nbsp &nbsp
                             <a href="/communitymanager/modif_post/{{ post.id }}/">

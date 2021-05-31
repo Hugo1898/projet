@@ -5,7 +5,12 @@
 {% endblock %}
 
 {% block content %}
-
+<style>#avertissement a {
+                                    color: red
+                                }</style>
+     <style>#sticky a {
+                            color: orange
+                        }</style>
     <h2>{{ com.nom }}</h2>
     <!-- Sticky Post pour les Community Managers si la communauté n'est pas suspendue par l'admin
     et est bien ouverte par le community manager -->
@@ -14,9 +19,6 @@
             {% if com.open %}
                 <button type="button" class="btn btn-light">
                     <div id="sticky" style="color:orange">
-                        <style>#sticky a {
-                            color: orange
-                        }</style>
                         <a href="/communitymanager/nouveau_post/1">
                             <h4>
                                 <i class="fa fa-concierge-bell"></i> Créer Sticky Post
@@ -39,9 +41,6 @@
     {% if request.user.is_superuser %}
         <button type="button" class="btn btn-light">
             <div id="avertissement" style="color:red">
-                <style>#avertissement a {
-                    color: red
-                }</style>
                 <a href="/communitymanager/nouveau_post/2">
                     <h4>
                         <i class="fa fa-exclamation-triangle"></i> Créer Avertissement
@@ -86,7 +85,7 @@
                             &nbsp &nbsp
                             <kbd> {{ post.communaute.nom }} </kbd>
                         </p>
-                        {% if user == post.auteur and not post.communaute.suspended and user not in post.communaute.banned.all %}
+                        {% if user == post.auteur and not post.communaute.suspended and post.communaute.open and user not in post.communaute.banned.all %}
                             <p> Par {{ post.auteur }}
                                 &nbsp &nbsp
                                 <a href="/communitymanager/modif_post/{{ post.id }}/">
@@ -119,6 +118,9 @@
                             &nbsp &nbsp
                             <a href="/communitymanager/delete_post/{{ post.id }}/">
                                 <i class="fa fa-trash"></i></a>
+                            &nbsp &nbsp
+                            <a href="/communitymanager/sticky_modify/{{ post.id }}/">
+                                <i class="fa fa-concierge-bell"></i></a>
                             &nbsp &nbsp
                         {% endif %}
                         </p>

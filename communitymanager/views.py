@@ -71,6 +71,10 @@ def post(request, post_id):
     # Si la communauté est suspendue et que l'user n'est pas superuser, il ne peut pas y accéder
     if post.communaute.suspended == 2 and not request.user.is_superuser:
         return redirect("communautes")
+    # Si la communauté est fermée et que l'auteur n'est ni admin ni superuser
+    if not post.visible:
+        if not request.user.is_superuser and not request.user in post.communaute.managers.all():
+            return redirect("communautes")
 
     form = CommentaireForm(request.POST or None)
 
@@ -130,6 +134,9 @@ def modif_post(request, post_id):
 
     # Si la communauté est suspendue et que l'user n'est pas superuser, il ne peut pas modifier le post
     if (post.communaute.suspended == (2 or 1) ) and not request.user.is_superuser:
+        return redirect("communautes")
+    # Si la communauté est fermee et que l'user n'est pas manager, il ne peut pas modifier le post
+    if not post.communaute.open and not request.user in post.communaute.managers.all():
         return redirect("communautes")
     # Si l'user est banni de la communaute
     if request.user in post.communaute.banned.all():
@@ -194,6 +201,17 @@ def delete_communaute(request, communaute_id):
     return redirect('communautes')
 
 @login_required
+def open_close_communaute(request, communaute_id):
+    communaute = get_object_or_404(Communaute, pk=communaute_id)
+    if request.user in communaute.managers.all():
+        if (communaute.open):
+            communaute.open = False
+        elif (not communaute.open):
+            communaute.open = True
+        communaute.save()
+    return redirect('communautes')
+
+@login_required
 def delete_post(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
     com_id = post.communaute.id
@@ -235,7 +253,18 @@ def suspend_communaute(request, com_id, action):
         communaute.save()
     return redirect('communautes')
 
+@login_required
+def sticky_modify(request, post_id):
+    post = get_object_or_404(Post, pk=post_id)
 
+    if request.user not in post.communaute.banned.all():
+        if not post.avertissement and request.user in post.communaute.managers.all():
+            if (post.sticky):
+                post.sticky=False
+            elif (not post.sticky):
+                post.sticky=True
+            post.save()
+    return redirect('communaute', com_id=post.communaute.id)
 
 
 def signup(request):
