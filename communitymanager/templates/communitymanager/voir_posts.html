@@ -86,7 +86,7 @@
                             &nbsp &nbsp
                             <kbd> {{ post.communaute.nom }} </kbd>
                         </p>
-                        {% if user == post.auteur %}
+                        {% if user == post.auteur and not post.communaute.suspended and user not in post.communaute.banned.all %}
                             <p> Par {{ post.auteur }}
                                 &nbsp &nbsp
                                 <a href="/communitymanager/modif_post/{{ post.id }}/">

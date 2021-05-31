@@ -120,7 +120,7 @@ def nouveau_post(request, special_post=0):
             post.save()
             return redirect('post', post_id=post.id)
 
-    communautes = Communaute.objects.all()
+    communautes_choices = Communaute.objects.filter(open=True, suspended=0).exclude(banned=request.user)
     return render(request, 'communitymanager/nouveau_post.html', locals())
 
 
@@ -129,7 +129,10 @@ def modif_post(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
 
     # Si la communauté est suspendue et que l'user n'est pas superuser, il ne peut pas modifier le post
-    if (post.communaute.suspended == (2 or 1) )and not request.user.is_superuser:
+    if (post.communaute.suspended == (2 or 1) ) and not request.user.is_superuser:
+        return redirect("communautes")
+    # Si l'user est banni de la communaute
+    if request.user in post.communaute.banned.all():
         return redirect("communautes")
 
     form = PostForm(request.POST or None, instance=post)
@@ -188,20 +191,23 @@ def delete_communaute(request, communaute_id):
 @login_required
 def delete_post(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
-    com_id=post.communaute.id
-    if (not post.avertissement and request.user in post.communaute.managers.all()) or (post.avertissement and request.user.is_superuser):
-        post.delete()
+    com_id = post.communaute.id
+    if request.user not in post.communaute.banned.all():
+        if (not post.avertissement and request.user in post.communaute.managers.all()) or (post.avertissement and request.user.is_superuser):
+            post.delete()
     return redirect('communaute', com_id=com_id)
 
 @login_required
 def visibility_post(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
-    if (not post.avertissement and request.user in post.communaute.managers.all()) or (post.avertissement and request.user.is_superuser):
-        if (post.visible):
-            post.visible=False
-        elif (not post.visible):
-            post.visible=True
-        post.save()
+
+    if request.user not in post.communaute.banned.all():
+        if (not post.avertissement and request.user in post.communaute.managers.all()) or (post.avertissement and request.user.is_superuser):
+            if (post.visible):
+                post.visible=False
+            elif (not post.visible):
+                post.visible=True
+            post.save()
     return redirect('communaute', com_id=post.communaute.id)
 
 @login_required

@@ -22,8 +22,8 @@
                                href="/communitymanager/communaute/{{ post.communaute.id }}/"> {{ post.communaute.nom }} </a>
                         </kbd>
                     </p>
-                    <!-- Modification du post ssi auteur et que la communauté n'est pas suspendue par l'admin-->
-                    {% if user == post.auteur and not post.communaute.suspended%}
+                    <!-- Modification du post ssi auteur non banned et que la communauté n'est pas suspendue par l'admin-->
+                    {% if user == post.auteur and not post.communaute.suspended and user not in post.communaute.banned %}
                         <p> Par {{ post.auteur }}
                             &nbsp &nbsp
                             <a href="/communitymanager/modif_post/{{ post.id }}/">
@@ -86,16 +86,20 @@
             </tbody>
         </table>
     </div>
-    <!-- Possibilité d'ajouter des commentaires ssi open et suspended == 0 (d'où not suspended)-->
-    {% if post.communaute.open and not post.communaute.suspended %}
-        <form method="POST" action="" style="margin-left: 0px !important; margin-top: 5px">
-            {% csrf_token %}
-            <text style="font-weight:bold"> Ajouter un commentaire :</text>
-            {{ form.contenu }}
-            <input class="btn btn-primary" type="submit" value="Commenter"/>
-        </form>
+    <!-- Possibilité d'ajouter des commentaires ssi pas banned, open et suspended == 0 (d'où not suspended)-->
+    {% if request.user not in post.communaute.banned.all %}
+        {% if post.communaute.open and not post.communaute.suspended %}
+            <form method="POST" action="" style="margin-left: 0px !important; margin-top: 5px">
+                {% csrf_token %}
+                <text style="font-weight:bold"> Ajouter un commentaire :</text>
+                {{ form.contenu }}
+                <input class="btn btn-primary" type="submit" value="Commenter"/>
+            </form>
+        {% else %}
+            <text style="font-weight:bold"> Désolé, cette communauté est fermée, vous ne pouvez plus commenter !</text>
+        {% endif %}
     {% else %}
-        <text style="font-weight:bold"> Désolé, cette communauté est fermée, vous ne pouvez plus commenter !</text>
+        <text style="font-weight:bold"> Désolé, vous êtes bannis de cette communauté, vous ne pouvez plus commenter !</text>
     {% endif %}
 
 {% endblock %}

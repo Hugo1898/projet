@@ -39,13 +39,9 @@
                                 <text style="font-weight: bold"> Club :</text>
                                 <select class=form name="communaute">
                                     <option value="" selected disabled hidden>----</option>
-                                    {% for com in communautes %}
+                                    {% for com in communautes_choices %}
                                         {{ com.id }}
-                                        {% if com.open %}
-                                            {% if com.suspended == 0 %}
-                                                <option value={{ com.id }}>{{ com.nom }}</option>
-                                            {% endif %}
-                                        {% endif %}
+                                                    <option value={{ com.id }}>{{ com.nom }}</option>
                                     {% endfor %}
                                 </select>
                             </p>
