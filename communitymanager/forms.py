@@ -9,7 +9,7 @@ class CommentaireForm(forms.Form):
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        exclude = ["auteur"]
+        exclude = ["auteur", "sticky", "visible"]
         widgets = {
             'date_evenement': forms.DateTimeInput(attrs={
             'class': 'form-control', 'type':'datetime-local',

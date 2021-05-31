@@ -127,7 +127,8 @@ def modif_post(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
 
     # Si la communauté est suspendue et que l'user n'est pas superuser, il ne peut pas modifier le post
-    if (post.communaute.suspended == 2 or 1 )and not request.user.is_superuser:
+    if (post.communaute.suspended == (2 or 1) )and not request.user.is_superuser:
+        print(post.communaute.suspended)
         return redirect("communautes")
 
     form = PostForm(request.POST or None, instance=post)
@@ -310,13 +311,13 @@ def advanced_search(request):
                 comments_written_by = Commentaire.objects.filter(post__commentaire__date_creation__lt=form.end)
                 comments_containing = Commentaire.objects.filter(post__commentaire__date_creation__lt=form.end)
             if form.subscribed_only:
-                community_titles = Communaute.objects.filter(communaute__titre__icontains=form.content)
-                community_desc = Communaute.objects.filter(communuate__description__icontains=form.content)
-                posts_written_by = Post.objects.filter(communaute__post__date_creation__gt=form.start)
-                posts_title_containing = Post.objects.filter(communaute__post__date_creation__gt=form.start)
-                posts_content_containing = Post.objects.filter(communaute__post__date_creation__gt=form.start)
-                comments_written_by = Commentaire.objects.filter(post__commentaire__date_creation__gt=form.start)
-                comments_containing = Commentaire.objects.filter(post__commentaire__date_creation__gt=form.start)
+                community_titles = Communaute.objects.filter(abonnes__communautes__abonnes__contains=request.user)
+                community_desc = Communaute.objects.filter(abonnes__communautes__abonnes__contains=request.user)
+                posts_written_by = Post.objects.filter(communaute__abonnes__post__contains=request.user)
+                posts_title_containing = Post.objects.filter(communaute__abonnes__post__contains=request.user)
+                posts_content_containing = Post.objects.filter(communaute__abonnes__post__contains=request.user)
+                comments_written_by = Commentaire.objects.filter(communaute__abonnes__post__commentaire__contains=request.user)
+                comments_containing = Commentaire.objects.filter(communaute__abonnes__post__commentaire__contains=form.start)
             return render(request, 'communitymanager/search_result.html',{'community_titles':community_titles,
                                                                           'community_desc':community_desc,
                                                                           'posts_written_by':posts_written_by,
