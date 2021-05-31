@@ -41,6 +41,7 @@ class Post(models.Model):
     auteur = models.ForeignKey(User, on_delete=models.CASCADE)
     visible = models.BooleanField(default=True)
     sticky = models.BooleanField(default=False)
+    avertissement = models.BooleanField(default=False)
 
 
     class Meta:
