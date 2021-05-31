@@ -47,7 +47,7 @@ def communaute(request, com_id):
     if com.suspended == 2 and not request.user.is_superuser :
         return redirect("communautes")
 
-    if request.user in com.managers.all():
+    if request.user in com.managers.all() or request.user.is_superuser:
         posts = Post.objects.filter(communaute=com_id).order_by('-avertissement', '-sticky', '-date_creation')
     else:
         posts = Post.objects.filter(communaute=com_id, visible=True).order_by('-avertissement','-sticky', '-date_creation')
@@ -189,14 +189,14 @@ def delete_communaute(request, communaute_id):
 def delete_post(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
     com_id=post.communaute.id
-    if request.user in post.communaute.managers.all():
+    if (not post.avertissement and request.user in post.communaute.managers.all()) or (post.avertissement and request.user.is_superuser):
         post.delete()
     return redirect('communaute', com_id=com_id)
 
 @login_required
 def visibility_post(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
-    if request.user in post.communaute.managers.all():
+    if (not post.avertissement and request.user in post.communaute.managers.all()) or (post.avertissement and request.user.is_superuser):
         if (post.visible):
             post.visible=False
         elif (not post.visible):
