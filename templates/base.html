@@ -15,7 +15,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
-</head>
+    {% block head %}{% endblock %}
 
 <title>{% block title %}{% endblock %}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -35,6 +35,9 @@
             </li>
             <li class="nav-item">
             <a class="nav-link" role="tab" id="clubs" href="/communitymanager/communautes/">Liste des clubs</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" role="tab" id="com" href="/communitymanager/calendrier/0/0/1/1/2021/1/1/2022">Calendrier</a>
             </li>
             <li class="nav-item">
             <a class="nav-link" role="tab" id="post" href="/communitymanager/nouveau_post/">Créer un post</a>
