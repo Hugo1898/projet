@@ -40,8 +40,7 @@
                                 {% if not mod %}
                                     <option value="" selected disabled hidden>----</option>
                                     {% for com in communautes_choices %}
-                                        {{ com.id }}
-
+                                        <option value={{ com.id }}>{{ com.nom }}</option>
                                     {% endfor %}
                                 {% else %}
                                     <option value={{ post.communaute.id }}>{{ post.communaute.nom }}</option>
