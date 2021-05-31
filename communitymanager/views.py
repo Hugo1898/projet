@@ -136,6 +136,8 @@ def modif_post(request, post_id):
         return redirect("communautes")
 
     form = PostForm(request.POST or None, instance=post)
+    print("voici la com")
+    print(post.communaute)
     mod = True
     if form.is_valid():
         print("form valide")
@@ -143,6 +145,9 @@ def modif_post(request, post_id):
         postm.auteur = request.user
         postm.save()
         return redirect('post', post_id=post_id)
+    else:
+        print("form invalide boloss")
+        print(form.errors)
     return render(request, 'communitymanager/nouveau_post.html', locals())
 
 
