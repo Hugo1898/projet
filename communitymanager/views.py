@@ -11,6 +11,8 @@ from .utils import *
 
 @login_required
 def communautes(request):
+    """Page d'affichage des communautes, qui sert de page d'accueil
+        Permet aux community managers et administrateurs de modifier l'état d'une communauté"""
     if request.user.is_superuser:
         communities = Communaute.objects.all()
     else:
@@ -41,6 +43,8 @@ def abonnement(request, action, com_id):
 
 @login_required
 def communaute(request, com_id):
+    """Page d'affichage des détails d'une communaute
+            Permet aux community managers de suivre l'Etat des posts de leur communauté"""
     com = get_object_or_404(Communaute, pk=com_id)
 
     # Si la communauté est suspendue et que l'user n'est pas superuser, il ne peut pas y accéder
@@ -63,9 +67,9 @@ def communaute(request, com_id):
         com.user_is_manager = True
     return render(request, 'communitymanager/voir_posts.html', locals())
 
-
 @login_required
 def post(request, post_id):
+    """Affichage d'un post et de ses commentaires"""
     post = get_object_or_404(Post, pk=post_id)
 
     # Si la communauté est suspendue et que l'user n'est pas superuser, il ne peut pas y accéder
@@ -110,6 +114,7 @@ def commentaire(request, post_id, contenu):
 
 @login_required
 def nouveau_post(request, special_post=0):
+    """Page de création d'un nouveau post"""
     form = PostForm(request.POST or None)
     mod = False
     if form.is_valid():
@@ -124,12 +129,19 @@ def nouveau_post(request, special_post=0):
             post.save()
             return redirect('post', post_id=post.id)
 
+    # Choix de communautés dans lesquelles l'user peut créer un post,
+    # Elle doit etre ouverte, non suspendue et il ne doit pas en être banni
     communautes_choices = Communaute.objects.filter(open=True, suspended=0).exclude(banned=request.user)
+    # Sauf pour un avertissement qui peut toujours être créé par un administrateur
+    if (special_post==2) and request.user.is_superuser:
+        communautes_choices = Communaute.objects.all()
+
     return render(request, 'communitymanager/nouveau_post.html', locals())
 
 
 @login_required
 def modif_post(request, post_id):
+    """Page de modification d'un post"""
     post = get_object_or_404(Post, pk=post_id)
 
     # Si la communauté est suspendue et que l'user n'est pas superuser, il ne peut pas modifier le post
@@ -143,23 +155,18 @@ def modif_post(request, post_id):
         return redirect("communautes")
 
     form = PostForm(request.POST or None, instance=post)
-    print("voici la com")
-    print(post.communaute)
     mod = True
     if form.is_valid():
-        print("form valide")
         postm = form.save(commit=False)
         postm.auteur = request.user
         postm.save()
         return redirect('post', post_id=post_id)
-    else:
-        print("form invalide boloss")
-        print(form.errors)
     return render(request, 'communitymanager/nouveau_post.html', locals())
 
 
 @login_required
 def news_feed(request):
+    """Affichage de tous les posts des communautés abonnées en ordre chronologique"""
     communautes = request.user.communautes.filter(Q(suspended=0) | Q(suspended=1))
     coments = Commentaire.objects.all()
     posts = Post.objects.filter(visible=True).order_by('-date_creation').filter(communaute__in=communautes)
@@ -171,6 +178,7 @@ def news_feed(request):
 
 @login_required
 def nouvelle_communaute(request):
+    """Page de création d'une communauté"""
     form = CommunauteForm(request.POST or None)
     if form.is_valid():
         form.save()
@@ -180,6 +188,7 @@ def nouvelle_communaute(request):
 
 @login_required
 def modif_communaute(request, communaute_id):
+    """Page de modification d'une communauté"""
     communaute = get_object_or_404(Communaute, pk=communaute_id)
     if request.user in communaute.managers.all():
 
@@ -195,6 +204,7 @@ def modif_communaute(request, communaute_id):
 
 @login_required
 def delete_communaute(request, communaute_id):
+    """Commande pour la suppression d'une communaute si l'user est bien manager"""
     communaute = get_object_or_404(Communaute, pk=communaute_id)
     if request.user in communaute.managers.all():
         communaute.delete()
@@ -202,6 +212,8 @@ def delete_communaute(request, communaute_id):
 
 @login_required
 def open_close_communaute(request, communaute_id):
+    """Commande pour l'ouverture/fermeture d'une communaute si l'user est bien manager"""
+
     communaute = get_object_or_404(Communaute, pk=communaute_id)
     if request.user in communaute.managers.all():
         if (communaute.open):
@@ -212,7 +224,18 @@ def open_close_communaute(request, communaute_id):
     return redirect('communautes')
 
 @login_required
+def suspend_communaute(request, com_id, action):
+    """Commande pour la suspension d'une communaute si l'user est bien admin ie superuser"""
+
+    communaute = get_object_or_404(Communaute, pk=com_id)
+    if request.user.is_superuser and (action in {0,1,2}):
+        communaute.suspended = action
+        communaute.save()
+    return redirect('communautes')
+
+@login_required
 def delete_post(request, post_id):
+    """Commande pour la suppression d'un post"""
     post = get_object_or_404(Post, pk=post_id)
     com_id = post.communaute.id
     if request.user not in post.communaute.banned.all():
@@ -222,6 +245,7 @@ def delete_post(request, post_id):
 
 @login_required
 def visibility_post(request, post_id):
+    """Commande pour le changement de statut de visibilité d'un post"""
     post = get_object_or_404(Post, pk=post_id)
 
     if request.user not in post.communaute.banned.all():
@@ -234,27 +258,8 @@ def visibility_post(request, post_id):
     return redirect('communaute', com_id=post.communaute.id)
 
 @login_required
-def visibility_comment(request, commentaire_id):
-    commentaire = get_object_or_404(Commentaire, pk=commentaire_id)
-    if request.user in commentaire.post.communaute.managers.all():
-        if (commentaire.visible):
-            commentaire.visible=False
-        elif (not commentaire.visible):
-            commentaire.visible=True
-        commentaire.save()
-    return redirect('post', post_id=commentaire.post.id)
-
-
-@login_required
-def suspend_communaute(request, com_id, action):
-    communaute = get_object_or_404(Communaute, pk=com_id)
-    if request.user.is_superuser and (action in {0,1,2}):
-        communaute.suspended = action
-        communaute.save()
-    return redirect('communautes')
-
-@login_required
-def sticky_modify(request, post_id):
+def sticky_modify_post(request, post_id):
+    """Commande pour transformer un post sticky en non et réciproquement"""
     post = get_object_or_404(Post, pk=post_id)
 
     if request.user not in post.communaute.banned.all():
@@ -265,6 +270,22 @@ def sticky_modify(request, post_id):
                 post.sticky=True
             post.save()
     return redirect('communaute', com_id=post.communaute.id)
+
+
+@login_required
+def visibility_comment(request, commentaire_id):
+    """Commande pour le changement de statut de visibilité d'un commentaire"""
+    commentaire = get_object_or_404(Commentaire, pk=commentaire_id)
+    if request.user in commentaire.post.communaute.managers.all():
+        if (commentaire.visible):
+            commentaire.visible=False
+        elif (not commentaire.visible):
+            commentaire.visible=True
+        commentaire.save()
+    return redirect('post', post_id=commentaire.post.id)
+
+
+
 
 
 def signup(request):

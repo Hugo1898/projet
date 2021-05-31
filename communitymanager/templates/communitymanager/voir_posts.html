@@ -119,7 +119,9 @@
                             <a href="/communitymanager/delete_post/{{ post.id }}/">
                                 <i class="fa fa-trash"></i></a>
                             &nbsp &nbsp
-                            <a href="/communitymanager/sticky_modify/{{ post.id }}/">
+                        {% endif %}
+                        {% if com.user_is_manager and not post.avertissement %}
+                            <a href="/communitymanager/sticky_modify_post/{{ post.id }}/">
                                 <i class="fa fa-concierge-bell"></i></a>
                             &nbsp &nbsp
                         {% endif %}

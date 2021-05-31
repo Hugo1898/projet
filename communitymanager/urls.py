@@ -25,7 +25,7 @@ urlpatterns = [
     path('visibility_post/<int:post_id>/', views.visibility_post, name='visibility_post'),
     path('nouveau_post/<int:special_post>/', views.nouveau_post, name='nouveau_special_post'),
     path('delete_post/<int:post_id>/', views.delete_post, name='delete_post'),
-    path('sticky_modify/<int:post_id>/', views.sticky_modify, name='sticky_modify'),
+    path('sticky_modify_post/<int:post_id>/', views.sticky_modify_post, name='sticky_modify_post'),
 
     ## Actions sur Commentaire
     path('visibility_comment/<int:commentaire_id>/', views.visibility_comment, name='visibility_comment'),
