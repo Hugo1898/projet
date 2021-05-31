@@ -48,9 +48,9 @@ def communaute(request, com_id):
         return redirect("communautes")
 
     if request.user in com.managers.all():
-        posts = Post.objects.filter(communaute=com_id).order_by('-sticky', '-date_creation')
+        posts = Post.objects.filter(communaute=com_id).order_by('-avertissement', '-sticky', '-date_creation')
     else:
-        posts = Post.objects.filter(communaute=com_id, visible=True).order_by('-sticky', '-date_creation')
+        posts = Post.objects.filter(communaute=com_id, visible=True).order_by('-avertissement','-sticky', '-date_creation')
 
     counts = {}
     for post in posts:

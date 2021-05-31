@@ -5,62 +5,74 @@
 
 {% block content %}
 
-<h2>Fil d'actualité</h2>
-<br>
-<div class="card">
-<table class="table table-striped">
-    <tbody>
-    {% for post in posts %}
-        <tr>
-        <td>
-            <h4>
-                {% if  post.sticky %}
-                        <i class="fa fa-grin-hearts"></i>
-                        <i class="fa fa-tape"></i>
-                        <i class="fa fa-grin-hearts"></i>
-                {% endif %}
-        <a href="/communitymanager/post/{{ post.id }}/">  {{ post.titre }}  </a>
+    <h2>Fil d'actualité</h2>
+    <br>
+    <div class="card">
+        <table class="table table-striped">
+            <tbody>
+            {% for post in posts %}
+                <tr>
+                    <td>
 
-            </h4>
-        <p> {{ post.description }}</p>
-        </td>
-        <td>
-        <p>
-            <i class="fas fa-circle" style="color: {{ post|get_color:post.priorite }}"></i>
-             &nbsp &nbsp
-            <kbd>
-                <a style="color: white" href="/communitymanager/communaute/{{ post.communaute.id }}/"> {{ post.communaute.nom }} </a>
-            </kbd>
-        </p>
-        {% if user == post.auteur %}
-            <p> Par {{ post.auteur }}
-            &nbsp &nbsp
-            <a href="/communitymanager/modif_post/{{ post.id }}/">
-            <i class="fa fa-pencil-square-o" ></i> </a>
-            &nbsp &nbsp
-            <kbd style="background-color: #b4b0b0">
-            {{ counts|get_item:post.titre }}
-            <i class="fas fa-comment"></i>
-            </kbd>
-            </p>
-        {% else %}
-            <p> Par {{ post.auteur }}
-            &nbsp &nbsp
-            <kbd style="background-color: #b4b0b0">
-            {{ counts|get_item:post.titre }}
-            <i class="fas fa-comment"></i>
-            </kbd>
-            </p>
-        {% endif %}
-        {% if post.evenementiel %}
-        <p> <i class='fas'>&#xf073;</i> Prévu le {{ post.date_evenement }}</p>
-        {% endif %}
-        <small style="color: grey">Dernière modification : {{ post.date_creation }}</small>
-        </td>
-        </tr>
-    {% endfor %}
+                        <h4>
+                            {% if  post.sticky %}
+                                <div id="sticky" style="color:orange">
+                                <style>#sticky a {
+                                    color: orange
+                                }</style>
+                                <i class="fa fa-concierge-bell"></i>
+                            {% endif %}
+                            {% if post.avertissement %}
+                                <div id="avertissement" style="color:red">
+                                <style>#avertissement a {
+                                    color: red
+                                }</style>
+                                <i class="fa fa-exclamation-triangle"></i>
+                            {% endif %}
+                            <a href="/communitymanager/post/{{ post.id }}/">  {{ post.titre }}  </a>
+                            </div>
+                        </h4>
+                </div>
+                <p> {{ post.description }}</p>
+                </td>
+                <td>
+                    <p>
+                        <i class="fas fa-circle" style="color: {{ post|get_color:post.priorite }}"></i>
+                        &nbsp &nbsp
+                        <kbd>
+                            <a style="color: white"
+                               href="/communitymanager/communaute/{{ post.communaute.id }}/"> {{ post.communaute.nom }} </a>
+                        </kbd>
+                    </p>
+                    {% if user == post.auteur %}
+                        <p> Par {{ post.auteur }}
+                            &nbsp &nbsp
+                            <a href="/communitymanager/modif_post/{{ post.id }}/">
+                                <i class="fa fa-pencil-square-o"></i> </a>
+                            &nbsp &nbsp
+                            <kbd style="background-color: #b4b0b0">
+                                {{ counts|get_item:post.titre }}
+                                <i class="fas fa-comment"></i>
+                            </kbd>
+                        </p>
+                    {% else %}
+                        <p> Par {{ post.auteur }}
+                            &nbsp &nbsp
+                            <kbd style="background-color: #b4b0b0">
+                                {{ counts|get_item:post.titre }}
+                                <i class="fas fa-comment"></i>
+                            </kbd>
+                        </p>
+                    {% endif %}
+                    {% if post.evenementiel %}
+                        <p><i class='fas'>&#xf073;</i> Prévu le {{ post.date_evenement }}</p>
+                    {% endif %}
+                    <small style="color: grey">Dernière modification : {{ post.date_creation }}</small>
+                </td>
+                </tr>
+            {% endfor %}
     </tbody>
-</table>
-</div>
+    </table>
+    </div>
 
 {% endblock %}
