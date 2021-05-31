@@ -265,6 +265,7 @@ def calendrier(request, com_id, prio_deg, j_d, m_d, y_d, j_f, m_f, y_f):
         post = form.save(commit=False)
         post.auteur = request.user
         post.evenementiel = True
+        post.visible = True
         post.save()
 
     coms = Communaute.objects.all()
