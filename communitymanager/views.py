@@ -335,7 +335,7 @@ def calendrier(request, com_id, prio_deg, j_d, m_d, y_d, j_f, m_f, y_f):
         post.visible = True
         post.save()
 
-    coms = Communaute.objects.all()
+    coms = Communaute.objects.exclude(suspended=2)
     priorites = Priorite.objects.all().order_by("degre")
 
     if prio_deg != 0:
@@ -347,5 +347,7 @@ def calendrier(request, com_id, prio_deg, j_d, m_d, y_d, j_f, m_f, y_f):
     date_d = conv_date(j_d, m_d, y_d)
     date_f = conv_date(j_f, m_f, y_f)
     posts = filter(com_id, prio_deg, date_d, date_f)
+
+    communautes_choices = Communaute.objects.filter(open=True, suspended=0).exclude(banned=request.user)
 
     return render(request, 'communitymanager/calendrier.html', locals())
