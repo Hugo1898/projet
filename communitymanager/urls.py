@@ -2,6 +2,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    # Projet individuel - Hugo
     path('communautes/', views.communautes, name='communautes'),
     path('communautes/<str:action>/<int:com_id>/', views.abonnement, name='abonnement'),
     path('communaute/<int:com_id>/', views.communaute, name='communaute'),
@@ -11,9 +12,9 @@ urlpatterns = [
     path('modif_post/<int:post_id>/', views.modif_post, name='modif_post'),
     path('news_feed/', views.news_feed, name='news_feed'),
     path('nouvelle_communaute/', views.nouvelle_communaute, name='nouvelle_communaute'),
+    path('', views.communautes, name='home'),
 
     #Extention 2 - Antoine
-    path('', views.communautes, name='home'),
 
     ## Actions sur Communaute
     path('modif_communaute/<int:communaute_id>/', views.modif_communaute, name='modif_communaute'),
