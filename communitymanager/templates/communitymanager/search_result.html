@@ -9,7 +9,16 @@
 {% block content %}
     <form method="POST" action="">
     {% csrf_token %}
-    {% form as_p %}
+        <label for="content">Search : </label><br>
+        <input type="text" id="content" name="content"><br>
+        <label for="start">Start date</label><br>
+        <input type="date" id="start" name="Start date"><br>
+        <label for="end">End date</label><br>
+        <input type="date" id="end" name="End date"><br>
+        <label for="event_date">Event date</label><br>
+        <input type="date" id="event_date" name="Event date"><br>
+        <label for="subscribed_only">Search only in subscribed communities</label>
+        <input type="checkbox" id="subscribed_only" name="Search only in subscribed Communities"><br>
     <input class="btn btn-primary" type="submit" value="Envoyer"/>
     </form>
     <h4>Search Results : </h4>
