@@ -19,14 +19,14 @@
                         &nbsp &nbsp
                         <kbd>
                             <a style="color: white"
-                               href="/communitymanager/communaute/{{ post.communaute.id }}/"> {{ post.communaute.nom }} </a>
+                               href={% url 'communaute' post.communaute.id %}> {{ post.communaute.nom }} </a>
                         </kbd>
                     </p>
                     <!-- Modification du post ssi auteur non banned et que la communauté n'est pas suspendue par l'admin-->
                     {% if user == post.auteur and not post.communaute.suspended and post.communaute.open and user not in post.communaute.banned.all %}
                         <p> Par {{ post.auteur }}
                             &nbsp &nbsp
-                            <a href="/communitymanager/modif_post/{{ post.id }}/">
+                            <a href={% url 'modif_post' post.id %}>
                                 <i class="fa fa-pencil-square-o"></i> </a>
                             &nbsp &nbsp
                             <kbd style="background-color: #b4b0b0">
@@ -61,7 +61,7 @@
                 <tr>
                     <td>
                         {% if coment.user_is_manager and not post.communaute.suspended%}
-                            <a href="/communitymanager/visibility_comment/{{ coment.id }}/">
+                            <a href={% url 'visibility_comment' coment.id %}>
                                 {% if  not coment.visible %}
                                     <i class="fa fa-eye"></i> </a>
                                 {% else %}

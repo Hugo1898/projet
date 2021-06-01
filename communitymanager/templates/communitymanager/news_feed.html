@@ -25,7 +25,7 @@
 
                                 <i class="fa fa-exclamation-triangle"></i>
                             {% endif %}
-                            <a href="/communitymanager/post/{{ post.id }}/">  {{ post.titre }}  </a>
+                            <a href={% url 'post' post.id %}>  {{ post.titre }}  </a>
                             </div>
                         </h4>
                 </div>
@@ -37,13 +37,13 @@
                         &nbsp &nbsp
                         <kbd>
                             <a style="color: white"
-                               href="/communitymanager/communaute/{{ post.communaute.id }}/"> {{ post.communaute.nom }} </a>
+                               href={% url 'communaute' post.communaute.id %}> {{ post.communaute.nom }} </a>
                         </kbd>
                     </p>
                     {% if user == post.auteur %}
                         <p> Par {{ post.auteur }}
                             &nbsp &nbsp
-                            <a href="/communitymanager/modif_post/{{ post.id }}/">
+                            <a href={% url 'modif_post' post.id %}>
                                 <i class="fa fa-pencil-square-o"></i> </a>
                             &nbsp &nbsp
                             <kbd style="background-color: #b4b0b0">

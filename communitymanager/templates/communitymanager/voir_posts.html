@@ -14,7 +14,7 @@
             {% if com.open %}
                 <button type="button" class="btn btn-light">
                     <div id="sticky" style="color:orange">
-                        <a href="/communitymanager/nouveau_post/1">
+                        <a href={% url 'nouveau_post' 1 %}>
                             <h4>
                                 <i class="fa fa-concierge-bell"></i> Créer Sticky Post
                             </h4>
@@ -36,7 +36,7 @@
     {% if request.user.is_superuser %}
         <button type="button" class="btn btn-light">
             <div id="avertissement" style="color:red">
-                <a href="/communitymanager/nouveau_post/2">
+                <a href={% url 'nouveau_post' 2 %}>
                     <h4>
                         <i class="fa fa-exclamation-triangle"></i> Créer Avertissement
                     </h4>
@@ -67,7 +67,7 @@
                                 <i class="fa fa-eye-slash" style="color:grey"></i>
                                 <text style="color:grey">Hidden</text>
                             {% endif %}
-                            <a href="/communitymanager/post/{{ post.id }}/">
+                            <a href={% url 'post' post.id %}>
                                 {{ post.titre }}</a>
                             </div>
                         </h4>
@@ -83,7 +83,7 @@
                         {% if user == post.auteur and not post.communaute.suspended and post.communaute.open and user not in post.communaute.banned.all %}
                             <p> Par {{ post.auteur }}
                                 &nbsp &nbsp
-                                <a href="/communitymanager/modif_post/{{ post.id }}/">
+                                <a href={% url 'modif_post' post.id %}>
                                     <i class="fa fa-pencil-square-o"></i> </a>
                                 &nbsp &nbsp
                                 <kbd style="background-color: #b4b0b0">
@@ -104,19 +104,19 @@
                         Seul un Admin peut faire ces actions pour un avertissement -->
                         <!-- and est prioritaire sur le or -->
                         {% if com.user_is_manager and not post.avertissement or post.avertissement and request.user.is_superuser %}
-                            <a href="/communitymanager/visibility_post/{{ post.id }}/">
+                            <a href={% url 'visibility_post' post.id %}>
                                 {% if  not post.visible %}
                                     <i class="fa fa-eye"></i> </a>
                                 {% else %}
                                     <i class="fa fa-eye-slash"></i> </a>
                                 {% endif %}
                             &nbsp &nbsp
-                            <a href="/communitymanager/delete_post/{{ post.id }}/">
+                            <a href={% url 'delete_post' post.id %}>
                                 <i class="fa fa-trash"></i></a>
                             &nbsp &nbsp
                         {% endif %}
                         {% if com.user_is_manager and not post.avertissement %}
-                            <a href="/communitymanager/sticky_modify_post/{{ post.id }}/">
+                            <a href={% url 'sticky_modify_post' post.id %}>
                                 <i class="fa fa-concierge-bell"></i></a>
                             &nbsp &nbsp
                         {% endif %}
