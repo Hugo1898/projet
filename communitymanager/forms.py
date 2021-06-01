@@ -41,10 +41,10 @@ class CommunauteForm(forms.ModelForm):
 
 class SearchForm(forms.Form):
     content = forms.CharField(required=True)
-    start = forms.DateField()
-    end = forms.DateField()
-    event_date = forms.DateField()
-    subscribed_only = forms.BooleanField()
+    start = forms.DateField(required=False)
+    end = forms.DateField(required=False)
+    event_date = forms.DateField(required=False)
+    subscribed_only = forms.BooleanField(required=False)
 
 
 class CalendarForm(forms.ModelForm):

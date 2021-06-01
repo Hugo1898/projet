@@ -10,7 +10,7 @@
     <form method="POST" action="">
     {% csrf_token %}
         <label for="content">Search : </label><br>
-        <input type="text" id="content" name="content"><br>
+        <input type="text" id="content" name="content" required><br>
         <label for="start">Start date</label><br>
         <input type="date" id="start" name="Start date"><br>
         <label for="end">End date</label><br>
@@ -122,7 +122,7 @@
     <div class="card">
     <table class="table table-striped">
     <tbody>
-    {% for post in posts_titles_containing %}
+    {% for post in posts_titles %}
         <tr>
         <td>
         <a href="/communitymanager/post/{{ post.id }}/"> <h4> {{ post.titre }} </h4> </a>
@@ -171,7 +171,7 @@
     <div class="card">
     <table class="table table-striped">
     <tbody>
-    {% for post in posts_content_containing %}
+    {% for post in posts_content %}
         <tr>
         <td>
         <a href="/communitymanager/post/{{ post.id }}/"> <h4> {{ post.titre }} </h4> </a>

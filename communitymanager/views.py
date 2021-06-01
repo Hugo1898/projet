@@ -288,41 +288,49 @@ def advanced_search(request):
     if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
-            form.save()
+            print("form is valid")
             # text search in all text fields
-            community_titles = Communaute.objects.filter(communaute__titre__icontains=form.content)
-            community_desc = Communaute.objects.filter(communuate__description__icontains=form.content)
-            posts_written_by = Post.objects.filter(auteur__username__icontains=form.content)
-            posts_title_containing = Post.objects.filter(communaute__post__titre__contains=form.content)
-            posts_content_containing = Post.objects.filter(communaute__post__contenu__contains=form.content)
-            comments_written_by = Commentaire.objects.filter(auteur__username__icontains=form.content)
-            comments_containing = Commentaire.objects.filter(post__commentaire__contenu__icontains=form.content)
+            content = form.cleaned_data['content']
+            community_titles = Communaute.objects.filter(nom__contains=content)
+            community_desc = Communaute.objects.filter(description__contains=content)
+            posts_written_by = Post.objects.filter(auteur__username__contains=content)
+            posts_title = Post.objects.filter(titre__contains=content)
+            posts_content = Post.objects.filter(description__contains=content)
+            comments_written_by = Commentaire.objects.filter(auteur__username__contains=content)
+            comments_containing = Commentaire.objects.filter(contenu__contains=content)
             # date creation filter
             if form.start:
-                posts_written_by = Post.objects.filter(communaute__post__date_creation__gt=form.start)
-                posts_title_containing = Post.objects.filter(communaute__post__date_creation__gt=form.start)
-                posts_content_containing = Post.objects.filter(communaute__post__date_creation__gt=form.start)
-                comments_written_by = Commentaire.objects.filter(post__commentaire__date_creation__gt=form.start)
-                comments_containing = Commentaire.objects.filter(post__commentaire__date_creation__gt=form.start)
+                start = form.cleaned_data['start']
+                posts_written_by = Post.objects.filter(date_creation__gt=start)
+                posts_title = Post.objects.filter(date_creation__gt=start)
+                posts_content = Post.objects.filter(date_creation__gt=start)
+                comments_written_by = Commentaire.objects.filter(date_creation__gt=start)
+                comments_containing = Commentaire.objects.filter(date_creation__gt=start)
             if form.end:
-                posts_written_by = Post.objects.filter(communaute__post__date_creation__lt=form.end)
-                posts_title_containing = Post.objects.filter(communaute__post__date_creation__lt=form.end)
-                posts_content_containing = Post.objects.filter(communaute__post__date_creation__lt=form.end)
-                comments_written_by = Commentaire.objects.filter(post__commentaire__date_creation__lt=form.end)
-                comments_containing = Commentaire.objects.filter(post__commentaire__date_creation__lt=form.end)
-            if form.subscribed_only:
+                end = form.cleaned_data['end']
+                posts_written_by = Post.objects.filter(post__date_creation__lt=end)
+                posts_title = Post.objects.filter(date_creation__lt=end)
+                posts_content = Post.objects.filter(date_creation__lt=end)
+                comments_written_by = Commentaire.objects.filter(date_creation__lt=end)
+                comments_containing = Commentaire.objects.filter(date_creation__lt=end)
+            subscribed_only = form.cleaned_data['subscribed_only']
+            if subscribed_only:
                 community_titles = Communaute.objects.filter(abonnes__communautes__abonnes__contains=request.user)
                 community_desc = Communaute.objects.filter(abonnes__communautes__abonnes__contains=request.user)
                 posts_written_by = Post.objects.filter(communaute__abonnes__post__contains=request.user)
-                posts_title_containing = Post.objects.filter(communaute__abonnes__post__contains=request.user)
-                posts_content_containing = Post.objects.filter(communaute__abonnes__post__contains=request.user)
-                comments_written_by = Commentaire.objects.filter(communaute__abonnes__post__commentaire__contains=request.user)
-                comments_containing = Commentaire.objects.filter(communaute__abonnes__post__commentaire__contains=form.start)
-            return render(request, 'communitymanager/search_result.html',{'community_titles':community_titles,
-                                                                          'community_desc':community_desc,
-                                                                          'posts_written_by':posts_written_by,
-                                                                          'posts_titles_containing':posts_title_containing,
-                                                                          'posts_content_containing':posts_content_containing,
-                                                                          'comments_written_by':comments_written_by,
-                                                                          'comments_containing':comments_containing})
+                posts_title = Post.objects.filter(communaute__abonnes__post__contains=request.user)
+                posts_content = Post.objects.filter(communaute__abonnes__post__contains=request.user)
+                comments_written_by = Commentaire.objects.filter(
+                    communaute__abonnes__post__commentaire__contains=request.user)
+                comments_containing = Commentaire.objects.filter(
+                    communaute__abonnes__post__commentaire__contains=request.user)
+            return render(request, 'communitymanager/search_result.html', {'community_titles': community_titles,
+                                                                          'community_desc': community_desc,
+                                                                          'posts_written_by': posts_written_by,
+                                                                          'posts_titles': posts_title,
+                                                                          'posts_content': posts_content,
+                                                                          'comments_written_by': comments_written_by,
+                                                                          'comments_containing': comments_containing})
+        else:
+            print(form.errors)
     return render(request, 'communitymanager/search_result.html')
