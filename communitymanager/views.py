@@ -314,6 +314,8 @@ def advanced_search(request):
                 end = form.cleaned_data['end']
                 posts = Post.objects.filter(post__date_creation__lt=end)
                 comments = Commentaire.objects.filter(date_creation__lt=end)
+            if event_date:
+                posts = Post.objects.filter(Q(evenementiel=True) & Q(date_evenement__day=event_date))
             # search only in subscribed communities
             if subscribed_only:
                 communities = Communaute.objects.filter(abonnes__communautes__abonnes__contains=request.user)
