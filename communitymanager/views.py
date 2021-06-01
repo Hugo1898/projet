@@ -44,7 +44,7 @@ def communaute(request, com_id):
     com = get_object_or_404(Communaute, pk=com_id)
 
     # Si la communauté est suspendue et que l'user n'est pas superuser, il ne peut pas y accéder
-    if com.suspended == 2 and not request.user.is_superuser :
+    if com.suspended == 2 and not request.user.is_superuser:
         return redirect("communautes")
 
     if request.user in com.managers.all():
@@ -111,9 +111,9 @@ def nouveau_post(request, sticky_post=0):
     if form.is_valid():
         post = form.save(commit=False)
         post.auteur = request.user
-        post.visible=True
-        if (sticky_post==1) and request.user in post.communaute.managers.all():
-            post.sticky=True
+        post.visible = True
+        if (sticky_post == 1) and request.user in post.communaute.managers.all():
+            post.sticky = True
         if post.communaute.open:
             post.save()
             return redirect('post', post_id=post.id)
@@ -127,7 +127,7 @@ def modif_post(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
 
     # Si la communauté est suspendue et que l'user n'est pas superuser, il ne peut pas modifier le post
-    if (post.communaute.suspended == (2 or 1) )and not request.user.is_superuser:
+    if (post.communaute.suspended == (2 or 1)) and not request.user.is_superuser:
         print(post.communaute.suspended)
         return redirect("communautes")
 
@@ -161,6 +161,7 @@ def nouvelle_communaute(request):
 
     return render(request, 'communitymanager/nouvelle_communaute.html', locals())
 
+
 @login_required
 def modif_communaute(request, communaute_id):
     communaute = get_object_or_404(Communaute, pk=communaute_id)
@@ -176,6 +177,7 @@ def modif_communaute(request, communaute_id):
         return render(request, 'communitymanager/nouvelle_communaute.html', locals())
     return redirect('communautes')
 
+
 @login_required
 def delete_communaute(request, communaute_id):
     communaute = get_object_or_404(Communaute, pk=communaute_id)
@@ -183,33 +185,36 @@ def delete_communaute(request, communaute_id):
         communaute.delete()
     return redirect('communautes')
 
+
 @login_required
 def delete_post(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
-    com_id=post.communaute.id
+    com_id = post.communaute.id
     if request.user in post.communaute.managers.all():
         post.delete()
     return redirect('communaute', com_id=com_id)
+
 
 @login_required
 def visibility_post(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
     if request.user in post.communaute.managers.all():
         if (post.visible):
-            post.visible=False
+            post.visible = False
         elif (not post.visible):
-            post.visible=True
+            post.visible = True
         post.save()
     return redirect('communaute', com_id=post.communaute.id)
+
 
 @login_required
 def visibility_comment(request, commentaire_id):
     commentaire = get_object_or_404(Commentaire, pk=commentaire_id)
     if request.user in commentaire.post.communaute.managers.all():
         if (commentaire.visible):
-            commentaire.visible=False
+            commentaire.visible = False
         elif (not commentaire.visible):
-            commentaire.visible=True
+            commentaire.visible = True
         commentaire.save()
     return redirect('post', post_id=commentaire.post.id)
 
@@ -217,12 +222,10 @@ def visibility_comment(request, commentaire_id):
 @login_required
 def suspend_communaute(request, com_id, action):
     communaute = get_object_or_404(Communaute, pk=com_id)
-    if request.user.is_superuser and (action in {0,1,2}):
+    if request.user.is_superuser and (action in {0, 1, 2}):
         communaute.suspended = action
         communaute.save()
     return redirect('communautes')
-
-
 
 
 def signup(request):
@@ -257,9 +260,9 @@ def get_color(dictionary, key):
     }
     return switcher.get(key)
 
+
 @login_required
 def calendrier(request, com_id, prio_deg, j_d, m_d, y_d, j_f, m_f, y_f):
-
     form = CalendarForm(request.POST or None, auto_id="cal_%s")
     if form.is_valid():
         post = form.save(commit=False)
@@ -283,6 +286,7 @@ def calendrier(request, com_id, prio_deg, j_d, m_d, y_d, j_f, m_f, y_f):
 
     return render(request, 'communitymanager/calendrier.html', locals())
 
+
 @login_required()
 def advanced_search(request):
     if request.method == 'POST':
@@ -291,6 +295,10 @@ def advanced_search(request):
             print("form is valid")
             # text search in all text fields
             content = form.cleaned_data['content']
+            start = form.cleaned_data['start']
+            end = form.cleaned_data['end']
+            event_date = form.cleaned_data['event_date']
+            subscribed_only = form.cleaned_data['subscribed_only']
             community_titles = Communaute.objects.filter(nom__contains=content)
             community_desc = Communaute.objects.filter(description__contains=content)
             posts_written_by = Post.objects.filter(auteur__username__contains=content)
@@ -299,21 +307,20 @@ def advanced_search(request):
             comments_written_by = Commentaire.objects.filter(auteur__username__contains=content)
             comments_containing = Commentaire.objects.filter(contenu__contains=content)
             # date creation filter
-            if form.start:
+            if start:
                 start = form.cleaned_data['start']
                 posts_written_by = Post.objects.filter(date_creation__gt=start)
                 posts_title = Post.objects.filter(date_creation__gt=start)
                 posts_content = Post.objects.filter(date_creation__gt=start)
                 comments_written_by = Commentaire.objects.filter(date_creation__gt=start)
                 comments_containing = Commentaire.objects.filter(date_creation__gt=start)
-            if form.end:
+            if end:
                 end = form.cleaned_data['end']
                 posts_written_by = Post.objects.filter(post__date_creation__lt=end)
                 posts_title = Post.objects.filter(date_creation__lt=end)
                 posts_content = Post.objects.filter(date_creation__lt=end)
                 comments_written_by = Commentaire.objects.filter(date_creation__lt=end)
                 comments_containing = Commentaire.objects.filter(date_creation__lt=end)
-            subscribed_only = form.cleaned_data['subscribed_only']
             if subscribed_only:
                 community_titles = Communaute.objects.filter(abonnes__communautes__abonnes__contains=request.user)
                 community_desc = Communaute.objects.filter(abonnes__communautes__abonnes__contains=request.user)
@@ -325,12 +332,12 @@ def advanced_search(request):
                 comments_containing = Commentaire.objects.filter(
                     communaute__abonnes__post__commentaire__contains=request.user)
             return render(request, 'communitymanager/search_result.html', {'community_titles': community_titles,
-                                                                          'community_desc': community_desc,
-                                                                          'posts_written_by': posts_written_by,
-                                                                          'posts_titles': posts_title,
-                                                                          'posts_content': posts_content,
-                                                                          'comments_written_by': comments_written_by,
-                                                                          'comments_containing': comments_containing})
+                                                                           'community_desc': community_desc,
+                                                                           'posts_written_by': posts_written_by,
+                                                                           'posts_titles': posts_title,
+                                                                           'posts_content': posts_content,
+                                                                           'comments_written_by': comments_written_by,
+                                                                           'comments_containing': comments_containing})
         else:
             print(form.errors)
     return render(request, 'communitymanager/search_result.html')
