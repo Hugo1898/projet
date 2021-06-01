@@ -292,7 +292,6 @@ def advanced_search(request):
     if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
-            print("form is valid")
             # text search in all text fields
             content = form.cleaned_data['content']
             start = form.cleaned_data['start']
@@ -306,7 +305,7 @@ def advanced_search(request):
             posts_content = Post.objects.filter(description__contains=content)
             comments_written_by = Commentaire.objects.filter(auteur__username__contains=content)
             comments_containing = Commentaire.objects.filter(contenu__contains=content)
-            # date creation filter
+            # creation date filters
             if start:
                 start = form.cleaned_data['start']
                 posts_written_by = Post.objects.filter(date_creation__gt=start)
@@ -321,6 +320,7 @@ def advanced_search(request):
                 posts_content = Post.objects.filter(date_creation__lt=end)
                 comments_written_by = Commentaire.objects.filter(date_creation__lt=end)
                 comments_containing = Commentaire.objects.filter(date_creation__lt=end)
+            # search only in subscribed communities
             if subscribed_only:
                 community_titles = Communaute.objects.filter(abonnes__communautes__abonnes__contains=request.user)
                 community_desc = Communaute.objects.filter(abonnes__communautes__abonnes__contains=request.user)
