@@ -1,9 +1,9 @@
 h1 {
-    font-weight: bold
+    font-weight: bold;
 }
 
 h2 {
-    font-weight: bold
+    font-weight: bold;
 }
 
 h4 {
@@ -37,3 +37,10 @@ kbd {
   justify-content: center;
 }
 
+#avertissement a {
+        color: red
+    }
+
+#sticky a {
+        color: orange
+    }
