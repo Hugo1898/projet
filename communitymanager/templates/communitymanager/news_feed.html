@@ -17,16 +17,12 @@
                         <h4>
                             {% if  post.sticky %}
                                 <div id="sticky" style="color:orange">
-                                <style>#sticky a {
-                                    color: orange
-                                }</style>
+
                                 <i class="fa fa-concierge-bell"></i>
                             {% endif %}
                             {% if post.avertissement %}
                                 <div id="avertissement" style="color:red">
-                                <style>#avertissement a {
-                                    color: red
-                                }</style>
+
                                 <i class="fa fa-exclamation-triangle"></i>
                             {% endif %}
                             <a href="/communitymanager/post/{{ post.id }}/">  {{ post.titre }}  </a>

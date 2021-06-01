@@ -43,7 +43,12 @@
                                         <option value={{ com.id }}>{{ com.nom }}</option>
                                     {% endfor %}
                                 {% else %}
-                                    <option value={{ post.communaute.id }}>{{ post.communaute.nom }}</option>
+                                    <option value="{{ post.communaute.id }}" selected >{{ post.communaute.nom }}</option>
+                                    {% for com in communautes_choices %}
+                                        {% if com.id != post.communaute.id %}
+                                        <option value={{ com.id }}>{{ com.nom }}</option>
+                                        {% endif %}
+                                    {% endfor %}
                                 {% endif %}
                             </select>
                         </p>

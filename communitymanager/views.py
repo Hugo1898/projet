@@ -103,6 +103,7 @@ def post(request, post_id):
 
 @login_required
 def commentaire(request, post_id, contenu):
+    """Formulaire de commentaires"""
     coment = Commentaire()
     coment.auteur = request.user
     coment.contenu = contenu
@@ -161,6 +162,8 @@ def modif_post(request, post_id):
         postm.auteur = request.user
         postm.save()
         return redirect('post', post_id=post_id)
+
+    communautes_choices = Communaute.objects.filter(open=True, suspended=0).exclude(banned=request.user)
     return render(request, 'communitymanager/nouveau_post.html', locals())
 
 
