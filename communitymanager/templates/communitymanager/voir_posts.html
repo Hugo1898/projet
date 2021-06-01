@@ -14,7 +14,7 @@
             {% if com.open %}
                 <button type="button" class="btn btn-light">
                     <div id="sticky" style="color:orange">
-                        <a href={% url 'nouveau_post' 1 %}>
+                        <a href={% url 'nouveau_special_post' 1 %}>
                             <h4>
                                 <i class="fa fa-concierge-bell"></i> Créer Sticky Post
                             </h4>
@@ -36,7 +36,7 @@
     {% if request.user.is_superuser %}
         <button type="button" class="btn btn-light">
             <div id="avertissement" style="color:red">
-                <a href={% url 'nouveau_post' 2 %}>
+                <a href={% url 'nouveau_special_post' 2 %}>
                     <h4>
                         <i class="fa fa-exclamation-triangle"></i> Créer Avertissement
                     </h4>

@@ -53,11 +53,13 @@
                                 </a>
                             {% endif %}
 
+                            <!--Commandes pour managers-->
                             {% if com.user_is_manager %}
                                 &nbsp &nbsp
                                 <a href={% url 'modif_communaute' com.id %}>
                                     <i class="fa fa-pencil-square-o"></i></a>
                                 &nbsp &nbsp
+                                <!-- Pour qu'un manager ferme ou ouvre a communaute-->
                                 <a href={% url 'open_close_communaute' com.id %}>
                                     <i class="fa fa-door-closed"></i></a>
                                 &nbsp &nbsp
@@ -66,7 +68,11 @@
                                 &nbsp &nbsp
                             {% endif %}
 
+                            <!--Commandes pour admin ie superuser-->
                             {% if request.user.is_superuser %}
+                                {% if not com.suspended %}
+
+                                    {% endif %}
                                 &nbsp &nbsp
                                 <!-- Pour suspendre la communauté de manière visible-->
                                 <a href={% url 'suspend_communaute' com.id 1 %}>
