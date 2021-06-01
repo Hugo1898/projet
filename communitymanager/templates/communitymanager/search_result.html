@@ -23,57 +23,23 @@
     </form>
     <h4>Résultats de la recherche : </h4>
     <p>
-    Titres de communautés
-    {% for com in community_titles %}
+    Parmi les communautés
+    {% for com in communities %}
         <tr>
         <td>
         <a href="/communitymanager/communaute/{{ com.id }}/">
             <h4> {{ com.nom }} </h4> </a>
         <p> {{ com.description }}</p>
         </td>
-        <td>
-        {% if com in abonnement %}
-            <a href="/communitymanager/communautes/desabo/{{ com.id }}/">
-            <i class='fas fa-star' style='font-size:24px; color:#ffc800'></i>
-            </a>
-        {% else %}
-            <a href="/communitymanager/communautes/abo/{{ com.id }}/">
-            <i class='fas fa-star' style='font-size:24px; color:grey'></i>
-            </a>
-        </td>
-        {% endif %}
-        </tr>
-    {% endfor %}
-    </p>
-        <p>
-    Descriptions de communautés
-    {% for com in community_desc %}
-        <tr>
-        <td>
-        <a href="/communitymanager/communaute/{{ com.id }}/">
-            <h4> {{ com.nom }} </h4> </a>
-        <p> {{ com.description }}</p>
-        </td>
-        <td>
-        {% if com in abonnement %}
-            <a href="/communitymanager/communautes/desabo/{{ com.id }}/">
-            <i class='fas fa-star' style='font-size:24px; color:#ffc800'></i>
-            </a>
-        {% else %}
-            <a href="/communitymanager/communautes/abo/{{ com.id }}/">
-            <i class='fas fa-star' style='font-size:24px; color:grey'></i>
-            </a>
-        </td>
-        {% endif %}
         </tr>
     {% endfor %}
     </p>
     <p>
-    Auteurs de post
+    Parmi les posts
     <div class="card">
     <table class="table table-striped">
     <tbody>
-    {% for post in posts_written_by %}
+    {% for post in posts %}
         <tr>
         <td>
         <a href="/communitymanager/post/{{ post.id }}/"> <h4> {{ post.titre }} </h4> </a>
@@ -118,126 +84,11 @@
 
     </p>
     <p>
-    Titres de posts
-    <div class="card">
-    <table class="table table-striped">
-    <tbody>
-    {% for post in posts_titles %}
-        <tr>
-        <td>
-        <a href="/communitymanager/post/{{ post.id }}/"> <h4> {{ post.titre }} </h4> </a>
-        <p> {{ post.description }}</p>
-        </td>
-        <td>
-        <p>
-            <i class="fas fa-circle" style="color: {{ post|get_color:post.priorite }}"></i>
-            &nbsp &nbsp
-            <kbd> {{ post.communaute.nom }} </kbd>
-        </p>
-        {% if user == post.auteur %}
-            <p> Par {{ post.auteur }}
-            &nbsp &nbsp
-            <a href="/communitymanager/modif_post/{{ post.id }}/">
-            <i class="fa fa-pencil-square-o" ></i> </a>
-            &nbsp &nbsp
-            <kbd style="background-color: #b4b0b0">
-            {{ counts|get_item:post.titre }}
-            <i class="fas fa-comment"></i>
-            </kbd>
-            </p>
-        {% else %}
-            <p> Par {{ post.auteur }}
-            &nbsp &nbsp
-            <kbd style="background-color: #b4b0b0">
-            {{ counts|get_item:post.titre }}
-            <i class="fas fa-comment"></i>
-            </kbd>
-            </p>
-        {% endif %}
-        {% if post.evenementiel %}
-        <p> <i class='fas'>&#xf073;</i> Prévu le {{ post.date_evenement }}</p>
-        {% endif %}
-        <small style="color: grey">Dernière modification : {{ post.date_creation }}</small>
-        </td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
-</div>
-
-    </p>
-    <p>
-    Descriptions de post
-    <div class="card">
-    <table class="table table-striped">
-    <tbody>
-    {% for post in posts_content %}
-        <tr>
-        <td>
-        <a href="/communitymanager/post/{{ post.id }}/"> <h4> {{ post.titre }} </h4> </a>
-        <p> {{ post.description }}</p>
-        </td>
-        <td>
-        <p>
-            <i class="fas fa-circle" style="color: {{ post|get_color:post.priorite }}"></i>
-            &nbsp &nbsp
-            <kbd> {{ post.communaute.nom }} </kbd>
-        </p>
-        {% if user == post.auteur %}
-            <p> Par {{ post.auteur }}
-            &nbsp &nbsp
-            <a href="/communitymanager/modif_post/{{ post.id }}/">
-            <i class="fa fa-pencil-square-o" ></i> </a>
-            &nbsp &nbsp
-            <kbd style="background-color: #b4b0b0">
-            {{ counts|get_item:post.titre }}
-            <i class="fas fa-comment"></i>
-            </kbd>
-            </p>
-        {% else %}
-            <p> Par {{ post.auteur }}
-            &nbsp &nbsp
-            <kbd style="background-color: #b4b0b0">
-            {{ counts|get_item:post.titre }}
-            <i class="fas fa-comment"></i>
-            </kbd>
-            </p>
-        {% endif %}
-        {% if post.evenementiel %}
-        <p> <i class='fas'>&#xf073;</i> Prévu le {{ post.date_evenement }}</p>
-        {% endif %}
-        <small style="color: grey">Dernière modification : {{ post.date_creation }}</small>
-        </td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
-</div>
-    </p>
-    <p>
-    Auteurs de commentaires
+    Parmi les commentaires
     <div class="card">
 <table class="table table-striped">
     <tbody>
-    {% for coment in comments_written_by %}
-        <tr>
-        <td>
-        <p> {{ coment.contenu }}</p>
-        <p style="font-style: italic; color: grey"> {{ coment.auteur }}, le {{ coment.date_creation }} </p>
-        </td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
-</div>
-    </p>
-        </p>
-    <p>
-    Contenus de commentaires
-    <div class="card">
-<table class="table table-striped">
-    <tbody>
-    {% for coment in comments_containing %}
+    {% for coment in comments %}
         <tr>
         <td>
         <p> {{ coment.contenu }}</p>
