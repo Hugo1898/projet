@@ -18,7 +18,7 @@
                             {% if  post.sticky %}
                                 <div id="sticky" style="color:orange">
 
-                                <i class="fa fa-concierge-bell"></i>
+                                <i class="fa fa-bell"></i>
                             {% endif %}
                             {% if post.avertissement %}
                                 <div id="avertissement" style="color:red">
@@ -43,7 +43,7 @@
                     {% if user == post.auteur %}
                         <p> Par {{ post.auteur }}
                             &nbsp &nbsp
-                            <a href={% url 'modif_post' post.id %}>
+                            <a href={% url 'modif_post' post.id %} data-toggle="tooltip" title="Modifier le post">
                                 <i class="fa fa-pencil-square-o"></i> </a>
                             &nbsp &nbsp
                             <kbd style="background-color: #b4b0b0">
