@@ -24,6 +24,9 @@ def communautes(request):
         if request.user in com.managers.all():
             com.user_is_manager = True
 
+    all_managers = []
+    for com in communities:
+        all_managers += com.managers.all()
     return render(request, 'communitymanager/voir_communautes.html', locals())
 
 

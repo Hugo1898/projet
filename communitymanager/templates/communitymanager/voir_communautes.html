@@ -12,6 +12,17 @@
     <br>
     <div class="card">
         <table class="table table-striped">
+            {% if request.user.is_superuser or request.user in all_managers %}
+            <thead>
+               <tr>
+                  <th></th>
+                <th></th>
+                  <th>{% if request.user in all_managers %}<h4>Actions Manager</h4>{% endif %}</th>
+                  <th>{% if request.user.is_superuser %}<h4>Actions Admin</h4>{% endif %}</th>
+               </tr>
+            </thead>
+            {% endif %}
+
             <tbody>
             {% for com in communities %}
                 <tr>
@@ -52,7 +63,10 @@
                                     <i class='fas fa-star' style='font-size:24px; color:grey'></i>
                                 </a>
                             {% endif %}
-
+                        </p>
+                    </td>
+                    <td>
+                        <p>
                             <!--Commandes pour managers-->
                             {% if com.user_is_manager %}
                                 &nbsp &nbsp
@@ -71,7 +85,10 @@
                                     <i class="fa fa-trash"></i></a>
                                 &nbsp &nbsp
                             {% endif %}
-
+                        </p>
+                    </td>
+                    <td>
+                        <p>
                             <!--Commandes pour admin ie superuser-->
                             {% if request.user.is_superuser %}
                                 {% if not com.suspended %}
