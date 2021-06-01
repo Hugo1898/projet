@@ -75,13 +75,17 @@ def post(request, post_id):
     form = CommentaireForm(request.POST or None)
 
     if form.is_valid():
-        contenu = form.cleaned_data['contenu']
-        return redirect(reverse('commentaire', kwargs={"post_id": post_id, "contenu": contenu}))
+        commentaire = form.save(commit=False)
+        commentaire.auteur = request.user
+        commentaire.post = post
+        commentaire.visible = True
+        commentaire.save()
+
 
     if request.user in post.communaute.managers.all():
-        coments = Commentaire.objects.filter(post=post_id).order_by('-date_creation')
+        coments = Commentaire.objects.filter(post=post_id).order_by('date_creation')
     else:
-        coments = Commentaire.objects.filter(post=post_id, visible=True).order_by('-date_creation')
+        coments = Commentaire.objects.filter(post=post_id, visible=True).order_by('date_creation')
 
     count = coments.count()
 
@@ -91,17 +95,6 @@ def post(request, post_id):
         if request.user in coment.post.communaute.managers.all():
             coment.user_is_manager = True
     return render(request, 'communitymanager/voir_commentaires.html', locals())
-
-
-@login_required
-def commentaire(request, post_id, contenu):
-    coment = Commentaire()
-    coment.auteur = request.user
-    coment.contenu = contenu
-    post = get_object_or_404(Post, pk=post_id)
-    coment.post = post
-    coment.save()
-    return redirect('post', post_id=post_id)
 
 
 @login_required
