@@ -41,6 +41,9 @@ class CommunauteForm(forms.ModelForm):
 
 class SearchForm(forms.Form):
     content = forms.CharField(required=True)
+    in_posts = forms.BooleanField(required=False)
+    in_communities = forms.BooleanField(required=False)
+    in_authors = forms.BooleanField(required=False)
     start = forms.DateField(required=False)
     end = forms.DateField(required=False)
     event_date = forms.DateField(required=False)

@@ -11,6 +11,13 @@
     {% csrf_token %}
         <label for="content">Rechercher : </label><br>
         <input type="text" id="content" name="content" required><br>
+        Rechercher dans : <br>
+        <input type="checkbox" id="in_posts" name="in_posts" checked>
+        <label for="in_posts"> Posts et commentaires</label><br>
+        <input type="checkbox" id="in_communities" name="in_communities" checked>
+        <label for="filter2"> Communautés</label><br>
+        <input type="checkbox" id="in_authors" name="in_authors" checked>
+        <label for="vehicle3"> Auteurs</label><br>
         <label for="start">A partir du</label><br>
         <input type="date" id="start" name="Start date"><br>
         <label for="end">Jusqu'au</label><br>

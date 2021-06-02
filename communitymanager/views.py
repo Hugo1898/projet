@@ -296,15 +296,42 @@ def advanced_search(request):
             content = form.cleaned_data['content']
             start = form.cleaned_data['start']
             end = form.cleaned_data['end']
+            in_posts = form.cleaned_data['in_posts']
+            in_communities = form.cleaned_data['in_communities']
+            in_authors = form.cleaned_data['in_authors']
             event_date = form.cleaned_data['event_date']
             subscribed_only = form.cleaned_data['subscribed_only']
-            communities = Communaute.objects.filter(Q(nom__contains=content) | Q(description__contains=content))
-            posts = Post.objects.filter(Q(titre__contains=content) | Q(description__contains=content) |
-                                        Q(auteur__username__contains=content))
-            counts = {}
-            for post in posts:
-                counts[post.titre] = Commentaire.objects.filter(post=post).count()
-            comments = Commentaire.objects.filter(Q(auteur__username__contains=content) | Q(contenu__contains=content))
+            if in_communities:
+                communities = Communaute.objects.filter(Q(nom__contains=content) | Q(description__contains=content))
+            if in_posts:
+                if in_authors:
+                    posts = Post.objects.filter(Q(titre__contains=content) | Q(description__contains=content)
+                                                | Q(auteur__username__contains=content))
+                    comments = Commentaire.objects.filter(Q(contenu__contains=content)
+                                                          | Q(auteur__username__contains=content))
+                else:
+                    posts = Post.objects.filter(Q(titre__contains=content) | Q(description__contains=content))
+                    comments = Commentaire.objects.filter(Q(contenu__contains=content))
+                counts = {}
+                for post in posts:
+                    counts[post.titre] = Commentaire.objects.filter(post=post).count()
+                    comments = Commentaire.objects.filter(Q(contenu__contains=content)
+                                                          | Q(auteur__username__contains=content))
+            if in_authors:
+                if in_posts:
+                    posts = Post.objects.filter(Q(titre__contains=content) | Q(description__contains=content)
+                                                | Q(auteur__username__contains=content))
+                    comments = Commentaire.objects.filter(Q(contenu__contains=content)
+                                                          | Q(auteur__username__contains=content))
+                else:
+                    posts = Post.objects.filter(Q(auteur__username__contains=content))
+                    comments = Commentaire.objects.filter(Q(auteur__username__contains=content))
+                counts = {}
+                for post in posts:
+                    counts[post.titre] = Commentaire.objects.filter(post=post).count()
+                    comments = Commentaire.objects.filter(Q(contenu__contains=content)
+                                                          | Q(auteur__username__contains=content))
+
             # creation date filters
             if start:
                 start = form.cleaned_data['start']
