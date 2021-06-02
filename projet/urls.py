@@ -27,6 +27,8 @@ urlpatterns = [
     path('connexion/', LoginView.as_view(template_name='registration/login.html'), name="login"),
     path('deconnexion/', logout_then_login, name="logout"),
     path('signup/', views.signup, name='signup'),
+    path('', views.communautes, name='global_home'),
+
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
