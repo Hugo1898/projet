@@ -60,18 +60,30 @@
             {% for coment in coments %}
                 <tr>
                     <td>
-                        {% if coment.user_is_manager and not post.communaute.suspended%}
-                            <a href={% url 'visibility_comment' coment.id %}>
-                                {% if  not coment.visible %}
-                                    <i class="fa fa-eye"></i> </a>
-                                {% else %}
-                                    <i class="fa fa-eye-slash"></i> </a>
-                                {% endif %}
-                            &nbsp &nbsp
-                        {% endif %}
-                        <p> {{ coment.contenu }}</p>
+                        <p>
+                            {% if not coment.visible %}
+                                <text style="color:grey">
+                                    <i class="fa fa-eye-slash"></i> Hidden
+                                </text>
+                            {% endif %}
+                            {{ coment.contenu }}
+                        </p>
+                    </td>
+                    <td>
                         <p style="font-style: italic; color: grey"> {{ coment.auteur }},
                             le {{ coment.date_creation }} </p>
+                    </td>
+                    <td>
+                        {% if coment.user_is_manager and not post.communaute.suspended %}
+                            {% if  not coment.visible %}
+                                <a href={% url 'visibility_comment' coment.id %} data-toggle="tooltip" title="Rendre le commendaitre visible">
+                                    <i class="fa fa-eye"></i> Afficher</a>
+                            {% else %}
+                                <a href={% url 'visibility_comment' coment.id %} data-toggle="tooltip" title="Rendre le commendaitre invisible">
+                                    <i class="fa fa-eye-slash"></i> Masquer</a>
+                            {% endif %}
+                            &nbsp &nbsp
+                        {% endif %}
                     </td>
                 </tr>
             {% empty %}
@@ -99,11 +111,12 @@
             <text style="font-weight:bold"> Désolé, cette communauté est fermée, vous ne pouvez plus commenter !</text>
         {% endif %}
     {% else %}
-        <text style="font-weight:bold"> Désolé, vous êtes bannis de cette communauté, vous ne pouvez plus commenter !</text>
+        <text style="font-weight:bold"> Désolé, vous êtes bannis de cette communauté, vous ne pouvez plus commenter !
+        </text>
     {% endif %}
 
 
-    <button type="button" class="btn btn-light" style="float:right" >
+    <button type="button" class="btn btn-light" style="float:right">
         <a href={% url 'communaute' post.communaute.id %}>
             <h4>
                 <i class="fa fa-undo"></i> Retour à la Communauté
