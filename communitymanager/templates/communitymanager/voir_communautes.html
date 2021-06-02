@@ -14,10 +14,10 @@
             {% if request.user.is_superuser or request.user in all_managers %}
                 <thead>
                 <tr>
-                        <th></th>
-                        <th></th>
-                        <th>{% if request.user in all_managers %}<h4>Manager</h4>{% endif %}</th>
-                        <th>{% if request.user.is_superuser %}<h4>Admin</h4>{% endif %}</th>
+                    <th></th>
+                    <th></th>
+                    <th>{% if request.user in all_managers %}<h4>Manager</h4>{% endif %}</th>
+                    <th>{% if request.user.is_superuser %}<h4>Admin</h4>{% endif %}</th>
                 </tr>
                 </thead>
             {% endif %}
@@ -83,10 +83,46 @@
                                         <i class="fa fa-lock-open"></i> Open</a>
                                     {% endif %}
                                 &nbsp &nbsp
-                                <a href={% url 'delete_communaute' com.id %} data-toggle="tooltip"
-                                   title="Supprimer la communauté, attention, cette action est irréversible">
-                                    <i class="fa fa-trash"></i></a>
+                                <button id="button_bin" type="button" data-toggle="modal"
+                                        title="Supprimer la communauté, attention, cette action est irréversible"
+                                        data-target="#delete_communaute"
+                                >
+                                    <i class="fa fa-trash"></i>
+                                </button>
                                 &nbsp &nbsp
+
+                                <!-- Fenetre pop-up de prévention de suppression de communauté -->
+                                <div class="modal" id="delete_communaute">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+
+                                            <!-- Modal Header -->
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Suppression de la communauté</h4>
+                                                <button type="button" class="close" data-dismiss="modal">&times;
+                                                </button>
+                                            </div>
+
+                                            <!-- Modal body -->
+                                            <div class="modal-body">
+                                                Voulez-vous vraiment supprimer la communauté ?
+                                                Cette action est irréversible
+                                            </div
+                                                    <!-- Modal footer -->
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-danger" data-dismiss="modal"><a
+                                                        href={% url 'delete_communaute' com.id %} id="popup_oui" >Oui</a></button>
+                                                <button type="button" class="btn btn-danger" data-dismiss="modal"><a
+                                                        href={% url 'delete_communaute' com.id %} id="popup_oui" >Oui</a></button>
+
+                                                <button type="button" class="btn btn-danger" data-dismiss="modal" color="green">
+                                                    Annuler
+                                                </button>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
                             {% endif %}
                         </p>
                     </td>
@@ -133,4 +169,7 @@
             </tbody>
         </table>
     </div>
+
+
+
 {% endblock %}

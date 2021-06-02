@@ -11,7 +11,13 @@
         <table class="table table-striped">
             <tbody>
             {% for post in posts %}
+                {% if post.avertissement %}
+                <tr class="danger">
+                {% elif post.sticky %}
+                <tr class="warning">
+                {% else %}
                 <tr>
+                {% endif %}
                     <td>
 
                         <h4>
