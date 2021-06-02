@@ -9,15 +9,15 @@
 
 {% block content %}
 
-    <h2>{{ com.nom }}</h2>
-    {% if com.user_is_manager%}
-        {% if com.open %}
-
     <form action="" method="post">
         {% csrf_token %}
         {{ priorite_form.as_p }}
         <input type="submit" value="Submit"/>
     </form>
+
+    <h2>{{ com.nom }}</h2>
+    {% if com.user_is_manager%}
+        {% if com.open %}
 
     <button type="button" class="btn btn-light" >
     <a href="/communitymanager/nouveau_post/1"> <h4>
@@ -102,6 +102,13 @@
                             <p><i class='fas'>&#xf073;</i> Prévu le {{ post.date_evenement }}</p>
                         {% endif %}
                         <small style="color: grey">Dernière modification : {{ post.date_creation }}</small>
+
+                        {%  if post.lu == True %}
+                            Lu
+                        {% else %}
+                            Non lu
+                        {% endif %}
+
                     </td>
                 </tr>
             {% endfor %}

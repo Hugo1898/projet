@@ -6,13 +6,14 @@ from .models import *
 class CommentaireForm(forms.Form):
     contenu = forms.CharField(required=True)
 
+
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         exclude = ["auteur"]
         widgets = {
             'date_evenement': forms.DateTimeInput(attrs={
-            'class': 'form-control', 'type':'datetime-local',
+                'class': 'form-control', 'type': 'datetime-local',
             }, format="%Y-%m-%dT%H:%M"),
         }
 
@@ -32,12 +33,11 @@ class PostForm(forms.ModelForm):
         return cleaned_data
     """
 
+
 class CommunauteForm(forms.ModelForm):
     class Meta:
         model = Communaute
         exclude = ["abonnes", "suspended"]
-
-
 
 
 class CalendarForm(forms.ModelForm):
@@ -46,7 +46,7 @@ class CalendarForm(forms.ModelForm):
         exclude = ["auteur", "evenementiel"]
         widgets = {
             'date_evenement': forms.DateTimeInput(attrs={
-            'class': 'form-control', 'type':'datetime-local',
+                'class': 'form-control', 'type': 'datetime-local',
             }, format="%Y-%m-%dT%H:%M"),
         }
 
@@ -54,7 +54,20 @@ class CalendarForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields["date_evenement"].input_formats = ["%Y-%m-%dT%H:%M"]
 
+
+#Form pour le fitlrage de l'affichage des posts :
 class PrioriteForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        # first call parent's constructor
+        super(PrioriteForm, self).__init__(*args, **kwargs)
+        # there's a `fields` property now
+        self.fields['label'].required = False
+
+    évènement = forms.BooleanField(required=False)
+
     class Meta:
         model = Priorite
         fields = ['label']
+
+

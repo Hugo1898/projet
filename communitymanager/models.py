@@ -41,6 +41,8 @@ class Post(models.Model):
     auteur = models.ForeignKey(User, on_delete=models.CASCADE)
     visible = models.BooleanField(default=True)
     sticky = models.BooleanField(default=False)
+    lecteurs =models.ManyToManyField(User, related_name="posts")
+    lu = models.BooleanField()
 
 
     class Meta:

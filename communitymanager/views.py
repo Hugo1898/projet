@@ -40,30 +40,60 @@ def abonnement(request, action, com_id):
 
 
 @login_required
-def communaute(request, com_id, ordre):
+def communaute(request, com_id, degre, event):
     com = get_object_or_404(Communaute, pk=com_id)
-    posts = Post.objects.filter(communaute=com_id, priorite__degre__lte=ordre).order_by('-date_creation')
+    user = request.user
+
 
     # Si la communauté est suspendue et que l'user n'est pas superuser, il ne peut pas y accéder
-    if com.suspended == 2 and not request.user.is_superuser :
+    if com.suspended == 2 and not request.user.is_superuser:
         return redirect("communautes")
 
-    if request.user in com.managers.all():
-        posts = Post.objects.filter(communaute=com_id).order_by('-sticky', '-date_creation')
+    if request.user in com.managers.all() and event == 1:
+        posts = Post.objects.filter(communaute=com_id, priorite__degre__gte=degre, evenementiel=True).order_by(
+            '-sticky', '-date_creation')
+    elif request.user in com.managers.all() and event == 0:
+        posts = Post.objects.filter(communaute=com_id, visible=True, priorite__degre__gte=degre).order_by('-sticky',
+                                                                                                          '-date_creation')
+    elif event == 1:
+        posts = Post.objects.filter(communaute=com_id, visible=True, priorite__degre__gte=degre, evenementiel=True).order_by('-sticky',
+                                                                                                          '-date_creation')
     else:
-        posts = Post.objects.filter(communaute=com_id, visible=True).order_by('-sticky', '-date_creation')
+        posts = Post.objects.filter(communaute=com_id, visible=True, priorite__degre__gte=degre).order_by('-sticky',
+                                                                                                          '-date_creation')
 
     counts = {}
     for post in posts:
         counts[post.titre] = Commentaire.objects.filter(post=post).count()
     user = request.user
 
-    priorite_form = PrioriteForm(request.POST or None)
+    for post in posts:
+        post.lu = False
+        if request.user in post.lecteurs.all():
+            post.lu = True
+            post.save()
 
-    if priorite_form.is_valid():
-        label = priorite_form.cleaned_data['label']
-        ordre = get_object_or_404(Priorite, label=label).degre
-        return redirect('communaute', com_id, ordre)
+    #Filtrage de l'affichage des posts selon leur priorité et leur statut d'évènement ou non ; fonctionnalité disponible si l'utilisateur est abonné  :
+
+    if request.user in com.abonnes.all():
+
+        priorite_form = PrioriteForm(request.POST or None)
+
+        if priorite_form.is_valid():
+            label = priorite_form.cleaned_data['label']
+            print(type(label))
+            if label:
+                priorite = get_object_or_404(Priorite, label=label).degre
+            évènement = priorite_form.cleaned_data['évènement']
+            if évènement is True and 'priorite' in locals() :
+                return redirect('communaute', com_id, priorite, 1)
+            elif évènement is False and 'priorite' in locals():
+                return redirect('communaute', com_id, priorite, 0)
+            elif évènement is True:
+                return redirect('communaute', com_id, 0, 1)
+            else:
+                return redirect('communaute', com_id, 0, 0)
+
 
     # Pour vérifier si l'user est un manager
     com.user_is_manager = False
@@ -77,7 +107,11 @@ def communaute(request, com_id, ordre):
 def post(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
 
-    # Si la communauté est suspendue et que l'user n'est pas superuser, il ne peut pas y accéder
+    if (request.user in post.lecteurs.all()) is False:
+        post.lecteurs.add(request.user)
+        post.save()
+
+    #Si la communauté est suspendue et que l'user n'est pas superuser, il ne peut pas y accéder
     if post.communaute.suspended == 2 and not request.user.is_superuser:
         return redirect("communautes")
 
@@ -120,9 +154,9 @@ def nouveau_post(request, sticky_post=0):
     if form.is_valid():
         post = form.save(commit=False)
         post.auteur = request.user
-        post.visible=True
-        if (sticky_post==1) and request.user in post.communaute.managers.all():
-            post.sticky=True
+        post.visible = True
+        if (sticky_post == 1) and request.user in post.communaute.managers.all():
+            post.sticky = True
         if post.communaute.open:
             post.save()
             return redirect('post', post_id=post.id)
@@ -136,7 +170,7 @@ def modif_post(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
 
     # Si la communauté est suspendue et que l'user n'est pas superuser, il ne peut pas modifier le post
-    if (post.communaute.suspended == (2 or 1 ))and not request.user.is_superuser:
+    if (post.communaute.suspended == (2 or 1)) and not request.user.is_superuser:
         return redirect("communautes")
 
     form = PostForm(request.POST or None, instance=post)
@@ -169,6 +203,7 @@ def nouvelle_communaute(request):
 
     return render(request, 'communitymanager/nouvelle_communaute.html', locals())
 
+
 @login_required
 def modif_communaute(request, communaute_id):
     communaute = get_object_or_404(Communaute, pk=communaute_id)
@@ -184,6 +219,7 @@ def modif_communaute(request, communaute_id):
         return render(request, 'communitymanager/nouvelle_communaute.html', locals())
     return redirect('communautes')
 
+
 @login_required
 def delete_communaute(request, communaute_id):
     communaute = get_object_or_404(Communaute, pk=communaute_id)
@@ -191,33 +227,36 @@ def delete_communaute(request, communaute_id):
         communaute.delete()
     return redirect('communautes')
 
+
 @login_required
 def delete_post(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
-    com_id=post.communaute.id
+    com_id = post.communaute.id
     if request.user in post.communaute.managers.all():
         post.delete()
     return redirect('communaute', com_id=com_id)
+
 
 @login_required
 def visibility_post(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
     if request.user in post.communaute.managers.all():
         if (post.visible):
-            post.visible=False
+            post.visible = False
         elif (not post.visible):
-            post.visible=True
+            post.visible = True
         post.save()
     return redirect('communaute', com_id=post.communaute.id)
+
 
 @login_required
 def visibility_comment(request, commentaire_id):
     commentaire = get_object_or_404(Commentaire, pk=commentaire_id)
     if request.user in commentaire.post.communaute.managers.all():
         if (commentaire.visible):
-            commentaire.visible=False
+            commentaire.visible = False
         elif (not commentaire.visible):
-            commentaire.visible=True
+            commentaire.visible = True
         commentaire.save()
     return redirect('post', post_id=commentaire.post.id)
 
@@ -225,12 +264,10 @@ def visibility_comment(request, commentaire_id):
 @login_required
 def suspend_communaute(request, com_id, action):
     communaute = get_object_or_404(Communaute, pk=com_id)
-    if request.user.is_superuser and (action in {0,1,2}):
+    if request.user.is_superuser and (action in {0, 1, 2}):
         communaute.suspended = action
         communaute.save()
     return redirect('communautes')
-
-
 
 
 def signup(request):
@@ -268,7 +305,6 @@ def get_color(dictionary, key):
 
 @login_required
 def calendrier(request, com_id, prio_deg, j_d, m_d, y_d, j_f, m_f, y_f):
-
     form = CalendarForm(request.POST or None, auto_id="cal_%s")
     if form.is_valid():
         post = form.save(commit=False)
