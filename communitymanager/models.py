@@ -10,6 +10,7 @@ class Communaute(models.Model):
     managers = models.ManyToManyField(User, related_name="communautes_managed")
     open = models.BooleanField(default=True)
     suspended = models.IntegerField(default=0)
+    banned = models.ManyToManyField(User, blank=True, related_name="communautes_banned")
 
 
     class Meta:
@@ -41,8 +42,9 @@ class Post(models.Model):
     auteur = models.ForeignKey(User, on_delete=models.CASCADE)
     visible = models.BooleanField(default=True)
     sticky = models.BooleanField(default=False)
+    avertissement = models.BooleanField(default=False)
     lecteurs =models.ManyToManyField(User, related_name="posts")
-    lu = models.BooleanField()
+    lu = models.BooleanField(default=False)
 
 
     class Meta:
@@ -53,7 +55,7 @@ class Post(models.Model):
 
 
 class Commentaire(models.Model):
-    date_creation = models.DateTimeField(auto_now=True)
+    date_creation = models.DateTimeField(auto_now_add=True)
     contenu = models.TextField()
     auteur = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey('Post', on_delete=models.CASCADE)

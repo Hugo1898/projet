@@ -13,10 +13,11 @@ def filter(com_id, prio_deg, date_d, date_f):
 
     if com_id == 0:
         posts = Post.objects.all().filter(evenementiel=True, priorite__degre__gte=prio_deg,
-                                          date_evenement__gte=date_d, date_evenement__lte=date_f)
+                                          date_evenement__gte=date_d, date_evenement__lte=date_f
+                                          ).exclude(communaute__suspended=2)
     else:
         posts = Post.objects.all().filter(evenementiel=True, communaute=com_id, priorite__degre__gte=prio_deg,
-                                          date_evenement__gte=date_d, date_evenement__lte=date_f)
+                                          date_evenement__gte=date_d, date_evenement__lte=date_f).exclude(communaute__suspended=2)
 
     return posts
 

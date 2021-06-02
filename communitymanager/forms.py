@@ -3,14 +3,16 @@ from django import forms
 from .models import *
 
 
-class CommentaireForm(forms.Form):
-    contenu = forms.CharField(required=True)
+class CommentaireForm(forms.ModelForm):
+    class Meta:
+        model = Commentaire
+        exclude = ["auteur", "date_creation", "post", "visible"]
 
 
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        exclude = ["auteur"]
+        exclude = ["auteur", "visible", "sticky", "avertissement"]
         widgets = {
             'date_evenement': forms.DateTimeInput(attrs={
                 'class': 'form-control', 'type': 'datetime-local',

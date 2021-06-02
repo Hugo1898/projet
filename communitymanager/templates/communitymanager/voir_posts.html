@@ -16,19 +16,46 @@
     </form>
 
     <h2>{{ com.nom }}</h2>
-    {% if com.user_is_manager%}
-        {% if com.open %}
 
-    <button type="button" class="btn btn-light" >
-    <a href="/communitymanager/nouveau_post/1"> <h4>
-                                Créer Sticky Post <i class="fa fa-traffic-light"></i> </h4></a>
 
-    </button>
-        {% else %}
-        <h4 style="font-weight:bold"> Désolé, cette communauté est fermée, vous ne pouvez plus ajouter de Sticky Post !</h4>
+    <!-- Sticky Post pour les Community Managers si la communauté n'est pas suspendue par l'admin
+    et est bien ouverte par le community manager -->
+    {% if com.user_is_manager %}
+        {% if not com.suspended %}
+            {% if com.open %}
+                <button type="button" class="btn btn-light">
+                    <div id="sticky" style="color:orange">
+                        <a href={% url 'nouveau_special_post' 1 %}>
+                            <h4>
+                                <i class="fa fa-bell"></i> Créer Sticky Post
+                            </h4>
+                        </a>
+                    </div>
+                </button>
+            {% else %}
+                <h4 style="font-weight:bold"> Désolé, cette communauté est fermée par un Community Manager, vous ne
+                    pouvez plus ajouter de Sticky
+                    Post !</h4>
+            {% endif %}
+       {% else %}
+            <h4 style="font-weight:bold"> Désolé, cette communauté est suspendue par un Administrateur, vous ne pouvez
+                plus ajouter de Sticky
+                Post !</h4>
+        {% endif %}
     {% endif %}
-    {% endif %}
+    <!-- Avertissement Post pour les Administrateurs=Superuser -->
+    {% if request.user.is_superuser %}
+        <button type="button" class="btn btn-light">
+            <div id="avertissement" style="color:red">
+                <a href={% url 'nouveau_special_post' 2 %}>
+                    <h4>
+                        <i class="fa fa-exclamation-triangle"></i> Créer Avertissement
+                    </h4>
+                </a>
+            </div>
 
+        </button>
+    {% endif %}
 
     <br>
     <br>
@@ -39,18 +66,19 @@
                 <tr>
                     <td>
                         <h4>
+                            {% if  post.avertissement %}
+                                <div id="avertissement" style="color:red">
+                                <i class="fa fa-exclamation-triangle"></i>
+                            {% endif %}
                             {% if  post.sticky %}
-                                <div id="sticky" style="color:red">
-                                <style>#sticky a {color:red}</style>
-                                <i class="fa fa-grin-hearts"></i>
-                                <i class="fa fa-tape"></i>
-                                <i class="fa fa-grin-hearts"></i>
+                                <div id="sticky" style="color:orange">
+                                <i class="fa fa-bell"></i>
                             {% endif %}
                             {% if  not post.visible %}
                                 <i class="fa fa-eye-slash" style="color:grey"></i>
                                 <text style="color:grey">Hidden</text>
                             {% endif %}
-                            <a href="/communitymanager/post/{{ post.id }}/">
+                            <a href={% url 'post' post.id %}>
                                 {{ post.titre }}</a>
                             </div>
                         </h4>
@@ -63,10 +91,10 @@
                             &nbsp &nbsp
                             <kbd> {{ post.communaute.nom }} </kbd>
                         </p>
-                        {% if user == post.auteur %}
+                        {% if user == post.auteur and not post.communaute.suspended and post.communaute.open and user not in post.communaute.banned.all %}
                             <p> Par {{ post.auteur }}
                                 &nbsp &nbsp
-                                <a href="/communitymanager/modif_post/{{ post.id }}/">
+                                <a href={% url 'modif_post' post.id %} data-toggle="tooltip" title="Modifier le post">
                                     <i class="fa fa-pencil-square-o"></i> </a>
                                 &nbsp &nbsp
                                 <kbd style="background-color: #b4b0b0">
@@ -74,25 +102,39 @@
                                     <i class="fas fa-comment"></i>
                                 </kbd>
                                 &nbsp &nbsp
-                        {% else %}
+                                {% else %}
                             <p> Par {{ post.auteur }}
                             &nbsp &nbsp
                             <kbd style="background-color: #b4b0b0">
                                 {{ counts|get_item:post.titre }}
                                 <i class="fas fa-comment"></i>
                             </kbd>
-                             &nbsp &nbsp
-                        {% endif %}
-                        {% if com.user_is_manager%}
-                            <a href="/communitymanager/visibility_post/{{ post.id }}/">
-                                {% if  not post.visible %}
-                                    <i class="fa fa-eye"></i> </a>
-                                {% else %}
-                                    <i class="fa fa-eye-slash"></i> </a>
-                                {% endif %}
                             &nbsp &nbsp
-                            <a href="/communitymanager/delete_post/{{ post.id }}/">
-                                    <i class="fa fa-trash"></i></a>
+                        {% endif %}
+                        <!-- Pour masquer ou supprimer un post, il faut être manager.
+                        Seul un Admin peut faire ces actions pour un avertissement -->
+                        <!-- L'opérateur 'and' est prioritaire sur le 'or' -->
+                        {% if com.user_is_manager and not post.avertissement or post.avertissement and request.user.is_superuser %}
+                            {% if  not post.visible %}
+                                <a href={% url 'visibility_post' post.id %} data-toggle="tooltip" title="Afficher le post pour les utilisateurs">
+                                    <i class="fa fa-eye"></i> </a>
+                            {% else %}
+                                <a href={% url 'visibility_post' post.id %} data-toggle="tooltip" title="Masquer le poste pour les utilisateurs">
+                                    <i class="fa fa-eye-slash"></i> </a>
+                            {% endif %}
+                            &nbsp &nbsp
+                            <a href={% url 'delete_post' post.id %} data-toggle="tooltip" title="Supprimer le post, attention, cette action est irréversible">
+                                <i class="fa fa-trash"></i></a>
+                            &nbsp &nbsp
+                        {% endif %}
+                        {% if com.user_is_manager and not post.avertissement %}
+                            {%  if post.sticky %}
+                                <a href={% url 'sticky_modify_post' post.id %} data-toggle="tooltip" title="Unstick le post">
+                                    <i class="fa fa-bell-slash"></i></a>
+                            {% else %}
+                                <a href={% url 'sticky_modify_post' post.id %} data-toggle="tooltip" title="Stick le post">
+                                    <i class="fa fa-bell"></i></a>
+                            {% endif %}
                             &nbsp &nbsp
                         {% endif %}
                         </p>
