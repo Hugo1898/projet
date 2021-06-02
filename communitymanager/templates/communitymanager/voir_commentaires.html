@@ -92,7 +92,7 @@
             <form method="POST" action="" style="margin-left: 0px !important; margin-top: 5px">
                 {% csrf_token %}
                 <text style="font-weight:bold"> Ajouter un commentaire :</text>
-                {{ form.contenu }}
+                <input type="text" name="contenu">
                 <input class="btn btn-primary" type="submit" value="Commenter"/>
             </form>
         {% else %}
