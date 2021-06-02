@@ -50,7 +50,8 @@ class SearchForm(forms.Form):
     in_authors = forms.BooleanField(required=False)
     start = forms.DateField(required=False)
     end = forms.DateField(required=False)
-    event_date = forms.DateField(required=False)
+    event_date_start = forms.DateField(required=False)
+    event_date_end = forms.DateField(required=False)
     subscribed_only = forms.BooleanField(required=False)
 
 
