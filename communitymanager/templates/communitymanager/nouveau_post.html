@@ -34,22 +34,24 @@
                         </p>
                     </td>
                     <td>
-                        {% if not mod %}
-                            <p>
-                                <text style="font-weight: bold"> Club :</text>
-                                <select class=form name="communaute">
+                        <p>
+                            <text style="font-weight: bold"> Club :</text>
+                            <select class=form name="communaute">
+                                {% if not mod %}
                                     <option value="" selected disabled hidden>----</option>
-                                    {% for com in communautes %}
-                                        {{ com.id }}
-                                        {% if com.open %}
-                                            {% if com.suspended == 0 %}
-                                                <option value={{ com.id }}>{{ com.nom }}</option>
-                                            {% endif %}
+                                    {% for com in communautes_choices %}
+                                        <option value={{ com.id }}>{{ com.nom }}</option>
+                                    {% endfor %}
+                                {% else %}
+                                    <option value="{{ post.communaute.id }}" selected >{{ post.communaute.nom }}</option>
+                                    {% for com in communautes_choices %}
+                                        {% if com.id != post.communaute.id %}
+                                        <option value={{ com.id }}>{{ com.nom }}</option>
                                         {% endif %}
                                     {% endfor %}
-                                </select>
-                            </p>
-                        {% endif %}
+                                {% endif %}
+                            </select>
+                        </p>
                         <br>
                         <p>
                             <text style="font-weight: bold"> Niveau de priorité du post :</text>

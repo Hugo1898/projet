@@ -172,7 +172,12 @@
                 <div class="col">
                 <p>
                 <text style="font-weight: bold"> Club : </text>
-                {{ form.communaute }}
+                    <select class=form name="communaute">
+                        <option value="" selected disabled hidden>----</option>
+                        {% for com in communautes_choices %}
+                            <option value={{ com.id }}>{{ com.nom }}</option>
+                        {% endfor %}
+                    </select>
                 </p>
                 <br>
                 <p>

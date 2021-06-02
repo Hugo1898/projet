@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
           integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
@@ -28,31 +28,37 @@
     <h1>CLUB-ED</h1>
     <hr style="margin-bottom: 0px">
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark mb-0 pl-0 mt-0">
+        <!-- Menu-->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <h4>Menu <span class="navbar-toggler-icon"></span></h4>
+        </button>
         <!-- Nav tabs -->
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav">
             <li class="nav-item">
-            <a class="nav-link" role="tab" id="fil" href="/communitymanager/news_feed/">Fil d'actualité</a>
+                <a class="nav-link" role="tab" id="fil" href={% url 'news_feed' %}>Fil d'actualité <i class="fas fa-newspaper"></i></a>
             </li>
             <li class="nav-item">
-            <a class="nav-link" role="tab" id="clubs" href="/communitymanager/communautes/">Liste des clubs</a>
+            <a class="nav-link" role="tab" id="clubs" href={% url 'communautes' %}>Liste des clubs <i class="fas fa-glass-cheers"></i></a>
             </li>
             <li class="nav-item">
-            <a class="nav-link" role="tab" id="com" href="/communitymanager/calendrier/0/0/1/1/2021/1/1/2022">Calendrier</a>
+            <a class="nav-link" role="tab" id="com" href={% url 'calendrier' 0 0 1 1 2021 1 1 2022 %}>Calendrier <i class="fas fa-calendar"></i></a>
             </li>
             <li class="nav-item">
-            <a class="nav-link" role="tab" id="post" href="/communitymanager/nouveau_post/">Créer un post</a>
+            <a class="nav-link" role="tab" id="post" href={% url 'nouveau_post' %}>Créer un post</a>
             </li>
             <li class="nav-item">
-            <a class="nav-link" role="tab" id="com" href="/communitymanager/nouvelle_communaute/">Créer un club</a>
+            <a class="nav-link" role="tab" id="com" href={% url 'nouvelle_communaute' %}>Créer un club</a>
             </li>
             <li class="nav-item">
             <a class="nav-link" role="tab" id="search" href="/communitymanager/advanced_search/">Recherche avancée</a>
             </li>
              <li class="nav-item">
-            <a class="nav-link" role="tab" id="logout" href="/deconnexion/">
+            <a class="nav-link" role="tab" id="logout" href={% url 'logout' %}>
                 <span class="glyphicon glyphicon-log-out"></span> </a>
             </li>
         </ul>
+        </div>
     </nav>
 </div>
 </header>
