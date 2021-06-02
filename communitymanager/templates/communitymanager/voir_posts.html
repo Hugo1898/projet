@@ -9,6 +9,11 @@
     <h2>{{ com.nom }}</h2>
     <!-- Sticky Post pour les Community Managers si la communauté n'est pas suspendue par l'admin
     et est bien ouverte par le community manager -->
+    <button type="button" class="btn btn-light">
+                        <a href={% url 'nouveau_post' %}>
+                            <h4> New Post </h4>
+                        </a>
+                </button>
     {% if com.user_is_manager %}
         {% if not com.suspended %}
             {% if com.open %}
@@ -16,7 +21,7 @@
                     <div id="sticky" style="color:orange">
                         <a href={% url 'nouveau_special_post' 1 %}>
                             <h4>
-                                <i class="fa fa-bell"></i> Créer Sticky Post
+                                <i class="fa fa-bell"></i> New Sticky Post
                             </h4>
                         </a>
                     </div>
@@ -38,7 +43,7 @@
             <div id="avertissement" style="color:red">
                 <a href={% url 'nouveau_special_post' 2 %}>
                     <h4>
-                        <i class="fa fa-exclamation-triangle"></i> Créer Avertissement
+                        <i class="fa fa-exclamation-triangle"></i> New Avertissement
                     </h4>
                 </a>
             </div>
@@ -52,7 +57,13 @@
         <table class="table table-striped">
             <tbody>
             {% for post in posts %}
+                {% if post.avertissement %}
+                <tr class="danger">
+                {% elif post.sticky %}
+                <tr class="warning">
+                {% else %}
                 <tr>
+                {% endif %}
                     <td>
                         <h4>
                             {% if  post.avertissement %}

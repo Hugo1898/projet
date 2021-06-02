@@ -44,3 +44,22 @@ kbd {
 #sticky a {
         color: orange
     }
+
+#button_bin {
+    padding: 0;
+    border: none;
+    background: none;
+    color: #337ab7;
+}
+#button_bin :hover {
+    color: #23527c;
+    text-decoration: underline;
+}
+
+#popup_oui {
+    color: white;
+}
+#popup_oui :hover {
+    color: white;
+    text-decoration: none;
+}

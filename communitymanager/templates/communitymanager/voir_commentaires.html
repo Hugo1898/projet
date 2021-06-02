@@ -102,4 +102,12 @@
         <text style="font-weight:bold"> Désolé, vous êtes bannis de cette communauté, vous ne pouvez plus commenter !</text>
     {% endif %}
 
+
+    <button type="button" class="btn btn-light" style="float:right" >
+        <a href={% url 'communaute' post.communaute.id %}>
+            <h4>
+                <i class="fa fa-undo"></i> Retour à la Communauté
+            </h4>
+        </a>
+    </button>
 {% endblock %}
