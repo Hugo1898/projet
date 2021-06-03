@@ -31,7 +31,7 @@
                             <a href={% url 'communaute' com.id %}>
 
                                 {% if  com.suspended == 1 %}
-                                    <div class="text-muted">
+                                    <div class="text-muted" id="{{ com.nom }}">
                                     <i class="fa fa-user-lock"></i> Visible
                                 {% elif com.suspended == 2 %}
                                     <div class="text-muted">
@@ -75,8 +75,8 @@
                                     <i class="fa fa-pencil-square-o"></i></a>
                                 &nbsp &nbsp
                                 <!-- Pour qu'un manager ferme ou ouvre une communaute-->
-                                <a href={% url 'open_close_communaute' com.id %} data-toggle="tooltip"
-                                   title="Cliquez pour 'open' ou 'close' la communauté en tant que manager">
+                                <a href="{% url 'open_close_communaute' com.id %}#{{ com.id }}"  data-toggle="tooltip"
+                                   title="Cliquez pour 'open' ou 'close' la communauté en tant que manager" >
                                     {% if com.open %}
                                         <i class="fa fa-lock"></i> Close</a>
                                     {% else %}
@@ -85,14 +85,14 @@
                                 &nbsp &nbsp
                                 <button id="button_bin" type="button" data-toggle="modal"
                                         title="Supprimer la communauté, attention, cette action est irréversible"
-                                        data-target="#delete_communaute"
+                                        data-target="#delete_communaute_{{ com.id }}"
                                 >
                                     <i class="fa fa-trash"></i>
                                 </button>
                                 &nbsp &nbsp
 
                                 <!-- Fenetre pop-up de prévention de suppression de communauté -->
-                                <div class="modal" id="delete_communaute">
+                                <div class="modal" id="delete_communaute_{{ com.id }}">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
 
@@ -105,17 +105,23 @@
 
                                             <!-- Modal body -->
                                             <div class="modal-body">
-                                                Voulez-vous vraiment supprimer la communauté ?
-                                                Cette action est irréversible
+                                                Voulez-vous vraiment supprimer la communauté <text style="font-weight: bold">{{ com.nom }}</text> ?
+                                                <br> Cette action est irréversible
+                                            <a href="{% url 'delete_communaute' com.id %}" id="popup_oui">
+                                                        Oui supprimer
+                                                </a>
+
                                             </div
                                                     <!-- Modal footer -->
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-danger" data-dismiss="modal"><a
-                                                        href={% url 'delete_communaute' com.id %} id="popup_oui" >Oui</a></button>
-                                                <button type="button" class="btn btn-danger" data-dismiss="modal"><a
-                                                        href={% url 'delete_communaute' com.id %} id="popup_oui" >Oui</a></button>
+                                                <a href="{% url 'delete_communaute' com.id %}" id="popup_oui">
+                                                    <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="window.location.href='{% url 'delete_communaute' com.id %}';">
+                                                        Oui
+                                                    </button>
+                                                </a>
 
-                                                <button type="button" class="btn btn-danger" data-dismiss="modal" color="green">
+                                                <button type="button" class="btn btn-danger" data-dismiss="modal"
+                                                        color="green">
                                                     Annuler
                                                 </button>
                                             </div>

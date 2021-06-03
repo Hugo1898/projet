@@ -202,6 +202,7 @@ def modif_communaute(request, communaute_id):
 @login_required
 def delete_communaute(request, communaute_id):
     """Commande pour la suppression d'une communaute si l'user est bien manager"""
+    print(f"delete communauté id={communaute_id}")
     communaute = get_object_or_404(Communaute, pk=communaute_id)
     if request.user in communaute.managers.all():
         communaute.delete()
