@@ -149,9 +149,14 @@ def post(request, post_id):
 
 
 @login_required
-def nouveau_post(request, special_post=0):
+def nouveau_post(request, special_post=0, com_id=0):
+
     form = PostForm(request.POST or None)
     mod = False
+    comm_ultim = 0
+    if com_id != 0:
+        comm_ultim = get_object_or_404(Communaute, pk=com_id)
+
     if form.is_valid():
         post = form.save(commit=False)
         post.auteur = request.user
@@ -161,6 +166,7 @@ def nouveau_post(request, special_post=0):
             post.sticky = True
         if (special_post == 2) and request.user.is_superuser:
             post.avertissement = True
+
 
         if post.communaute.open:
             post.save()
@@ -172,6 +178,7 @@ def nouveau_post(request, special_post=0):
     # Sauf pour un avertissement qui peut toujours être créé par un administrateur
     if (special_post == 2) and request.user.is_superuser:
         communautes_choices = Communaute.objects.all()
+
 
     return render(request, 'communitymanager/nouveau_post.html', locals())
 

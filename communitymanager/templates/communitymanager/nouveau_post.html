@@ -38,10 +38,14 @@
                             <text style="font-weight: bold"> Club :</text>
                             <select class=form name="communaute">
                                 {% if not mod %}
-                                    <option value="" selected disabled hidden>----</option>
-                                    {% for com in communautes_choices %}
-                                        <option value={{ com.id }}>{{ com.nom }}</option>
-                                    {% endfor %}
+                                    {% if com_id == 0 %}
+                                        <option value="" selected disabled hidden>----</option>
+                                        {% for com in communautes_choices %}
+                                            <option value={{ com.id }}>{{ com.nom }}</option>
+                                        {% endfor %}
+                                    {% else %}
+                                        <option selected value="{{ comm_ultim.id }}">{{ comm_ultim.nom }}</option>
+                                    {% endif %}
                                 {% else %}
                                     <option value="{{ post.communaute.id }}" selected >{{ post.communaute.nom }}</option>
                                     {% for com in communautes_choices %}
