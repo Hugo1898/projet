@@ -12,7 +12,7 @@ class CommentaireForm(forms.ModelForm):
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        exclude = ["auteur", "visible", "sticky", "avertissement"]
+        exclude = ["auteur", "visible", "sticky", "avertissement", "lecteurs", "lu"]
         widgets = {
             'date_evenement': forms.DateTimeInput(attrs={
                 'class': 'form-control', 'type': 'datetime-local',
@@ -58,7 +58,7 @@ class SearchForm(forms.Form):
 class CalendarForm(forms.ModelForm):
     class Meta:
         model = Post
-        exclude = ["auteur", "evenementiel"]
+        exclude = ["auteur", "evenementiel", "visible", "sticky", "avertissement", "lecteurs", "lu"]
         widgets = {
             'date_evenement': forms.DateTimeInput(attrs={
                 'class': 'form-control', 'type': 'datetime-local',

@@ -158,6 +158,7 @@ def nouveau_post(request, special_post=0):
         post = form.save(commit=False)
         post.auteur = request.user
 
+
         post.visible=True
         if (special_post==1) and request.user in post.communaute.managers.all():
             post.sticky=True
@@ -385,7 +386,6 @@ def calendrier(request, com_id, prio_deg, j_d, m_d, y_d, j_f, m_f, y_f):
         post = form.save(commit=False)
         post.auteur = request.user
         post.evenementiel = True
-        post.visible = True
         post.save()
 
     coms = Communaute.objects.exclude(suspended=2)
