@@ -44,7 +44,7 @@
                         &nbsp &nbsp
                         <kbd>
                             <a style="color: white"
-                               href={% url 'communaute' post.communaute.id 0 0%}> {{ post.communaute.nom }} </a>
+                               href={% url 'communaute' post.communaute.id%}> {{ post.communaute.nom }} </a>
                         </kbd>
                     </p>
                     {% if user == post.auteur %}
