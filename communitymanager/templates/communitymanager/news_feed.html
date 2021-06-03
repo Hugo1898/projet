@@ -76,11 +76,13 @@
                     {% endif %}
                     <small style="color: grey">Dernière modification : {{ post.date_creation }}</small>
 
+                    <div style="font-weight: bold">
                     {%  if post.lu == True %}
                         Lu
                     {% else %}
                         Non lu
                     {% endif %}
+                    </div>
 
                     {% if request.user in post.likes.all %}
                         <a href={% url 'post_like' 0 post.id %} data-toggle="tooltip" title="Like">
