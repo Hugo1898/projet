@@ -463,9 +463,11 @@ def advanced_search(request):
                 comments = comments.none()
             # search only in subscribed communities
             if subscribed_only:
-                communities = communities.filter(abonnes=request.user)
-                posts = posts.filter(communaute__abonnes=request.user)
-                comments = comments.filter(post__communaute__abonnes=request.user)
+                if in_communities:
+                    communities = communities.filter(abonnes=request.user)
+                if in_posts or in_authors:
+                    posts = posts.filter(communaute__abonnes=request.user)
+                    comments = comments.filter(post__communaute__abonnes=request.user)
             return render(request, 'communitymanager/search_result.html', locals())
 
     return render(request, 'communitymanager/search_result.html')
