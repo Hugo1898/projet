@@ -8,15 +8,7 @@
 {% endblock %}
 
 {% block content %}
-
-    <form action="" method="post">
-        {% csrf_token %}
-        {{ priorite_form.as_p }}
-        <input type="submit" value="Submit"/>
-    </form>
-
     <h2>{{ com.nom }}</h2>
-
 
     <!-- Sticky Post pour les Community Managers si la communauté n'est pas suspendue par l'admin
     et est bien ouverte par le community manager -->
@@ -61,6 +53,13 @@
 
         </button>
     {% endif %}
+
+     <h3>Filtres </h3>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ priorite_form.as_p }}
+        <input type="submit" value="Submit"/>
+    </form>
 
     <br>
     <br>
