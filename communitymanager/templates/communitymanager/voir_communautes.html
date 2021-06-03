@@ -29,16 +29,16 @@
 
 
                         <h4>
-                            <a href={% url 'communaute' com.id 0 0 %}>
+                            <a href={% url 'communaute' com.id %}>
 
                                 {% if  com.suspended == 1 %}
-                                    <div class="text-muted" id="{{ com.nom }}">
+                                    <div class="text-muted" id="{{ com.id }}">
                                     <i class="fa fa-user-lock"></i> Visible
                                 {% elif com.suspended == 2 %}
-                                    <div class="text-muted">
+                                    <div class="text-muted" id="{{ com.id }}">
                                     <i class="fa fa-user-lock"></i> Invisible
                                 {% else %}
-                                    <div>
+                                    <div id="{{ com.id }}">
                                 {% endif %}
                                 {% if not com.open %}
                                     <i class="fa fa-lock"></i> Closed
@@ -140,31 +140,31 @@
                                 {% if not com.suspended %}
                                     &nbsp &nbsp
                                     <!-- Pour suspendre la communauté de manière visible-->
-                                    <a href={% url 'suspend_communaute' com.id 1 %}>
+                                    <a href="{% url 'suspend_communaute' com.id 1 %}#{{ com.id }}">
                                         <i class="fa fa-user-lock"></i> Lock Visible</a>
                                     &nbsp &nbsp
                                     <!-- Pour suspendre la communauté de manière invisible-->
-                                    <a href={% url 'suspend_communaute' com.id 2 %}>
+                                    <a href="{% url 'suspend_communaute' com.id 2 %}#{{ com.id }}">
                                         <i class="fa fa-user-lock"></i> Lock Invisible</a>
                                     &nbsp &nbsp
                                 {% elif com.suspended == 1 %}
                                     &nbsp &nbsp
                                     <!-- Pour réouvrir la communauté-->
-                                    <a href={% url 'suspend_communaute' com.id 0 %}>
+                                    <a href="{% url 'suspend_communaute' com.id 0 %}#{{ com.id }}">
                                         <i class="fa fa-user-shield"></i> Unlock</a>
                                     &nbsp &nbsp
                                     <!-- Pour suspendre la communauté de manière invisible-->
-                                    <a href={% url 'suspend_communaute' com.id 2 %}>
+                                    <a href="{% url 'suspend_communaute' com.id 2 %}#{{ com.id }}">
                                         <i class="fa fa-user-lock"></i> Lock Invisible</a>
                                     &nbsp &nbsp
                                 {% elif com.suspended == 2 %}
                                     &nbsp &nbsp
                                     <!-- Pour réouvrir la communauté-->
-                                    <a href={% url 'suspend_communaute' com.id 0 %}>
+                                    <a href="{% url 'suspend_communaute' com.id 0 %}#{{ com.id }}">
                                         <i class="fa fa-user-shield"></i> Unlock</a>
                                     &nbsp &nbsp
                                     <!-- Pour suspendre la communauté de manière visible-->
-                                    <a href={% url 'suspend_communaute' com.id 1 %}>
+                                    <a href="{% url 'suspend_communaute' com.id 1 %}#{{ com.id }}">
                                         <i class="fa fa-user-lock"></i> Lock Visible</a>
                                     &nbsp &nbsp
                                 {% endif %}
