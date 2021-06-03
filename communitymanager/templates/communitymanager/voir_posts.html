@@ -1,3 +1,6 @@
+
+
+
 {% extends 'base.html' %}
 {% block title %}
     Posts de {{ com.nom }}
@@ -6,7 +9,15 @@
 
 {% block content %}
 
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ priorite_form.as_p }}
+        <input type="submit" value="Submit"/>
+    </form>
+
     <h2>{{ com.nom }}</h2>
+
+
     <!-- Sticky Post pour les Community Managers si la communauté n'est pas suspendue par l'admin
     et est bien ouverte par le community manager -->
     <button type="button" class="btn btn-light">
@@ -31,7 +42,7 @@
                     pouvez plus ajouter de Sticky
                     Post !</h4>
             {% endif %}
-        {% else %}
+       {% else %}
             <h4 style="font-weight:bold"> Désolé, cette communauté est suspendue par un Administrateur, vous ne pouvez
                 plus ajouter de Sticky
                 Post !</h4>
@@ -144,6 +155,13 @@
                             <p><i class='fas'>&#xf073;</i> Prévu le {{ post.date_evenement }}</p>
                         {% endif %}
                         <small style="color: grey">Dernière modification : {{ post.date_creation }}</small>
+
+                        {%  if post.lu == True %}
+                            Lu
+                        {% else %}
+                            Non lu
+                        {% endif %}
+
                     </td>
                 </tr>
             {% endfor %}

@@ -45,29 +45,67 @@ def abonnement(request, action, com_id):
 
 
 @login_required
-def communaute(request, com_id):
+def communaute(request, com_id, degre, event):
     """Page d'affichage des détails d'une communaute
             Permet aux community managers de suivre l'Etat des posts de leur communauté"""
     com = get_object_or_404(Communaute, pk=com_id)
+    user = request.user
+
 
     # Si la communauté est suspendue et que l'user n'est pas superuser, il ne peut pas y accéder
-    if com.suspended == 2 and not request.user.is_superuser :
+    if com.suspended == 2 and not request.user.is_superuser:
         return redirect("communautes")
 
-    if request.user in com.managers.all() or request.user.is_superuser:
-        posts = Post.objects.filter(communaute=com_id).order_by('-avertissement', '-sticky', '-date_creation')
+    if request.user in com.managers.all() and event == 1:
+        posts = Post.objects.filter(communaute=com_id, priorite__degre__gte=degre, evenementiel=True).order_by(
+            '-sticky', '-date_creation')
+    elif request.user in com.managers.all() and event == 0:
+        posts = Post.objects.filter(communaute=com_id, visible=True, priorite__degre__gte=degre).order_by('-sticky',
+                                                                                                          '-date_creation')
+    elif event == 1:
+        posts = Post.objects.filter(communaute=com_id, visible=True, priorite__degre__gte=degre, evenementiel=True).order_by('-sticky',
+                                                                                                          '-date_creation')
     else:
-        posts = Post.objects.filter(communaute=com_id, visible=True).order_by('-avertissement','-sticky', '-date_creation')
-
+        posts = Post.objects.filter(communaute=com_id, visible=True, priorite__degre__gte=degre).order_by('-sticky',
+                                                                                                          '-date_creation')
     counts = {}
     for post in posts:
         counts[post.titre] = Commentaire.objects.filter(post=post).count()
     user = request.user
 
+    for post in posts:
+        post.lu = False
+        if request.user in post.lecteurs.all():
+            post.lu = True
+            post.save()
+
+    #Filtrage de l'affichage des posts selon leur priorité et leur statut d'évènement ou non ; fonctionnalité disponible si l'utilisateur est abonné  :
+
+    if request.user in com.abonnes.all():
+
+        priorite_form = PrioriteForm(request.POST or None)
+
+        if priorite_form.is_valid():
+            label = priorite_form.cleaned_data['label']
+            print(type(label))
+            if label:
+                priorite = get_object_or_404(Priorite, label=label).degre
+            évènement = priorite_form.cleaned_data['évènement']
+            if évènement is True and 'priorite' in locals() :
+                return redirect('communaute', com_id, priorite, 1)
+            elif évènement is False and 'priorite' in locals():
+                return redirect('communaute', com_id, priorite, 0)
+            elif évènement is True:
+                return redirect('communaute', com_id, 0, 1)
+            else:
+                return redirect('communaute', com_id, 0, 0)
+
+
     # Pour vérifier si l'user est un manager
     com.user_is_manager = False
     if request.user in com.managers.all():
         com.user_is_manager = True
+
     return render(request, 'communitymanager/voir_posts.html', locals())
 
 @login_required
@@ -75,7 +113,11 @@ def post(request, post_id):
     """Affichage d'un post et de ses commentaires"""
     post = get_object_or_404(Post, pk=post_id)
 
-    # Si la communauté est suspendue et que l'user n'est pas superuser, il ne peut pas y accéder
+    if (request.user in post.lecteurs.all()) is False:
+        post.lecteurs.add(request.user)
+        post.save()
+
+    #Si la communauté est suspendue et que l'user n'est pas superuser, il ne peut pas y accéder
     if post.communaute.suspended == 2 and not request.user.is_superuser:
         return redirect("communautes")
     # Si la communauté est fermée et que l'auteur n'est ni admin ni superuser
@@ -115,11 +157,14 @@ def nouveau_post(request, special_post=0):
     if form.is_valid():
         post = form.save(commit=False)
         post.auteur = request.user
+
+
         post.visible=True
         if (special_post==1) and request.user in post.communaute.managers.all():
             post.sticky=True
         if (special_post==2) and request.user.is_superuser:
             post.avertissement=True
+
         if post.communaute.open:
             post.save()
             return redirect('post', post_id=post.id)
@@ -140,6 +185,8 @@ def modif_post(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
 
     # Si la communauté est suspendue et que l'user n'est pas superuser, il ne peut pas modifier le post
+
+
     if (post.communaute.suspended == (2 or 1) ) and not request.user.is_superuser:
         return redirect("communautes")
     # Si la communauté est fermee et que l'user n'est pas manager, il ne peut pas modifier le post
@@ -147,6 +194,8 @@ def modif_post(request, post_id):
         return redirect("communautes")
     # Si l'user est banni de la communaute
     if request.user in post.communaute.banned.all():
+
+
         return redirect("communautes")
 
     form = PostForm(request.POST or None, instance=post)
@@ -183,6 +232,7 @@ def nouvelle_communaute(request):
 
     return render(request, 'communitymanager/nouvelle_communaute.html', locals())
 
+
 @login_required
 def modif_communaute(request, communaute_id):
     """Page de modification d'une communauté"""
@@ -199,6 +249,7 @@ def modif_communaute(request, communaute_id):
         return render(request, 'communitymanager/nouvelle_communaute.html', locals())
     return redirect('communautes')
 
+
 @login_required
 def delete_communaute(request, communaute_id):
     """Commande pour la suppression d'une communaute si l'user est bien manager"""
@@ -207,6 +258,8 @@ def delete_communaute(request, communaute_id):
     if request.user in communaute.managers.all():
         communaute.delete()
     return redirect('communautes')
+
+
 
 @login_required
 def open_close_communaute(request, communaute_id):
@@ -231,20 +284,27 @@ def suspend_communaute(request, com_id, action):
         communaute.save()
     return redirect('communautes')
 
+
 @login_required
 def delete_post(request, post_id):
     """Commande pour la suppression d'un post"""
     post = get_object_or_404(Post, pk=post_id)
     com_id = post.communaute.id
+
+
     if request.user not in post.communaute.banned.all():
         if (not post.avertissement and request.user in post.communaute.managers.all()) or (post.avertissement and request.user.is_superuser):
             post.delete()
+
+
     return redirect('communaute', com_id=com_id)
+
 
 @login_required
 def visibility_post(request, post_id):
     """Commande pour le changement de statut de visibilité d'un post"""
     post = get_object_or_404(Post, pk=post_id)
+
 
     if request.user not in post.communaute.banned.all():
         if (not post.avertissement and request.user in post.communaute.managers.all()) or (post.avertissement and request.user.is_superuser):
@@ -254,6 +314,7 @@ def visibility_post(request, post_id):
                 post.visible=True
             post.save()
     return redirect('communaute', com_id=post.communaute.id)
+
 
 @login_required
 def sticky_modify_post(request, post_id):
@@ -270,18 +331,18 @@ def sticky_modify_post(request, post_id):
     return redirect('communaute', com_id=post.communaute.id)
 
 
+
 @login_required
 def visibility_comment(request, commentaire_id):
     """Commande pour le changement de statut de visibilité d'un commentaire"""
     commentaire = get_object_or_404(Commentaire, pk=commentaire_id)
     if request.user in commentaire.post.communaute.managers.all():
         if (commentaire.visible):
-            commentaire.visible=False
+            commentaire.visible = False
         elif (not commentaire.visible):
-            commentaire.visible=True
+            commentaire.visible = True
         commentaire.save()
     return redirect('post', post_id=commentaire.post.id)
-
 
 
 
@@ -321,13 +382,11 @@ def get_color(dictionary, key):
 
 @login_required
 def calendrier(request, com_id, prio_deg, j_d, m_d, y_d, j_f, m_f, y_f):
-
     form = CalendarForm(request.POST or None, auto_id="cal_%s")
     if form.is_valid():
         post = form.save(commit=False)
         post.auteur = request.user
         post.evenementiel = True
-        post.visible = True
         post.save()
 
     coms = Communaute.objects.exclude(suspended=2)
@@ -346,3 +405,72 @@ def calendrier(request, com_id, prio_deg, j_d, m_d, y_d, j_f, m_f, y_f):
     communautes_choices = Communaute.objects.filter(open=True, suspended=0).exclude(banned=request.user)
 
     return render(request, 'communitymanager/calendrier.html', locals())
+
+
+@login_required()
+def advanced_search(request):
+    if request.method == 'POST':
+        form = SearchForm(request.POST)
+        if form.is_valid():
+            # text search in all text fields
+            content = form.cleaned_data['content']
+            start = form.cleaned_data['start']
+            end = form.cleaned_data['end']
+            in_posts = form.cleaned_data['in_posts']
+            in_communities = form.cleaned_data['in_communities']
+            in_authors = form.cleaned_data['in_authors']
+            event_date = form.cleaned_data['event_date']
+            subscribed_only = form.cleaned_data['subscribed_only']
+            if in_communities:
+                communities = Communaute.objects.filter(Q(nom__contains=content) | Q(description__contains=content))
+            if in_posts:
+                if in_authors:
+                    posts = Post.objects.filter(Q(titre__contains=content) | Q(description__contains=content)
+                                                | Q(auteur__username__contains=content))
+                    comments = Commentaire.objects.filter(Q(contenu__contains=content)
+                                                          | Q(auteur__username__contains=content))
+                else:
+                    posts = Post.objects.filter(Q(titre__contains=content) | Q(description__contains=content))
+                    comments = Commentaire.objects.filter(Q(contenu__contains=content))
+                counts = {}
+                for post in posts:
+                    counts[post.titre] = Commentaire.objects.filter(post=post).count()
+                    comments = Commentaire.objects.filter(Q(contenu__contains=content)
+                                                          | Q(auteur__username__contains=content))
+            if in_authors:
+                if in_posts:
+                    posts = Post.objects.filter(Q(titre__contains=content) | Q(description__contains=content)
+                                                | Q(auteur__username__contains=content))
+                    comments = Commentaire.objects.filter(Q(contenu__contains=content)
+                                                          | Q(auteur__username__contains=content))
+                else:
+                    posts = Post.objects.filter(Q(auteur__username__contains=content))
+                    comments = Commentaire.objects.filter(Q(auteur__username__contains=content))
+                counts = {}
+                for post in posts:
+                    counts[post.titre] = Commentaire.objects.filter(post=post).count()
+                    comments = Commentaire.objects.filter(Q(contenu__contains=content)
+                                                          | Q(auteur__username__contains=content))
+
+            # creation date filters
+            if start:
+                start = form.cleaned_data['start']
+                posts = Post.objects.filter(date_creation__gt=start)
+                comments = Commentaire.objects.filter(date_creation__gt=start)
+            if end:
+                end = form.cleaned_data['end']
+                posts = Post.objects.filter(post__date_creation__lt=end)
+                comments = Commentaire.objects.filter(date_creation__lt=end)
+            if event_date:
+                posts = Post.objects.filter(Q(evenementiel=True) & Q(date_evenement__day=event_date))
+            # search only in subscribed communities
+            if subscribed_only:
+                communities = Communaute.objects.filter(abonnes__communautes__abonnes__contains=request.user)
+                posts = Post.objects.filter(communaute__abonnes__post__contains=request.user)
+                comments = Commentaire.objects.filter(communaute__abonnes__post__commentaire__contains=request.user)
+            return render(request, 'communitymanager/search_result.html', locals())
+        else:
+            print(form.errors)
+
+
+    return render(request, 'communitymanager/search_result.html')

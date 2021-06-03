@@ -20,6 +20,7 @@
                 {% endif %}
                     <td>
 
+
                         <h4>
                             {% if  post.sticky %}
                                 <div id="sticky" style="color:orange">
@@ -43,7 +44,7 @@
                         &nbsp &nbsp
                         <kbd>
                             <a style="color: white"
-                               href={% url 'communaute' post.communaute.id %}> {{ post.communaute.nom }} </a>
+                               href={% url 'communaute' post.communaute.id 0 0%}> {{ post.communaute.nom }} </a>
                         </kbd>
                     </p>
                     {% if user == post.auteur %}
@@ -73,6 +74,7 @@
                 </td>
                 </tr>
             {% endfor %}
+
     </tbody>
     </table>
     </div>

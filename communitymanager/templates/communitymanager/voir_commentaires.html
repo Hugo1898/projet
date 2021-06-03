@@ -19,8 +19,9 @@
                         &nbsp &nbsp
                         <kbd>
                             <a style="color: white"
-                               href={% url 'communaute' post.communaute.id %}> {{ post.communaute.nom }} </a>
-                        </kbd>
+
+                               href={% url 'communaute' post.communaute.id 0 0 %}> {{ post.communaute.nom }}  </a>
+                       </kbd>
                     </p>
                     <!-- Modification du post ssi auteur non banned et que la communauté n'est pas suspendue par l'admin-->
                     {% if user == post.auteur and not post.communaute.suspended and post.communaute.open and user not in post.communaute.banned.all %}

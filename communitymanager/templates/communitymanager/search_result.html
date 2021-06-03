@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Recherche avancée{% endblock %}</title>
+</head>
+<body>
+{% block content %}
+    <form method="POST" action="">
+    {% csrf_token %}
+        <label for="content">Rechercher : </label><br>
+        <input type="text" id="content" name="content" required><br>
+        Rechercher dans : <br>
+        <input type="checkbox" id="in_posts" name="in_posts" checked>
+        <label for="in_posts"> Posts et commentaires</label><br>
+        <input type="checkbox" id="in_communities" name="in_communities" checked>
+        <label for="filter2"> Communautés</label><br>
+        <input type="checkbox" id="in_authors" name="in_authors" checked>
+        <label for="vehicle3"> Auteurs</label><br>
+        <label for="start">A partir du</label><br>
+        <input type="date" id="start" name="Start date"><br>
+        <label for="end">Jusqu'au</label><br>
+        <input type="date" id="end" name="End date"><br>
+        <label for="event_date">Date de l'événement</label><br>
+        <input type="date" id="event_date" name="Event date"><br>
+        <input type="checkbox" id="subscribed_only" name="Search only in subscribed Communities">
+        <label for="subscribed_only">Seulement dans mes abonnements</label><br>
+    <input class="btn btn-primary" type="submit" value="Envoyer"/>
+    </form>
+    <h4>Résultats de la recherche : </h4>
+    <p>
+    Parmi les communautés
+    {% for com in communities %}
+        <tr>
+        <td>
+        <a href="/communitymanager/communaute/{{ com.id }}/">
+            <h4> {{ com.nom }} </h4> </a>
+        <p> {{ com.description }}</p>
+        </td>
+        </tr>
+    {% endfor %}
+    </p>
+    <p>
+    Parmi les posts
+    <div class="card">
+    <table class="table table-striped">
+    <tbody>
+    {% for post in posts %}
+        <tr>
+        <td>
+        <a href="/communitymanager/post/{{ post.id }}/"> <h4> {{ post.titre }} </h4> </a>
+        <p> {{ post.description }}</p>
+        </td>
+        <td>
+        <p>
+            <i class="fas fa-circle" style="color: {{ post|get_color:post.priorite }}"></i>
+            &nbsp &nbsp
+            <kbd> {{ post.communaute.nom }} </kbd>
+        </p>
+        {% if user == post.auteur %}
+            <p> Par {{ post.auteur }}
+            &nbsp &nbsp
+            <a href="/communitymanager/modif_post/{{ post.id }}/">
+            <i class="fa fa-pencil-square-o" ></i> </a>
+            &nbsp &nbsp
+            <kbd style="background-color: #b4b0b0">
+            {{ counts|get_item:post.titre }}
+            <i class="fas fa-comment"></i>
+            </kbd>
+            </p>
+        {% else %}
+            <p> Par {{ post.auteur }}
+            &nbsp &nbsp
+            <kbd style="background-color: #b4b0b0">
+            {{ counts|get_item:post.titre }}
+            <i class="fas fa-comment"></i>
+            </kbd>
+            </p>
+        {% endif %}
+        {% if post.evenementiel %}
+        <p> <i class='fas'>&#xf073;</i> Prévu le {{ post.date_evenement }}</p>
+        {% endif %}
+        <small style="color: grey">Dernière modification : {{ post.date_creation }}</small>
+        </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+
+    </p>
+    <p>
+    Parmi les commentaires
+    <div class="card">
+<table class="table table-striped">
+    <tbody>
+    {% for coment in comments %}
+        <tr>
+        <td>
+        <p> {{ coment.contenu }}</p>
+        <p style="font-style: italic; color: grey"> {{ coment.auteur }}, le {{ coment.date_creation }} </p>
+        </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+    </p>
+{% endblock %}
+</body>
+</html>

@@ -43,6 +43,8 @@ class Post(models.Model):
     visible = models.BooleanField(default=True)
     sticky = models.BooleanField(default=False)
     avertissement = models.BooleanField(default=False)
+    lecteurs =models.ManyToManyField(User, related_name="posts")
+    lu = models.BooleanField(default=False)
 
 
     class Meta:

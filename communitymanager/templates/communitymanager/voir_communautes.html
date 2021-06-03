@@ -27,8 +27,9 @@
                 <tr>
                     <td>
 
+
                         <h4>
-                            <a href={% url 'communaute' com.id %}>
+                            <a href={% url 'communaute' com.id 0 0 %}>
 
                                 {% if  com.suspended == 1 %}
                                     <div class="text-muted" id="{{ com.nom }}">

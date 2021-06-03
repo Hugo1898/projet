@@ -5,7 +5,7 @@ urlpatterns = [
     # Projet individuel - Hugo
     path('communautes/', views.communautes, name='communautes'),
     path('communautes/<str:action>/<int:com_id>/', views.abonnement, name='abonnement'),
-    path('communaute/<int:com_id>/', views.communaute, name='communaute'),
+    path('communaute/<int:com_id>/<int:degre>/<int:event>/', views.communaute, name='communaute'),
     path('post/<int:post_id>/', views.post, name='post'),
     path('nouveau_post/', views.nouveau_post, name='nouveau_post'),
     path('modif_post/<int:post_id>/', views.modif_post, name='modif_post'),
@@ -33,6 +33,7 @@ urlpatterns = [
     #Extention 4 - Hugo
     path('calendrier/<int:com_id>/<int:prio_deg>/<int:j_d>/<int:m_d>/<int:y_d>/<int:j_f>/<int:m_f>/<int:y_f>/'
          , views.calendrier, name='calendrier'),
+    path('advanced_search/', views.advanced_search, name='recherche_avancee'),
 
 ]
 
