@@ -45,6 +45,10 @@ class Post(models.Model):
     avertissement = models.BooleanField(default=False)
     lecteurs =models.ManyToManyField(User, related_name="posts")
     lu = models.BooleanField(default=False)
+    likes = models.ManyToManyField(User, related_name='post_like')
+
+    def number_of_likes(self):
+        return self.likes.count()
 
 
     class Meta:

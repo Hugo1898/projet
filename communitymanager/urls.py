@@ -13,6 +13,10 @@ urlpatterns = [
     path('nouvelle_communaute/', views.nouvelle_communaute, name='nouvelle_communaute'),
     path('', views.communautes, name='home'),
 
+    #Extension 1 - Come
+
+    path('post_like/<int:com_id>/<int:post_id>/', views.post_like, name='post_like'),
+
     #Extention 2 - Antoine
 
     ## Actions sur Communaute

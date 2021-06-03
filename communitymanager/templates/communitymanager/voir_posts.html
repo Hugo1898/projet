@@ -17,6 +17,7 @@
 
     <h2>{{ com.nom }}</h2>
 
+    {{ unread_posts }} posts non lus
 
     <!-- Sticky Post pour les Community Managers si la communauté n'est pas suspendue par l'admin
     et est bien ouverte par le community manager -->
@@ -150,6 +151,11 @@
                         {% else %}
                             Non lu
                         {% endif %}
+
+                        {{ post.number_of_likes }} Likes
+
+                        <a href={% url 'post_like' com.id post.id %} data-toggle="tooltip" title="Like">
+                                    <i class="fa fa-thumbs-up"></i></a>
 
                     </td>
                 </tr>

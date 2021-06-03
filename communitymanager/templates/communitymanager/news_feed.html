@@ -65,6 +65,18 @@
                         <p><i class='fas'>&#xf073;</i> Prévu le {{ post.date_evenement }}</p>
                     {% endif %}
                     <small style="color: grey">Dernière modification : {{ post.date_creation }}</small>
+
+                    {%  if post.lu == True %}
+                        Lu
+                    {% else %}
+                        Non lu
+                    {% endif %}
+
+                    {{ post.number_of_likes }} Likes
+
+                    <a href={% url 'post_like' 0 post.id %} data-toggle="tooltip" title="Like">
+                                    <i class="fa fa-thumbs-up"></i></a>
+
                 </td>
                 </tr>
             {% endfor %}
