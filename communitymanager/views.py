@@ -98,7 +98,6 @@ def communaute(request, com_id, degre, event):
 
         if priorite_form.is_valid():
             label = priorite_form.cleaned_data['label']
-            print(type(label))
             if label:
                 priorite = get_object_or_404(Priorite, label=label).degre
             évènement = priorite_form.cleaned_data['évènement']

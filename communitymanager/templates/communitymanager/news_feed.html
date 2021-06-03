@@ -51,6 +51,11 @@
                                 {{ counts|get_item:post.titre }}
                                 <i class="fas fa-comment"></i>
                             </kbd>
+                            &nbsp &nbsp
+                            <kbd style="background-color: #b4b0b0">
+                                {{ post.number_of_likes }}
+                                <i class="fas fa-thumbs-up"></i>
+                            </kbd>
                         </p>
                     {% else %}
                         <p> Par {{ post.auteur }}
@@ -58,6 +63,11 @@
                             <kbd style="background-color: #b4b0b0">
                                 {{ counts|get_item:post.titre }}
                                 <i class="fas fa-comment"></i>
+                            </kbd>
+                            &nbsp &nbsp
+                            <kbd style="background-color: #b4b0b0">
+                                {{ post.number_of_likes }}
+                                <i class="fas fa-thumbs-up"></i>
                             </kbd>
                         </p>
                     {% endif %}
@@ -72,10 +82,13 @@
                         Non lu
                     {% endif %}
 
-                    {{ post.number_of_likes }} Likes
-
-                    <a href={% url 'post_like' 0 post.id %} data-toggle="tooltip" title="Like">
-                                    <i class="fa fa-thumbs-up"></i></a>
+                    {% if request.user in post.likes.all %}
+                        <a href={% url 'post_like' 0 post.id %} data-toggle="tooltip" title="Like">
+                                    <i class="fa fa-thumbs-up" style='font-size:18px'></i></a>
+                    {% else %}
+                        <a href={% url 'post_like' 0 post.id %} data-toggle="tooltip" title="Like">
+                                    <i class="fa fa-thumbs-up" style='font-size:18px; color:grey'></i></a>
+                    {% endif %}
 
                 </td>
                 </tr>
