@@ -36,8 +36,7 @@
     {% for com in communities %}
         <tr>
         <td>
-        <a href="/communitymanager/communaute/{{ com.id }}/">
-            <h4> {{ com.nom }} </h4> </a>
+        <a href="/communitymanager/communaute/{{ com.id }}/"><h4> {{ com.nom }} </h4> </a>
         <p> {{ com.description }}</p>
         </td>
         </tr>
@@ -100,7 +99,7 @@
     {% for coment in comments %}
         <tr>
         <td>
-        <p> {{ coment.contenu }}</p>
+            <p> <a href="/communitymanager/post/{{ coment.post.id }}/"> {{ coment.contenu }}</a></p>
         <p style="font-style: italic; color: grey"> {{ coment.auteur }}, le {{ coment.date_creation }} </p>
         </td>
         </tr>
