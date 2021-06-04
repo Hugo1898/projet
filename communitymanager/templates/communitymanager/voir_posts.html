@@ -30,7 +30,7 @@
             {% if com.open %}
                 <button type="button" class="btn btn-light">
                     <div id="sticky" style="color:orange">
-                        <a href={% url 'nouveau_special_post' 1 %}>
+                        <a href={% url 'nouveau_special_post' 1 com.id %}>
                             <h4>
                                 <i class="fa fa-bell"></i> New Sticky Post
                             </h4>
@@ -52,7 +52,7 @@
     {% if request.user.is_superuser %}
         <button type="button" class="btn btn-light">
             <div id="avertissement" style="color:red">
-                <a href={% url 'nouveau_special_post' 2 %}>
+                <a href={% url 'nouveau_special_post' 2 com.id %}>
                     <h4>
                         <i class="fa fa-exclamation-triangle"></i> New Avertissement
                     </h4>
@@ -109,7 +109,7 @@
                                     <i class="fa fa-pencil-square-o"></i> </a>
                                 &nbsp &nbsp
                                 <kbd style="background-color: #b4b0b0">
-                                    {{ counts|get_item:post.titre }}
+                                    {{ counts|get_item:post.id }}
                                     <i class="fas fa-comment"></i>
                                 </kbd>
                                 &nbsp &nbsp
@@ -117,7 +117,7 @@
                             <p> Par {{ post.auteur }}
                             &nbsp &nbsp
                             <kbd style="background-color: #b4b0b0">
-                                {{ counts|get_item:post.titre }}
+                                {{ counts|get_item:post.id }}
                                 <i class="fas fa-comment"></i>
                             </kbd>
                             &nbsp &nbsp
@@ -156,7 +156,7 @@
                         {% endif %}
                         <small style="color: grey">Dernière modification : {{ post.date_creation }}</small>
 
-                        {%  if post.lu == True %}
+                        {%  if lecture|get_item:post.id%}
                             Lu
                         {% else %}
                             Non lu

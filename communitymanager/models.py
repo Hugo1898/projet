@@ -31,6 +31,7 @@ class Priorite(models.Model):
         return self.label
 
 
+
 class Post(models.Model):
     titre = models.CharField(max_length=200)
     description = models.TextField()
@@ -43,8 +44,7 @@ class Post(models.Model):
     visible = models.BooleanField(default=True)
     sticky = models.BooleanField(default=False)
     avertissement = models.BooleanField(default=False)
-    lecteurs =models.ManyToManyField(User, related_name="posts")
-    lu = models.BooleanField(default=False)
+    #liste_lecteurs = models.ManyToManyField(User, through="Lecteur", related_name="post_reader", blank=True)
 
 
     class Meta:
@@ -52,6 +52,16 @@ class Post(models.Model):
 
     def __str__(self):
         return self.titre
+
+class Lecteur(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    lecteur = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "Lecteur"
+
+    def __str__(self):
+        return self.post.titre + "_" + self.lecteur.username
 
 
 class Commentaire(models.Model):
@@ -67,3 +77,4 @@ class Commentaire(models.Model):
 
     def __str__(self):
         return self.contenu
+

@@ -69,14 +69,17 @@ def communaute(request, com_id, degre, event):
             order_by('-avertissement', '-sticky', '-date_creation')
     counts = {}
     for post in posts:
-        counts[post.titre] = Commentaire.objects.filter(post=post).count()
+        counts[post.id] = Commentaire.objects.filter(post=post).count()
     user = request.user
 
+    lecture = {}
     for post in posts:
-        post.lu = False
-        if request.user in post.lecteurs.all():
-            post.lu = True
-            post.save()
+        lecteurs_list = Lecteur.objects.filter(lecteur=user, post=post)
+        if not lecteurs_list:
+            lecture[post.id] = False
+        else:
+            lecture[post.id] = True
+    print(lecture)
 
     # Filtrage de l'affichage des posts selon leur priorité et leur statut d'évènement ou non ; fonctionnalité disponible si l'utilisateur est abonné  :
 
@@ -112,9 +115,10 @@ def post(request, post_id):
     """Affichage d'un post et de ses commentaires"""
     post = get_object_or_404(Post, pk=post_id)
 
-    if (request.user in post.lecteurs.all()) is False:
-        post.lecteurs.add(request.user)
-        post.save()
+    lecteurs_list = Lecteur.objects.filter(lecteur=request.user, post=post)
+    if not lecteurs_list:
+        Lecteur.objects.create(lecteur=request.user, post=post)
+
 
     # Si la communauté est suspendue et que l'user n'est pas superuser, il ne peut pas y accéder
     if post.communaute.suspended == 2 and not request.user.is_superuser:
@@ -219,7 +223,7 @@ def news_feed(request):
     posts = Post.objects.filter(visible=True).order_by('-date_creation').filter(communaute__in=communautes)
     counts = {}
     for post in posts:
-        counts[post.titre] = Commentaire.objects.filter(post=post).count()
+        counts[post.id] = Commentaire.objects.filter(post=post).count()
     return render(request, 'communitymanager/news_feed.html', locals())
 
 
@@ -431,7 +435,7 @@ def advanced_search(request):
                     comments = Commentaire.objects.filter(Q(contenu__contains=content))
                 counts = {}
                 for post in posts:
-                    counts[post.titre] = Commentaire.objects.filter(post=post).count()
+                    counts[post.id] = Commentaire.objects.filter(post=post).count()
                     comments = Commentaire.objects.filter(Q(contenu__contains=content)
                                                           | Q(auteur__username__contains=content))
             if in_authors:
@@ -445,7 +449,7 @@ def advanced_search(request):
                     comments = Commentaire.objects.filter(Q(auteur__username__contains=content))
                 counts = {}
                 for post in posts:
-                    counts[post.titre] = Commentaire.objects.filter(post=post).count()
+                    counts[post.id] = Commentaire.objects.filter(post=post).count()
                     comments = Commentaire.objects.filter(Q(contenu__contains=content)
                                                           | Q(auteur__username__contains=content))
 

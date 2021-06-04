@@ -8,7 +8,7 @@ urlpatterns = [
     path('communaute/<int:com_id>/<int:degre>/<int:event>/', views.communaute, name='communaute'),
     path('post/<int:post_id>/', views.post, name='post'),
     path('nouveau_post/', views.nouveau_post, name='nouveau_post'),
-    path('nouveau_post/<int:special_post>/<int:com_id>', views.nouveau_post, name='nouveau_post_com'),
+    path('nouveau_post/<int:special_post>/<int:com_id>/', views.nouveau_post, name='nouveau_post_com'),
     path('modif_post/<int:post_id>/', views.modif_post, name='modif_post'),
     path('news_feed/', views.news_feed, name='news_feed'),
     path('nouvelle_communaute/', views.nouvelle_communaute, name='nouvelle_communaute'),
@@ -24,7 +24,7 @@ urlpatterns = [
 
     ## Actions sur Post
     path('visibility_post/<int:post_id>/', views.visibility_post, name='visibility_post'),
-    path('nouveau_post/<int:special_post>/', views.nouveau_post, name='nouveau_special_post'),
+    path('nouveau_post/<int:special_post>/<int:com_id>/', views.nouveau_post, name='nouveau_special_post'),
     path('delete_post/<int:post_id>/', views.delete_post, name='delete_post'),
     path('sticky_modify_post/<int:post_id>/', views.sticky_modify_post, name='sticky_modify_post'),
 

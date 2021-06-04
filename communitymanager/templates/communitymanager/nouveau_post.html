@@ -41,10 +41,10 @@
                                     {% if com_id == 0 %}
                                         <option value="" selected disabled hidden>----</option>
                                         {% for com in communautes_choices %}
-                                            <option value={{ com.id }}>{{ com.nom }}</option>
+                                            <option value="{{ com.id }}">{{ com.nom }}</option>
                                         {% endfor %}
                                     {% else %}
-                                        <option selected value="{{ comm_ultim.id }}">{{ comm_ultim.nom }}</option>
+                                        <option value="{{ comm_ultim.id }}" selected>{{ comm_ultim.nom }}</option>
                                     {% endif %}
                                 {% else %}
                                     <option value="{{ post.communaute.id }}" selected >{{ post.communaute.nom }}</option>
