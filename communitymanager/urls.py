@@ -5,7 +5,7 @@ urlpatterns = [
     # Projet individuel - Hugo
     path('communautes/', views.communautes, name='communautes'),
     path('communautes/<str:action>/<int:com_id>/', views.abonnement, name='abonnement'),
-    path('communaute/<int:com_id>', views.communaute, name='communaute'),
+    path('communaute/<int:com_id>/', views.communaute, name='communaute'),
     path('post/<int:post_id>/', views.post, name='post'),
     path('nouveau_post/', views.nouveau_post, name='nouveau_post'),
     path('modif_post/<int:post_id>/', views.modif_post, name='modif_post'),
