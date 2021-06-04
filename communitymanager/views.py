@@ -468,6 +468,14 @@ def advanced_search(request):
                 if in_posts or in_authors:
                     posts = posts.filter(communaute__abonnes=request.user)
                     comments = comments.filter(post__communaute__abonnes=request.user)
+            for com in communities:
+                com.user_is_manager = False
+                if request.user in com.managers.all():
+                    com.user_is_manager = True
+
+            all_managers = []
+            for com in communities:
+                all_managers += com.managers.all()
             return render(request, 'communitymanager/search_result.html', locals())
 
     return render(request, 'communitymanager/search_result.html')
