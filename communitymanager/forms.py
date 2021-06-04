@@ -86,3 +86,6 @@ class PrioriteForm(forms.ModelForm):
         fields = ['label']
 
 
+
+
+

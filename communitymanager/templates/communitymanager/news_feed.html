@@ -10,6 +10,11 @@
     <div class="card">
         <table class="table table-striped">
             <tbody>
+
+            <div style="font-weight: bold; font-size:18px">
+            {{ unread_posts }} posts non lus
+            </div>
+
             {% for post in posts %}
                 {% if post.avertissement %}
                 <tr class="danger">
@@ -57,6 +62,11 @@
                                 {{ counts|get_item:post.id }}
                                 <i class="fas fa-comment"></i>
                             </kbd>
+                            &nbsp &nbsp
+                            <kbd style="background-color: #b4b0b0">
+                                {{ post.number_of_likes }}
+                                <i class="fas fa-thumbs-up"></i>
+                            </kbd>
                         </p>
                     {% else %}
                         <p> Par {{ post.auteur }}
@@ -65,12 +75,42 @@
                                 {{ counts|get_item:post.id }}
                                 <i class="fas fa-comment"></i>
                             </kbd>
+                            &nbsp &nbsp
+                            <kbd style="background-color: #b4b0b0">
+                                {{ post.number_of_likes }}
+                                <i class="fas fa-thumbs-up"></i>
+                            </kbd>
                         </p>
                     {% endif %}
                     {% if post.evenementiel %}
                         <p><i class='fas'>&#xf073;</i> Prévu le {{ post.date_evenement }}</p>
                     {% endif %}
                     <small style="color: grey">Dernière modification : {{ post.date_creation }}</small>
+
+                    <div style="font-weight: bold">
+                    {%  if post.lu == True %}
+                        Lu
+                    {% else %}
+                        Non lu
+                    {% endif %}
+                    </div>
+
+                    {% if request.user in post.likes.all %}
+                        <a href={% url 'post_like' 0 post.id %} data-toggle="tooltip" title="Like">
+                                    <i class="fa fa-thumbs-up" style='font-size:18px'></i></a>
+                    {% else %}
+                        <a href={% url 'post_like' 0 post.id %} data-toggle="tooltip" title="Like">
+                                    <i class="fa fa-thumbs-up" style='font-size:18px; color:grey'></i></a>
+                    {% endif %}
+
+                    {% if request.user in post.lecteurs.all %}
+                        <a href={% url 'post_read' 0 post.id %} data-toggle="tooltip" title="Like">
+                                    <i class="fa fa-check-square" style='font-size:18px'></i></a>
+                    {% else %}
+                        <a href={% url 'post_read' 0 post.id %} data-toggle="tooltip" title="Like">
+                                    <i class="fa fa-check-square" style='font-size:18px; color:grey'></i></a>
+                    {% endif %}
+
                 </td>
                 </tr>
             {% endfor %}

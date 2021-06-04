@@ -82,16 +82,25 @@ def communaute(request, com_id, degre=0, event=0):
         counts[post.id] = Commentaire.objects.filter(post=post).count()
     user = request.user
 
-    lecture = {}
-    for post in posts:
-        lecteurs_list = Lecteur.objects.filter(lecteur=user, post=post)
-        if not lecteurs_list:
-            lecture[post.id] = False
-        else:
-            lecture[post.id] = True
-    print(lecture)
+    #Posts lus ou non lus par l'utilisateur :
 
-    # Filtrage de l'affichage des posts selon leur priorité et leur statut d'évènement ou non ; fonctionnalité disponible si l'utilisateur est abonné  :
+    for post in posts:
+        post.lu = False
+        post.save()
+        if request.user in post.lecteurs.all():
+            post.lu = True
+            post.save()
+
+    #Décompte des posts lus par l'utilisateur pour affichage
+
+    unread_posts = 0
+
+    for post in posts:
+        if (request.user in post.lecteurs.all()) is False:
+            unread_posts += 1
+
+
+    #Filtrage de l'affichage des posts selon leur priorité et leur statut d'évènement ou non ; fonctionnalité disponible si l'utilisateur est abonné  :
 
     if request.user in com.abonnes.all():
 
@@ -99,7 +108,6 @@ def communaute(request, com_id, degre=0, event=0):
 
         if priorite_form.is_valid():
             label = priorite_form.cleaned_data['label']
-            print(type(label))
             if label:
                 priorite = get_object_or_404(Priorite, label=label).degre
             évènement = priorite_form.cleaned_data['évènement']
@@ -110,6 +118,7 @@ def communaute(request, com_id, degre=0, event=0):
             elif évènement is True:
                 return redirect('communaute_filtered', com_id, 0, 1)
             else:
+
                 return redirect('communaute_filtered', com_id, 0, 0)
 
     # Pour vérifier si l'user est un manager
@@ -124,11 +133,6 @@ def communaute(request, com_id, degre=0, event=0):
 def post(request, post_id):
     """Affichage d'un post et de ses commentaires"""
     post = get_object_or_404(Post, pk=post_id)
-
-    lecteurs_list = Lecteur.objects.filter(lecteur=request.user, post=post)
-    if not lecteurs_list:
-        Lecteur.objects.create(lecteur=request.user, post=post)
-
 
     # Si la communauté est suspendue et que l'user n'est pas superuser, il ne peut pas y accéder
     if post.communaute.suspended == 2 and not request.user.is_superuser:
@@ -159,12 +163,47 @@ def post(request, post_id):
         coment.user_is_manager = False
         if request.user in coment.post.communaute.managers.all():
             coment.user_is_manager = True
+
     return render(request, 'communitymanager/voir_commentaires.html', locals())
+
+
+def post_like(request, post_id, com_id):
+    post = get_object_or_404(Post, id=post_id)
+
+    if (request.user in post.likes.all()) is False:
+        post.likes.add(request.user)
+        post.save()
+    else:
+        post.likes.remove(request.user)
+        post.save()
+
+    if com_id != 0:
+        com = get_object_or_404(Communaute, id=com_id)
+        return redirect('communaute', com.id, 0, 0)
+    else:
+        return redirect('news_feed')
+
+
+@login_required
+def post_read(request, post_id, com_id):
+    post = get_object_or_404(Post, id=post_id)
+
+    if (request.user in post.lecteurs.all()) is False:
+        post.lecteurs.add(request.user)
+        post.save()
+    else:
+        post.lecteurs.remove(request.user)
+        post.save()
+
+    if com_id != 0:
+        com = get_object_or_404(Communaute, id=com_id)
+        return redirect('communaute', com.id, 0, 0)
+    else:
+        return redirect('news_feed')
 
 
 @login_required
 def nouveau_post(request, special_post=0, com_id=0):
-
     form = PostForm(request.POST or None)
     mod = False
     comm_ultim = 0
@@ -234,6 +273,21 @@ def news_feed(request):
     counts = {}
     for post in posts:
         counts[post.id] = Commentaire.objects.filter(post=post).count()
+
+    for post in posts:
+        post.lu = False
+        if request.user in post.lecteurs.all():
+            post.lu = True
+            post.save()
+
+    # Décompte des posts lus par l'utilisateur pour affichage
+
+    unread_posts = 0
+
+    for post in posts:
+        if (request.user in post.lecteurs.all()) is False:
+             unread_posts += 1
+
     return render(request, 'communitymanager/news_feed.html', locals())
 
 

@@ -44,7 +44,12 @@ class Post(models.Model):
     visible = models.BooleanField(default=True)
     sticky = models.BooleanField(default=False)
     avertissement = models.BooleanField(default=False)
-    #liste_lecteurs = models.ManyToManyField(User, through="Lecteur", related_name="post_reader", blank=True)
+    lecteurs =models.ManyToManyField(User, related_name="posts")
+    lu = models.BooleanField(default=False)
+    likes = models.ManyToManyField(User, related_name='post_like')
+
+    def number_of_likes(self):
+        return self.likes.count()
 
 
     class Meta:
@@ -52,16 +57,6 @@ class Post(models.Model):
 
     def __str__(self):
         return self.titre
-
-class Lecteur(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    lecteur = models.ForeignKey(User, on_delete=models.CASCADE)
-
-    class Meta:
-        verbose_name = "Lecteur"
-
-    def __str__(self):
-        return self.post.titre + "_" + self.lecteur.username
 
 
 class Commentaire(models.Model):

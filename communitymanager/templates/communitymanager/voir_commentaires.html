@@ -34,6 +34,11 @@
                                 {{ count }}
                                 <i class="fas fa-comment"></i>
                             </kbd>
+                            &nbsp &nbsp
+                            <kbd style="background-color: #b4b0b0">
+                                {{ post.number_of_likes }}
+                                <i class="fas fa-thumbs-up"></i>
+                            </kbd>
                         </p>
                     {% else %}
                         <p> Par {{ post.auteur }}
@@ -41,6 +46,11 @@
                             <kbd style="background-color: #b4b0b0">
                                 {{ count }}
                                 <i class="fas fa-comment"></i>
+                            </kbd>
+                            &nbsp &nbsp
+                            <kbd style="background-color: #b4b0b0">
+                                {{ post.number_of_likes }}
+                                <i class="fas fa-thumbs-up"></i>
                             </kbd>
                         </p>
                     {% endif %}
