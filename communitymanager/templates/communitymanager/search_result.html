@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <title>{% block title %}Recherche avancée{% endblock %}</title>
 </head>
-<body>
+<a>
 {% block content %}
     <form method="POST" action="">
     {% csrf_token %}
@@ -36,9 +36,8 @@
     {% for com in communities %}
         <tr>
         <td>
-        <a href="/communitymanager/communaute/{{ com.id }}/"><h4> {{ com.nom }} </h4> </a>
+            <h4><a href={% url 'communaute' com.id %}> {{ com.nom }}</a></h4>
         <p> {{ com.description }}</p>
-        </td>
         </tr>
     {% endfor %}
     </p>
@@ -50,7 +49,7 @@
     {% for post in posts %}
         <tr>
         <td>
-        <a href="/communitymanager/post/{{ post.id }}/"> <h4> {{ post.titre }} </h4> </a>
+        <a href={% url 'post' post.id %}> <h4> {{ post.titre }} </h4> </a>
         <p> {{ post.description }}</p>
         </td>
         <td>
@@ -62,7 +61,7 @@
         {% if user == post.auteur %}
             <p> Par {{ post.auteur }}
             &nbsp &nbsp
-            <a href="/communitymanager/modif_post/{{ post.id }}/">
+            <a href={% url 'modif_post' post.id %}>
             <i class="fa fa-pencil-square-o" ></i> </a>
             &nbsp &nbsp
             <kbd style="background-color: #b4b0b0">
@@ -99,7 +98,7 @@
     {% for coment in comments %}
         <tr>
         <td>
-            <p> <a href="/communitymanager/post/{{ coment.post.id }}/"> {{ coment.contenu }}</a></p>
+            <p> <a href={% url 'post' coment.post.id %}> {{ coment.contenu }}</a></p>
         <p style="font-style: italic; color: grey"> {{ coment.auteur }}, le {{ coment.date_creation }} </p>
         </td>
         </tr>
