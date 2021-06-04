@@ -12,7 +12,7 @@ class CommentaireForm(forms.ModelForm):
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        exclude = ["auteur", "visible", "sticky", "avertissement"]
+        exclude = ["auteur", "visible", "sticky", "avertissement", "lu", "likes", "lecteurs"]
         widgets = {
             'date_evenement': forms.DateTimeInput(attrs={
                 'class': 'form-control', 'type': 'datetime-local',
@@ -23,17 +23,6 @@ class PostForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields["date_evenement"].input_formats = ["%Y-%m-%dT%H:%M"]
 
-    """
-    def clean(self):
-
-        cleaned_data = super(PostForm, self).clean()
-        date_evenement = cleaned_data['date_evenement']
-        evenementiel = cleaned_data['evenementiel']
-
-        if date_evenement < timezone.now() and evenementiel :
-            raise forms.ValidationError('Votre événement doit se passer dans le futur !')
-        return cleaned_data
-    """
 
 
 class CommunauteForm(forms.ModelForm):
@@ -59,7 +48,7 @@ class SearchForm(forms.Form):
 class CalendarForm(forms.ModelForm):
     class Meta:
         model = Post
-        exclude = ["auteur", "evenementiel", "visible", "sticky", "avertissement"]
+        exclude = ["auteur", "evenementiel", "visible", "sticky", "avertissement", "lu", "likes", "lecteurs"]
         widgets = {
             'date_evenement': forms.DateTimeInput(attrs={
                 'class': 'form-control', 'type': 'datetime-local',
