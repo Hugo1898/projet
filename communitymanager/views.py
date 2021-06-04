@@ -142,7 +142,6 @@ def communaute(request, com_id, degre=0, event=0):
 
     priorites = Priorite.objects.all().order_by("degre")
 
-
     return render(request, 'communitymanager/voir_posts.html', locals())
 
 
