@@ -16,6 +16,7 @@ urlpatterns = [
     #Extension 1 - Come
 
     path('post_like/<int:com_id>/<int:post_id>/', views.post_like, name='post_like'),
+    path('post_read/<int:com_id>/<int:post_id>/', views.post_read, name='post_read'),
 
     #Extention 2 - Antoine
 

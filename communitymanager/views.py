@@ -77,6 +77,7 @@ def communaute(request, com_id, degre, event):
 
     for post in posts:
         post.lu = False
+        #post.save()
         if request.user in post.lecteurs.all():
             post.lu = True
             post.save()
@@ -109,7 +110,6 @@ def communaute(request, com_id, degre, event):
                 return redirect('communaute', com_id, 0, 1)
             else:
                 return redirect('communaute', com_id, 0, 0)
-
 
     # Pour vérifier si l'user est un manager
     com.user_is_manager = False
@@ -178,6 +178,23 @@ def post_like(request, post_id, com_id):
     else:
         return redirect('news_feed')
 
+
+@login_required
+def post_read(request, post_id, com_id):
+    post = get_object_or_404(Post, id=post_id)
+
+    if (request.user in post.lecteurs.all()) is False:
+        post.lecteurs.add(request.user)
+        post.save()
+    else:
+        post.lecteurs.remove(request.user)
+        post.save()
+
+    if com_id != 0:
+        com = get_object_or_404(Communaute, id=com_id)
+        return redirect('communaute', com.id, 0, 0)
+    else:
+        return redirect('news_feed')
 
 
 @login_required
@@ -252,6 +269,14 @@ def news_feed(request):
         if request.user in post.lecteurs.all():
             post.lu = True
             post.save()
+
+    # Décompte des posts lus par l'utilisateur pour affichage
+
+    unread_posts = 0
+
+    for post in posts:
+        if (request.user in post.lecteurs.all()) is False:
+             unread_posts += 1
 
     return render(request, 'communitymanager/news_feed.html', locals())
 
@@ -371,8 +396,6 @@ def visibility_comment(request, commentaire_id):
             commentaire.visible = True
         commentaire.save()
     return redirect('post', post_id=commentaire.post.id)
-
-
 
 def signup(request):
     if request.method == 'POST':

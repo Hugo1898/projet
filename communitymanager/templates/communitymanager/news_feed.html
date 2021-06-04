@@ -10,6 +10,11 @@
     <div class="card">
         <table class="table table-striped">
             <tbody>
+
+            <div style="font-weight: bold; font-size:18px">
+            {{ unread_posts }} posts non lus
+            </div>
+
             {% for post in posts %}
                 <tr>
                     <td>
@@ -90,6 +95,14 @@
                     {% else %}
                         <a href={% url 'post_like' 0 post.id %} data-toggle="tooltip" title="Like">
                                     <i class="fa fa-thumbs-up" style='font-size:18px; color:grey'></i></a>
+                    {% endif %}
+
+                    {% if request.user in post.lecteurs.all %}
+                        <a href={% url 'post_read' 0 post.id %} data-toggle="tooltip" title="Like">
+                                    <i class="fa fa-check-square" style='font-size:18px'></i></a>
+                    {% else %}
+                        <a href={% url 'post_read' 0 post.id %} data-toggle="tooltip" title="Like">
+                                    <i class="fa fa-check-square" style='font-size:18px; color:grey'></i></a>
                     {% endif %}
 
                 </td>
