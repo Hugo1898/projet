@@ -4,6 +4,14 @@
 {% block title %} Recherche avancée {% endblock %}
 
 {% block content %}
+  <div class="row justify-content-center ">
+            <h2> Formulaire de Recherche </h2>
+
+
+    </div>
+    <hr style="margin-top: 10px"/>
+    <br>
+
     <form method="POST" action="">
     {% csrf_token %}
         <label for="content">Rechercher : </label><br>
@@ -51,7 +59,7 @@
 
 
                         <h4>
-                            <a href={% url 'communaute' com.id 0 0 %}>
+                            <a href={% url 'communaute' com.id %}>
 
                                 {% if  com.suspended == 1 %}
                                     <div class="text-muted">
@@ -197,7 +205,7 @@
                                     <i class="fa fa-pencil-square-o"></i> </a>
                                 &nbsp &nbsp
                                 <kbd style="background-color: #b4b0b0">
-                                    {{ counts|get_item:post.titre }}
+                                    {{ counts|get_item:post.id }}
                                     <i class="fas fa-comment"></i>
                                 </kbd>
                                 &nbsp &nbsp
@@ -205,7 +213,7 @@
                             <p> Par {{ post.auteur }}
                             &nbsp &nbsp
                             <kbd style="background-color: #b4b0b0">
-                                {{ counts|get_item:post.titre }}
+                                {{ counts|get_item:post.id }}
                                 <i class="fas fa-comment"></i>
                             </kbd>
                             &nbsp &nbsp
@@ -243,12 +251,6 @@
                             <p><i class='fas'>&#xf073;</i> Prévu le {{ post.date_evenement }}</p>
                         {% endif %}
                         <small style="color: grey">Date de création : {{ post.date_creation }}</small>
-                       
-                        {%  if post.lu == True %}
-                            Lu
-                        {% else %}
-                            Non lu
-                        {% endif %}
 
                     </td>
                 </tr>

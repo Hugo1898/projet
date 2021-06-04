@@ -12,17 +12,17 @@
 
 
     <div style="font-weight: bold; font-size:18px">
-    {{ unread_posts }} posts non lus
+        {{ unread_posts }} posts non lus
     </div>
 
 
     <!-- Sticky Post pour les Community Managers si la communauté n'est pas suspendue par l'admin
     et est bien ouverte par le community manager -->
     <button type="button" class="btn btn-light">
-                        <a href={% url 'nouveau_post_com' 0 com.id %}>
-                            <h4> New Post </h4>
-                        </a>
-                </button>
+        <a href={% url 'nouveau_post_com' 0 com.id %}>
+            <h4> New Post </h4>
+        </a>
+    </button>
     {% if com.user_is_manager %}
         {% if not com.suspended %}
             {% if com.open %}
@@ -40,7 +40,7 @@
                     pouvez plus ajouter de Sticky
                     Post !</h4>
             {% endif %}
-       {% else %}
+        {% else %}
             <h4 style="font-weight:bold"> Désolé, cette communauté est suspendue par un Administrateur, vous ne pouvez
                 plus ajouter de Sticky
                 Post !</h4>
@@ -62,14 +62,24 @@
 
     <!-- Filtres des communautés affichées -->
     <h3>Filtres </h3>
-    <form method="POST" action="" style="margin-left: 0px !important; margin-top: 5px">
-                {% csrf_token %}
-                <text> Priorité minimale ? </text>
-                        {{ priorite_form.label }}
-                <text> Événement ? </text>
-                        {{ priorite_form.évènement }}
+        <form method="POST" action="" style="margin-left: 0px !important; margin-top: 5px">
+            {% csrf_token %}
+
+                <text> Priorité minimale ?</text>
+
+                <select name="label" class="custom-select mb-3">
+                    {% for priorite in priorites %}
+                        <option value="{{ priorite.label }}">
+                            {{ priorite.label }} </option>
+                    {% endfor %}
+                </select>
+
+                <text> Événement ?</text>
+                {{ priorite_form.évènement }}
+            <br>
                 <input class="btn btn-primary" type="submit" value="Filtrer"/>
-    </form>
+        </form>
+
     <br>
     <br>
 
@@ -79,132 +89,135 @@
             <tbody>
             {% for post in posts %}
                 {% if post.avertissement %}
-                <tr class="danger">
-                {% elif post.sticky %}
-                <tr class="warning">
-                {% else %}
-                <tr>
+                    <tr class="danger">
+                        {% elif post.sticky %}
+                    <tr class="warning">
+                        {% else %}
+                    <tr>
                 {% endif %}
-                    <td>
-                    <div >
-                        <h4>
-                            {% if  post.avertissement %}
-                                <div id="avertissement" style="color:red">
-                                <i class="fa fa-exclamation-triangle"></i>
-                            {% endif %}
-                            {% if  post.sticky %}
-                                <div id="sticky" style="color:orange">
-                                <i class="fa fa-bell"></i>
-                            {% endif %}
-                            {% if  not post.visible %}
-                                <i class="fa fa-eye-slash" style="color:grey"></i>
-                                <text style="color:grey">Hidden</text>
-                            {% endif %}
-                            <a href={% url 'post' post.id %}>
-                                {{ post.titre }}</a>
-                        </h4>
-                        <p> {{ post.description }}</p>
-
-                    </div>
-                    </td>
-                    <td>
-                        <p>
-                            <i class="fas fa-circle" style="color: {{ post|get_color:post.priorite }}"></i>
-                            &nbsp &nbsp
-                            <kbd> {{ post.communaute.nom }} </kbd>
-                        </p>
-                        {% if user == post.auteur and not post.communaute.suspended and post.communaute.open and user not in post.communaute.banned.all %}
-                            <p> Par {{ post.auteur }}
-                                &nbsp &nbsp
-                                <a href={% url 'modif_post' post.id %} data-toggle="tooltip" title="Modifier le post">
-                                    <i class="fa fa-pencil-square-o"></i> </a>
-                                &nbsp &nbsp
-                                <kbd style="background-color: #b4b0b0">
-                                    {{ counts|get_item:post.id }}
-                                    <i class="fas fa-comment"></i>
-                                </kbd>
-                                &nbsp &nbsp
-                            <kbd style="background-color: #b4b0b0">
-                                {{ post.number_of_likes }}
-                                <i class="fas fa-thumbs-up"></i>
-                            </kbd>
-                                &nbsp &nbsp
-                                {% else %}
-                            <p> Par {{ post.auteur }}
-                            &nbsp &nbsp
-                            <kbd style="background-color: #b4b0b0">
-                                {{ counts|get_item:post.id }}
-                                <i class="fas fa-comment"></i>
-                            </kbd>
-                            &nbsp &nbsp
-                            <kbd style="background-color: #b4b0b0">
-                                {{ post.number_of_likes }}
-                                <i class="fas fa-thumbs-up"></i>
-                            </kbd>
-                            &nbsp &nbsp
+            <td>
+                <div>
+                    <h4>
+                        {% if  post.avertissement %}
+                            <div id="avertissement" style="color:red">
+                            <i class="fa fa-exclamation-triangle"></i>
                         {% endif %}
-                        <!-- Pour masquer ou supprimer un post, il faut être manager.
-                        Seul un Admin peut faire ces actions pour un avertissement -->
-                        <!-- L'opérateur 'and' est prioritaire sur le 'or' -->
-                        {% if com.user_is_manager and not post.avertissement or post.avertissement and request.user.is_superuser %}
-                            {% if  not post.visible %}
-                                <a href="{% url 'visibility_post' post.id %}" data-toggle="tooltip" title="Afficher le post pour les utilisateurs">
-                                    <i class="fa fa-eye"></i> </a>
-                            {% else %}
-                                <a href="{% url 'visibility_post' post.id %}" data-toggle="tooltip" title="Masquer le poste pour les utilisateurs">
-                                    <i class="fa fa-eye-slash"></i> </a>
-                            {% endif %}
-                            &nbsp &nbsp
-                            <a href={% url 'delete_post' post.id %} data-toggle="tooltip" title="Supprimer le post, attention, cette action est irréversible">
-                                <i class="fa fa-trash"></i></a>
-                            &nbsp &nbsp
+                        {% if  post.sticky %}
+                            <div id="sticky" style="color:orange">
+                            <i class="fa fa-bell"></i>
                         {% endif %}
-                        {% if com.user_is_manager and not post.avertissement %}
-                            {%  if post.sticky %}
-                                <a href="{% url 'sticky_modify_post' post.id %}" data-toggle="tooltip" title="Unstick le post">
-                                    <i class="fa fa-bell-slash"></i></a>
-                            {% else %}
-                                <a href="{% url 'sticky_modify_post' post.id %}" data-toggle="tooltip" title="Stick le post">
-                                    <i class="fa fa-bell"></i></a>
-                            {% endif %}
-                            &nbsp &nbsp
+                        {% if  not post.visible %}
+                            <i class="fa fa-eye-slash" style="color:grey"></i>
+                            <text style="color:grey">Hidden</text>
                         {% endif %}
-                        </p>
+                        <a href={% url 'post' post.id %}>
+                            {{ post.titre }}</a>
+                    </h4>
+                    <p> {{ post.description }}</p>
 
-
-                        {% if post.evenementiel %}
-                            <p><i class='fas'>&#xf073;</i> Prévu le {{ post.date_evenement }}</p>
-                        {% endif %}
-                        <small style="color: grey">Date de création : {{ post.date_creation }}</small>
-
-
-                        <div style="font-weight: bold">
-                        {%  if post.lu == True %}
-                            Lu
+                </div>
+            </td>
+            <td>
+                <p>
+                    <i class="fas fa-circle" style="color: {{ post|get_color:post.priorite }}"></i>
+                    &nbsp &nbsp
+                    <kbd> {{ post.communaute.nom }} </kbd>
+                </p>
+                {% if user == post.auteur and not post.communaute.suspended and post.communaute.open and user not in post.communaute.banned.all %}
+                    <p> Par {{ post.auteur }}
+                        &nbsp &nbsp
+                        <a href={% url 'modif_post' post.id %} data-toggle="tooltip" title="Modifier le post">
+                            <i class="fa fa-pencil-square-o"></i> </a>
+                        &nbsp &nbsp
+                        <kbd style="background-color: #b4b0b0">
+                            {{ counts|get_item:post.id }}
+                            <i class="fas fa-comment"></i>
+                        </kbd>
+                        &nbsp &nbsp
+                        <kbd style="background-color: #b4b0b0">
+                            {{ post.number_of_likes }}
+                            <i class="fas fa-thumbs-up"></i>
+                        </kbd>
+                        &nbsp &nbsp
                         {% else %}
-                            Non lu
-                        {% endif %}
-                         </div>
+                    <p> Par {{ post.auteur }}
+                    &nbsp &nbsp
+                    <kbd style="background-color: #b4b0b0">
+                        {{ count_posts|get_item:post.id }}
+                        <i class="fas fa-cheers"></i>
+                    </kbd>
+                    &nbsp &nbsp
+                    <kbd style="background-color: #b4b0b0">
+                        {{ post.number_of_likes }}
+                        <i class="fas fa-thumbs-up"></i>
+                    </kbd>
+                    &nbsp &nbsp
+                {% endif %}
+                <!-- Pour masquer ou supprimer un post, il faut être manager.
+                Seul un Admin peut faire ces actions pour un avertissement -->
+                <!-- L'opérateur 'and' est prioritaire sur le 'or' -->
+                {% if com.user_is_manager and not post.avertissement or post.avertissement and request.user.is_superuser %}
+                    {% if  not post.visible %}
+                        <a href="{% url 'visibility_post' post.id %}" data-toggle="tooltip"
+                           title="Afficher le post pour les utilisateurs">
+                            <i class="fa fa-eye"></i> </a>
+                    {% else %}
+                        <a href="{% url 'visibility_post' post.id %}" data-toggle="tooltip"
+                           title="Masquer le poste pour les utilisateurs">
+                            <i class="fa fa-eye-slash"></i> </a>
+                    {% endif %}
+                    &nbsp &nbsp
+                    <a href={% url 'delete_post' post.id %} data-toggle="tooltip"
+                       title="Supprimer le post, attention, cette action est irréversible">
+                        <i class="fa fa-trash"></i></a>
+                    &nbsp &nbsp
+                {% endif %}
+                {% if com.user_is_manager and not post.avertissement %}
+                    {% if post.sticky %}
+                        <a href="{% url 'sticky_modify_post' post.id %}" data-toggle="tooltip" title="Unstick le post">
+                            <i class="fa fa-bell-slash"></i></a>
+                    {% else %}
+                        <a href="{% url 'sticky_modify_post' post.id %}" data-toggle="tooltip" title="Stick le post">
+                            <i class="fa fa-bell"></i></a>
+                    {% endif %}
+                    &nbsp &nbsp
+                {% endif %}
+                </p>
 
-                        {% if request.user in post.likes.all %}
-                        <a href={% url 'post_like' com.id post.id %} data-toggle="tooltip" title="Like">
-                                    <i class="fa fa-thumbs-up" style='font-size:18px'></i></a>
-                        {% else %}
-                        <a href={% url 'post_like' com.id post.id %} data-toggle="tooltip" title="Like">
-                                    <i class="fa fa-thumbs-up" style='font-size:18px; color:grey'></i></a>
-                        {% endif %}
 
-                        {% if request.user in post.lecteurs.all %}
-                        <a href={% url 'post_read' com.id post.id %} data-toggle="tooltip" title="Like">
-                                    <i class="fa fa-check-square" style='font-size:18px'></i></a>
-                        {% else %}
-                        <a href={% url 'post_read' com.id post.id %} data-toggle="tooltip" title="Like">
-                                    <i class="fa fa-check-square" style='font-size:18px; color:grey'></i></a>
-                        {% endif %}
+                {% if post.evenementiel %}
+                    <p><i class='fas'>&#xf073;</i> Prévu le {{ post.date_evenement }}</p>
+                {% endif %}
+                <small style="color: grey">Date de création : {{ post.date_creation }}</small>
 
 
-                    </td>
-                </tr>
+                <div style="font-weight: bold">
+                    {% if post.lu == True %}
+                        Lu
+                    {% else %}
+                        Non lu
+                    {% endif %}
+                </div>
+
+                {% if request.user in post.likes.all %}
+                    <a href={% url 'post_like' com.id post.id %} data-toggle="tooltip" title="Like">
+                        <i class="fa fa-thumbs-up" style='font-size:18px'></i></a>
+                {% else %}
+                    <a href={% url 'post_like' com.id post.id %} data-toggle="tooltip" title="Like">
+                        <i class="fa fa-thumbs-up" style='font-size:18px; color:grey'></i></a>
+                {% endif %}
+
+                {% if request.user in post.lecteurs.all %}
+                    <a href={% url 'post_read' com.id post.id %} data-toggle="tooltip" title="Like">
+                        <i class="fa fa-check-square" style='font-size:18px'></i></a>
+                {% else %}
+                    <a href={% url 'post_read' com.id post.id %} data-toggle="tooltip" title="Like">
+                        <i class="fa fa-check-square" style='font-size:18px; color:grey'></i></a>
+                {% endif %}
+
+
+            </td>
+            </tr>
             {% endfor %}
             </tbody>
         </table>

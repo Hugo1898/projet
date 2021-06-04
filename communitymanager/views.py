@@ -27,6 +27,12 @@ def communautes(request):
     all_managers = []
     for com in communities:
         all_managers += com.managers.all()
+
+    # Affichage nbre posts dans la communauté
+    count_posts = {}
+    for com in communities:
+        count_posts[com.id] = Post.objects.filter(communaute=com).count()
+
     return render(request, 'communitymanager/voir_communautes.html', locals())
 
 
@@ -134,6 +140,9 @@ def communaute(request, com_id, degre=0, event=0):
     if request.user in com.managers.all():
         com.user_is_manager = True
 
+    priorites = Priorite.objects.all().order_by("degre")
+
+
     return render(request, 'communitymanager/voir_posts.html', locals())
 
 
@@ -141,6 +150,10 @@ def communaute(request, com_id, degre=0, event=0):
 def post(request, post_id):
     """Affichage d'un post et de ses commentaires"""
     post = get_object_or_404(Post, pk=post_id)
+    if (request.user in post.lecteurs.all()) is False:
+        post.lecteurs.add(request.user)
+        post.save()
+
 
     # Si la communauté est suspendue et que l'user n'est pas superuser, il ne peut pas y accéder
     if post.communaute.suspended == 2 and not request.user.is_superuser:
@@ -187,7 +200,7 @@ def post_like(request, post_id, com_id):
 
     if com_id != 0:
         com = get_object_or_404(Communaute, id=com_id)
-        return redirect('communaute', com.id, 0, 0)
+        return redirect('communaute_filtered', com.id, 0, 0)
     else:
         return redirect('news_feed')
 
@@ -205,7 +218,7 @@ def post_read(request, post_id, com_id):
 
     if com_id != 0:
         com = get_object_or_404(Communaute, id=com_id)
-        return redirect('communaute', com.id, 0, 0)
+        return redirect('communaute_filtered', com.id, 0, 0)
     else:
         return redirect('news_feed')
 
