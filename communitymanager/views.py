@@ -55,6 +55,7 @@ def communaute(request, com_id, degre=0, event=0):
     if com.suspended == 2 and not request.user.is_superuser:
         return redirect("communautes")
 
+
     if request.user in com.managers.all() or request.user.is_superuser:
         if (event==1):
             posts = Post.objects.filter(communaute=com_id).\
@@ -65,6 +66,7 @@ def communaute(request, com_id, degre=0, event=0):
             posts = Post.objects.filter(communaute=com_id).\
                 filter(Q(avertissement=True) | Q(sticky=True) | Q(priorite__degre__gte=degre)).\
                 order_by('-avertissement', '-sticky', '-date_creation')
+
 
     else:
         if (event == 1):
@@ -91,6 +93,7 @@ def communaute(request, com_id, degre=0, event=0):
             post.lu = True
             post.save()
 
+
     #Décompte des posts lus par l'utilisateur pour affichage
 
     unread_posts = 0
@@ -102,6 +105,7 @@ def communaute(request, com_id, degre=0, event=0):
 
     #Filtrage de l'affichage des posts selon leur priorité et leur statut d'évènement ou non ; fonctionnalité disponible si l'utilisateur est abonné  :
 
+
     if request.user in com.abonnes.all():
 
         priorite_form = PrioriteForm(request.POST or None)
@@ -112,14 +116,18 @@ def communaute(request, com_id, degre=0, event=0):
                 priorite = get_object_or_404(Priorite, label=label).degre
             évènement = priorite_form.cleaned_data['évènement']
             if évènement is True and 'priorite' in locals():
+
                 return redirect('communaute_filtered', com_id, priorite, 1)
+
             elif évènement is False and 'priorite' in locals():
                 return redirect('communaute_filtered', com_id, priorite, 0)
             elif évènement is True:
                 return redirect('communaute_filtered', com_id, 0, 1)
             else:
 
+
                 return redirect('communaute_filtered', com_id, 0, 0)
+
 
     # Pour vérifier si l'user est un manager
     com.user_is_manager = False
@@ -484,7 +492,8 @@ def advanced_search(request):
             in_posts = form.cleaned_data['in_posts']
             in_communities = form.cleaned_data['in_communities']
             in_authors = form.cleaned_data['in_authors']
-            event_date = form.cleaned_data['event_date']
+            event_date_start = form.cleaned_data['event_date_start']
+            event_date_end = form.cleaned_data['event_date_end']
             subscribed_only = form.cleaned_data['subscribed_only']
             if in_communities:
                 communities = Communaute.objects.filter(Q(nom__contains=content) | Q(description__contains=content))
@@ -519,22 +528,36 @@ def advanced_search(request):
 
             # creation date filters
             if start:
-                start = form.cleaned_data['start']
-                posts = Post.objects.filter(date_creation__gt=start)
-                comments = Commentaire.objects.filter(date_creation__gt=start)
+                communities = Communaute.objects.none()
+                posts = posts.filter(date_creation__gt=start)
+                comments = comments.filter(date_creation__gt=start)
             if end:
-                end = form.cleaned_data['end']
-                posts = Post.objects.filter(post__date_creation__lt=end)
-                comments = Commentaire.objects.filter(date_creation__lt=end)
-            if event_date:
-                posts = Post.objects.filter(Q(evenementiel=True) & Q(date_evenement__day=event_date))
+                communities = Communaute.objects.none()
+                posts = posts.filter(date_creation__lt=end)
+                comments = comments.filter(date_creation__lt=end)
+            if event_date_start:
+                communities = Communaute.objects.none()
+                posts = posts.filter(Q(evenementiel=True) & Q(date_evenement__gt=event_date_start))
+                comments = comments.none()
+            if event_date_end:
+                communities = Communaute.objects.none()
+                posts = posts.filter(Q(evenementiel=True) & Q(date_evenement__lt=event_date_end))
+                comments = comments.none()
             # search only in subscribed communities
             if subscribed_only:
-                communities = Communaute.objects.filter(abonnes__communautes__abonnes__contains=request.user)
-                posts = Post.objects.filter(communaute__abonnes__post__contains=request.user)
-                comments = Commentaire.objects.filter(communaute__abonnes__post__commentaire__contains=request.user)
+                if in_communities:
+                    communities = communities.filter(abonnes=request.user)
+                if in_posts or in_authors:
+                    posts = posts.filter(communaute__abonnes=request.user)
+                    comments = comments.filter(post__communaute__abonnes=request.user)
+            for com in communities:
+                com.user_is_manager = False
+                if request.user in com.managers.all():
+                    com.user_is_manager = True
+
+            all_managers = []
+            for com in communities:
+                all_managers += com.managers.all()
             return render(request, 'communitymanager/search_result.html', locals())
-        else:
-            print(form.errors)
 
     return render(request, 'communitymanager/search_result.html')

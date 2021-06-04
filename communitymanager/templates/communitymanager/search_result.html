@@ -16,72 +16,243 @@
         <input type="checkbox" id="in_authors" name="in_authors" checked>
         <label for="vehicle3"> Auteurs</label><br>
         <label for="start">A partir du</label><br>
-        <input type="date" id="start" name="Start date"><br>
+        <input type="date" id="start" name="start"><br>
         <label for="end">Jusqu'au</label><br>
-        <input type="date" id="end" name="End date"><br>
-        <label for="event_date">Date de l'événement</label><br>
-        <input type="date" id="event_date" name="Event date"><br>
-        <input type="checkbox" id="subscribed_only" name="Search only in subscribed Communities">
+        <input type="date" id="end" name="end"><br>
+        <label for="event_date_start">L'événement a lieu après le : </label><br>
+        <input type="date" id="event_date_start" name="event_date_start"><br>
+        <label for="event_date_end">L'événement a lieu avant le : </label><br>
+        <input type="date" id="event_date_end" name="event_date_end"><br>
+        <input type="checkbox" id="subscribed_only" name="subscribed_only">
         <label for="subscribed_only">Seulement dans mes abonnements</label><br>
     <input class="btn btn-primary" type="submit" value="Envoyer"/>
     </form>
     <h4>Résultats de la recherche : </h4>
     <p>
     Parmi les communautés
-    {% for com in communities %}
-        <tr>
-        <td>
-        <a href="/communitymanager/communaute/{{ com.id }}/">
-            <h4> {{ com.nom }} </h4> </a>
-        <p> {{ com.description }}</p>
-        </td>
-        </tr>
-    {% endfor %}
-    </p>
+     <br>
+    <div class="card">
+        <table class="table table-striped">
+            {% if request.user.is_superuser or request.user in all_managers %}
+                <thead>
+                <tr>
+                        <th></th>
+                        <th></th>
+                        <th>{% if request.user in all_managers %}<h4>Manager</h4>{% endif %}</th>
+                        <th>{% if request.user.is_superuser %}<h4>Admin</h4>{% endif %}</th>
+                </tr>
+                </thead>
+            {% endif %}
+
+            <tbody>
+            {% for com in communities %}
+                <tr>
+                    <td>
+
+
+                        <h4>
+                            <a href={% url 'communaute' com.id 0 0 %}>
+
+                                {% if  com.suspended == 1 %}
+                                    <div class="text-muted">
+                                    <i class="fa fa-user-lock"></i> Visible
+                                {% elif com.suspended == 2 %}
+                                    <div class="text-muted">
+                                    <i class="fa fa-user-lock"></i> Invisible
+                                {% else %}
+                                    <div>
+                                {% endif %}
+                                {% if not com.open %}
+                                    <i class="fa fa-lock"></i> Closed
+                                {% endif %}
+
+                                {{ com.nom }}
+                                </div>
+                            </a>
+                        </h4>
+                        <p> {{ com.description }}</p>
+                    </td>
+                    <td>
+                        <p>
+
+                            {% if com in abonnement %}
+                                <a href={% url 'abonnement' "desabo" com.id %} data-toggle="tooltip"
+                                   title="Se désabonner">
+                                    <i class='fas fa-star' style='font-size:24px; color:#ffc800'></i>
+                                </a>
+                            {% else %}
+                                <a href={% url 'abonnement' "abo" com.id %} data-toggle="tooltip" title="S'abonner">
+                                    <i class='fas fa-star' style='font-size:24px; color:grey'></i>
+                                </a>
+                            {% endif %}
+                        </p>
+                    </td>
+
+                    <td>
+                        <p>
+                            <!--Commandes pour managers-->
+                            {% if com.user_is_manager %}
+                                &nbsp &nbsp
+                                <a href={% url 'modif_communaute' com.id %}data-toggle="tooltip"
+                                   title="Modifier la communauté">
+                                    <i class="fa fa-pencil-square-o"></i></a>
+                                &nbsp &nbsp
+                                <!-- Pour qu'un manager ferme ou ouvre une communaute-->
+                                <a href={% url 'open_close_communaute' com.id %} data-toggle="tooltip"
+                                   title="Cliquez pour 'open' ou 'close' la communauté en tant que manager">
+                                    {% if com.open %}
+                                        <i class="fa fa-lock"></i> Close</a>
+                                    {% else %}
+                                        <i class="fa fa-lock-open"></i> Open</a>
+                                    {% endif %}
+                                &nbsp &nbsp
+                                <a href={% url 'delete_communaute' com.id %} data-toggle="tooltip"
+                                   title="Supprimer la communauté, attention, cette action est irréversible">
+                                    <i class="fa fa-trash"></i></a>
+                                &nbsp &nbsp
+                            {% endif %}
+                        </p>
+                    </td>
+                    <td>
+                        <p>
+                            <!--Commandes pour admin ie superuser-->
+                            {% if request.user.is_superuser %}
+                                {% if not com.suspended %}
+                                    &nbsp &nbsp
+                                    <!-- Pour suspendre la communauté de manière visible-->
+                                    <a href={% url 'suspend_communaute' com.id 1 %}>
+                                        <i class="fa fa-user-lock"></i> Lock Visible</a>
+                                    &nbsp &nbsp
+                                    <!-- Pour suspendre la communauté de manière invisible-->
+                                    <a href={% url 'suspend_communaute' com.id 2 %}>
+                                        <i class="fa fa-user-lock"></i> Lock Invisible</a>
+                                    &nbsp &nbsp
+                                {% elif com.suspended == 1 %}
+                                    &nbsp &nbsp
+                                    <!-- Pour réouvrir la communauté-->
+                                    <a href={% url 'suspend_communaute' com.id 0 %}>
+                                        <i class="fa fa-user-shield"></i> Unlock</a>
+                                    &nbsp &nbsp
+                                    <!-- Pour suspendre la communauté de manière invisible-->
+                                    <a href={% url 'suspend_communaute' com.id 2 %}>
+                                        <i class="fa fa-user-lock"></i> Lock Invisible</a>
+                                    &nbsp &nbsp
+                                {% elif com.suspended == 2 %}
+                                    &nbsp &nbsp
+                                    <!-- Pour réouvrir la communauté-->
+                                    <a href={% url 'suspend_communaute' com.id 0 %}>
+                                        <i class="fa fa-user-shield"></i> Unlock</a>
+                                    &nbsp &nbsp
+                                    <!-- Pour suspendre la communauté de manière visible-->
+                                    <a href={% url 'suspend_communaute' com.id 1 %}>
+                                        <i class="fa fa-user-lock"></i> Lock Visible</a>
+                                    &nbsp &nbsp
+                                {% endif %}
+                            {% endif %}
+                        </p>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
     <p>
     Parmi les posts
     <div class="card">
     <table class="table table-striped">
     <tbody>
     {% for post in posts %}
-        <tr>
-        <td>
-        <a href="/communitymanager/post/{{ post.id }}/"> <h4> {{ post.titre }} </h4> </a>
-        <p> {{ post.description }}</p>
-        </td>
-        <td>
-        <p>
-            <i class="fas fa-circle" style="color: {{ post|get_color:post.priorite }}"></i>
-            &nbsp &nbsp
-            <kbd> {{ post.communaute.nom }} </kbd>
-        </p>
-        {% if user == post.auteur %}
-            <p> Par {{ post.auteur }}
-            &nbsp &nbsp
-            <a href="/communitymanager/modif_post/{{ post.id }}/">
-            <i class="fa fa-pencil-square-o" ></i> </a>
-            &nbsp &nbsp
-            <kbd style="background-color: #b4b0b0">
-            {{ counts|get_item:post.id }}
-            <i class="fas fa-comment"></i>
-            </kbd>
-            </p>
-        {% else %}
-            <p> Par {{ post.auteur }}
-            &nbsp &nbsp
-            <kbd style="background-color: #b4b0b0">
-            {{ counts|get_item:post.id }}
-            <i class="fas fa-comment"></i>
-            </kbd>
-            </p>
-        {% endif %}
-        {% if post.evenementiel %}
-        <p> <i class='fas'>&#xf073;</i> Prévu le {{ post.date_evenement }}</p>
-        {% endif %}
-        <small style="color: grey">Dernière modification : {{ post.date_creation }}</small>
-        </td>
-        </tr>
-    {% endfor %}
+                <tr>
+                    <td>
+                        <h4>
+                            {% if  post.avertissement %}
+                                <div id="avertissement" style="color:red">
+                                <i class="fa fa-exclamation-triangle"></i>
+                            {% endif %}
+                            {% if  post.sticky %}
+                                <div id="sticky" style="color:orange">
+                                <i class="fa fa-bell"></i>
+                            {% endif %}
+                            {% if  not post.visible %}
+                                <i class="fa fa-eye-slash" style="color:grey"></i>
+                                <text style="color:grey">Hidden</text>
+                            {% endif %}
+                            <a href={% url 'post' post.id %}>
+                                {{ post.titre }}</a>
+                            </div>
+                        </h4>
+
+                        <p> {{ post.description }}</p>
+                    </td>
+                    <td>
+                        <p>
+                            <i class="fas fa-circle" style="color: {{ post|get_color:post.priorite }}"></i>
+                            &nbsp &nbsp
+                            <kbd> {{ post.communaute.nom }} </kbd>
+                        </p>
+                        {% if user == post.auteur and not post.communaute.suspended and post.communaute.open and user not in post.communaute.banned.all %}
+                            <p> Par {{ post.auteur }}
+                                &nbsp &nbsp
+                                <a href={% url 'modif_post' post.id %} data-toggle="tooltip" title="Modifier le post">
+                                    <i class="fa fa-pencil-square-o"></i> </a>
+                                &nbsp &nbsp
+                                <kbd style="background-color: #b4b0b0">
+                                    {{ counts|get_item:post.titre }}
+                                    <i class="fas fa-comment"></i>
+                                </kbd>
+                                &nbsp &nbsp
+                                {% else %}
+                            <p> Par {{ post.auteur }}
+                            &nbsp &nbsp
+                            <kbd style="background-color: #b4b0b0">
+                                {{ counts|get_item:post.titre }}
+                                <i class="fas fa-comment"></i>
+                            </kbd>
+                            &nbsp &nbsp
+                        {% endif %}
+                        <!-- Pour masquer ou supprimer un post, il faut être manager.
+                        Seul un Admin peut faire ces actions pour un avertissement -->
+                        <!-- L'opérateur 'and' est prioritaire sur le 'or' -->
+                        {% if com.user_is_manager and not post.avertissement or post.avertissement and request.user.is_superuser %}
+                            {% if  not post.visible %}
+                                <a href={% url 'visibility_post' post.id %} data-toggle="tooltip" title="Afficher le post pour les utilisateurs">
+                                    <i class="fa fa-eye"></i> </a>
+                            {% else %}
+                                <a href={% url 'visibility_post' post.id %} data-toggle="tooltip" title="Masquer le poste pour les utilisateurs">
+                                    <i class="fa fa-eye-slash"></i> </a>
+                            {% endif %}
+                            &nbsp &nbsp
+                            <a href={% url 'delete_post' post.id %} data-toggle="tooltip" title="Supprimer le post, attention, cette action est irréversible">
+                                <i class="fa fa-trash"></i></a>
+                            &nbsp &nbsp
+                        {% endif %}
+                        {% if com.user_is_manager and not post.avertissement %}
+                            {%  if post.sticky %}
+                                <a href={% url 'sticky_modify_post' post.id %} data-toggle="tooltip" title="Unstick le post">
+                                    <i class="fa fa-bell-slash"></i></a>
+                            {% else %}
+                                <a href={% url 'sticky_modify_post' post.id %} data-toggle="tooltip" title="Stick le post">
+                                    <i class="fa fa-bell"></i></a>
+                            {% endif %}
+                            &nbsp &nbsp
+                        {% endif %}
+                        </p>
+
+
+                        {% if post.evenementiel %}
+                            <p><i class='fas'>&#xf073;</i> Prévu le {{ post.date_evenement }}</p>
+                        {% endif %}
+                        <small style="color: grey">Date de création : {{ post.date_creation }}</small>
+                       
+                        {%  if post.lu == True %}
+                            Lu
+                        {% else %}
+                            Non lu
+                        {% endif %}
+
+                    </td>
+                </tr>
+            {% endfor %}
     </tbody>
 </table>
 </div>
@@ -95,7 +266,7 @@
     {% for coment in comments %}
         <tr>
         <td>
-        <p> {{ coment.contenu }}</p>
+            <p> <a href={% url 'post' coment.post.id %}> {{ coment.contenu }}</a></p>
         <p style="font-style: italic; color: grey"> {{ coment.auteur }}, le {{ coment.date_creation }} </p>
         </td>
         </tr>

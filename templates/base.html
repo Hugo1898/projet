@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
           integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -45,13 +46,13 @@
             <a class="nav-link" role="tab" id="com" href={% url 'calendrier' 0 0 1 1 2021 1 1 2022 %}>Calendrier <i class="fas fa-calendar"></i></a>
             </li>
             <li class="nav-item">
-            <a class="nav-link" role="tab" id="post" href={% url 'nouveau_post' %}>Créer un post</a>
+            <a class="nav-link" role="tab" id="post" href={% url 'nouveau_post' %}>Créer un post <i class="fa fa-plus"></i></a>
             </li>
             <li class="nav-item">
-            <a class="nav-link" role="tab" id="com" href={% url 'nouvelle_communaute' %}>Créer un club</a>
+            <a class="nav-link" role="tab" id="com" href={% url 'nouvelle_communaute' %}>Créer un club <i class="fa fa-plus"></i></a>
             </li>
             <li class="nav-item">
-            <a class="nav-link" role="tab" id="search" href="/communitymanager/advanced_search/">Recherche avancée</a>
+                <a class="nav-link" role="tab" id="search" href={% url 'recherche_avancee' %}>Recherche avancée <i class="fa fa-search"></i></a>
             </li>
              <li class="nav-item">
             <a class="nav-link" role="tab" id="logout" href={% url 'logout' %}>
