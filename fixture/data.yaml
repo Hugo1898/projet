@@ -242,7 +242,7 @@
   pk: 1
   fields:
     password: pbkdf2_sha256$120000$XEEXUqBNDAgr$4Irgsk2zdSnGfKjYJMmi+180LsWij2D1on86Q1Oc4vA=
-    last_login: 2021-05-31 09:21:01.045940+00:00
+    last_login: 2021-05-27 06:29:46.360656+00:00
     is_superuser: true
     username: hugom
     first_name: Hugo
@@ -298,6 +298,51 @@
     date_joined: 2021-05-23 18:04:15+00:00
     groups: []
     user_permissions: []
+- model: auth.user
+  pk: 10
+  fields:
+    password: pbkdf2_sha256$120000$NtR25n1ofMkc$XKUrR07htbcdIcDYtLY3hLPbycfnaTRkm3kgq05YDSc=
+    last_login: 2021-06-04 12:07:16.029518+00:00
+    is_superuser: true
+    username: antoine.chauvigne
+    first_name: ''
+    last_name: ''
+    email: antoine.chauvigne@student.isae-supaero.fr
+    is_staff: true
+    is_active: true
+    date_joined: 2021-05-27 08:17:53.705407+00:00
+    groups: []
+    user_permissions: []
+- model: auth.user
+  pk: 11
+  fields:
+    password: pbkdf2_sha256$120000$RCCnzabkc9Hu$ksEqR0L4JSLQfPqKtPmKv1EzSJQwN5dGqW0PnEHJAQc=
+    last_login: 2021-06-02 08:41:39.431543+00:00
+    is_superuser: false
+    username: simple_user
+    first_name: ''
+    last_name: ''
+    email: ''
+    is_staff: false
+    is_active: true
+    date_joined: 2021-05-27 18:04:57.609187+00:00
+    groups: []
+    user_permissions: []
+- model: auth.user
+  pk: 12
+  fields:
+    password: pbkdf2_sha256$120000$ZAo0NgtFmMIp$IfaWJEoM5jpp7eK8CBrGt/UjE2E/qA7IoPHxbIGg0fg=
+    last_login: 2021-06-03 07:39:12.804970+00:00
+    is_superuser: false
+    username: mechant_user
+    first_name: ''
+    last_name: ''
+    email: ''
+    is_staff: false
+    is_active: true
+    date_joined: 2021-05-31 14:47:21.601252+00:00
+    groups: []
+    user_permissions: []
 - model: communitymanager.communaute
   pk: 1
   fields:
@@ -308,8 +353,11 @@
     abonnes:
     - 1
     - 6
+    - 10
+    - 11
     managers:
     - 1
+    banned: []
 - model: communitymanager.communaute
   pk: 2
   fields:
@@ -322,19 +370,70 @@
     - 2
     - 6
     - 9
-    managers: []
+    - 12
+    managers:
+    - 11
+    banned: []
 - model: communitymanager.communaute
   pk: 4
   fields:
     nom: "Les cr\xEApes lovers"
-    description: "Les amoureux des cr\xEApes."
+    description: Les fans de caramel.
     open: true
     suspended: 0
     abonnes:
     - 1
-    - 2
-    - 6
-    managers: []
+    managers:
+    - 1
+    - 10
+    - 12
+    banned: []
+- model: communitymanager.communaute
+  pk: 5
+  fields:
+    nom: L'escalade toujours plus haut
+    description: "Pour les fans de grimpette dans les gorges du Tarn ou dans les Pyr\xE9n\xE9es
+      ! Venez d\xE9couvrir ! Souriez !"
+    open: true
+    suspended: 0
+    abonnes:
+    - 1
+    - 9
+    - 10
+    - 11
+    managers:
+    - 10
+    banned:
+    - 12
+- model: communitymanager.communaute
+  pk: 6
+  fields:
+    nom: A velo toujours plus loin
+    description: Montez en selle !
+    open: true
+    suspended: 0
+    abonnes:
+    - 10
+    - 11
+    - 12
+    managers:
+    - 10
+    - 11
+    banned: []
+- model: communitymanager.communaute
+  pk: 7
+  fields:
+    nom: Les randonneurs
+    description: Enfilez vos chaussures
+    open: true
+    suspended: 0
+    abonnes:
+    - 10
+    managers:
+    - 10
+    - 11
+    banned:
+    - 12
 - model: communitymanager.priorite
   pk: 1
   fields:
@@ -373,6 +472,9 @@
     auteur: 1
     visible: true
     sticky: false
+    avertissement: false
+    lu: false
+    lecteurs: []
 - model: communitymanager.post
   pk: 2
   fields:
@@ -386,19 +488,25 @@
     auteur: 2
     visible: true
     sticky: false
+    avertissement: false
+    lu: false
+    lecteurs: []
 - model: communitymanager.post
   pk: 7
   fields:
     titre: Vive les Poneys
     description: Petit poney !!
-    date_creation: 2021-05-30 18:36:23.513613+00:00
+    date_creation: 2021-05-26 10:28:46.370533+00:00
     communaute: 2
     priorite: 6
-    evenementiel: true
-    date_evenement: 2021-05-30 11:14:00+00:00
+    evenementiel: false
+    date_evenement: 2021-06-23 14:04:08+00:00
     auteur: 1
     visible: true
     sticky: false
+    avertissement: false
+    lu: false
+    lecteurs: []
 - model: communitymanager.post
   pk: 9
   fields:
@@ -413,46 +521,319 @@
     auteur: 9
     visible: true
     sticky: false
+    avertissement: false
+    lu: false
+    lecteurs: []
 - model: communitymanager.post
   pk: 11
   fields:
     titre: La vague
     description: "Pr\xE9parer vous \xE0 surfer !"
-    date_creation: 2021-05-31 08:32:01.106435+00:00
+    date_creation: 2021-05-26 19:03:29.697640+00:00
     communaute: 1
     priorite: 6
     evenementiel: true
-    date_evenement: 2021-06-17 16:43:00+00:00
+    date_evenement: 2021-05-28 16:43:37+00:00
     auteur: 1
     visible: true
     sticky: false
+    avertissement: false
+    lu: false
+    lecteurs: []
 - model: communitymanager.post
-  pk: 15
+  pk: 17
   fields:
-    titre: "Vive les cr\xEApes"
-    description: "Les cr\xEApes c'est la vie !!"
-    date_creation: 2021-05-26 08:01:21.189459+00:00
-    communaute: 4
-    priorite: 1
-    evenementiel: false
-    date_evenement: 2021-05-25 17:41:29+00:00
-    auteur: 1
-    visible: true
-    sticky: false
-- model: communitymanager.post
-  pk: 16
-  fields:
-    titre: "Les cr\xEApes bretonnes"
-    description: "Atelier demain \xE0 midi pour apprendre \xE0 faire des cr\xEApes
-      !!"
-    date_creation: 2021-05-29 17:41:48.327203+00:00
-    communaute: 4
+    titre: "D\xE9couverte escalade"
+    description: "Ceci est une session d'initiation, donc ouverte \xE0 tous !!"
+    date_creation: 2021-05-27 20:43:36.362867+00:00
+    communaute: 5
     priorite: 4
     evenementiel: true
-    date_evenement: 2021-05-30 17:42:24+00:00
-    auteur: 1
+    date_evenement: 2021-06-29 15:00:00+00:00
+    auteur: 10
     visible: true
     sticky: false
+    avertissement: false
+    lu: false
+    lecteurs: []
+- model: communitymanager.post
+  pk: 18
+  fields:
+    titre: Session Pro Gorges du Verdon
+    description: C'est un peu loin mais c'est le feu !
+    date_creation: 2021-05-31 08:25:10.014290+00:00
+    communaute: 5
+    priorite: 5
+    evenementiel: true
+    date_evenement: 2021-06-06 15:00:00+00:00
+    auteur: 11
+    visible: true
+    sticky: false
+    avertissement: false
+    lu: false
+    lecteurs: []
+- model: communitymanager.post
+  pk: 19
+  fields:
+    titre: Evenement pour les boss
+    description: Venez risquer votre vie
+    date_creation: 2021-05-27 19:44:11.403574+00:00
+    communaute: 5
+    priorite: 1
+    evenementiel: false
+    date_evenement: 2021-05-27 18:25:10+00:00
+    auteur: 11
+    visible: true
+    sticky: false
+    avertissement: false
+    lu: false
+    lecteurs: []
+- model: communitymanager.post
+  pk: 20
+  fields:
+    titre: "WE Surf fin ann\xE9e"
+    description: Venez vous amuser avec nous !
+    date_creation: 2021-05-27 18:38:56.785236+00:00
+    communaute: 1
+    priorite: 5
+    evenementiel: false
+    date_evenement: 2021-05-27 18:36:02+00:00
+    auteur: 11
+    visible: true
+    sticky: false
+    avertissement: false
+    lu: false
+    lecteurs: []
+- model: communitymanager.post
+  pk: 21
+  fields:
+    titre: Information importantes pour le budget
+    description: N'oubliez pas de payer votre cotisation
+    date_creation: 2021-06-04 12:08:00.971846+00:00
+    communaute: 5
+    priorite: 4
+    evenementiel: false
+    date_evenement: 2021-05-27 20:08:00+00:00
+    auteur: 10
+    visible: true
+    sticky: true
+    avertissement: false
+    lu: true
+    lecteurs:
+    - 10
+- model: communitymanager.post
+  pk: 22
+  fields:
+    titre: "Informations importantes pour la rentr\xE9e"
+    description: "Vous n'etes pas contraints de venir \xE0 tous les evenements !!"
+    date_creation: 2021-05-31 19:37:58.180124+00:00
+    communaute: 5
+    priorite: 6
+    evenementiel: false
+    date_evenement: 2021-05-27 20:11:00+00:00
+    auteur: 10
+    visible: false
+    sticky: true
+    avertissement: false
+    lu: false
+    lecteurs: []
+- model: communitymanager.post
+  pk: 23
+  fields:
+    titre: "Mat\xE9riel"
+    description: "N'oubliez pas votre corde.\r\nVotre baudrier also"
+    date_creation: 2021-05-31 08:25:05.241314+00:00
+    communaute: 5
+    priorite: 2
+    evenementiel: false
+    date_evenement: 2021-05-27 20:12:05+00:00
+    auteur: 10
+    visible: false
+    sticky: false
+    avertissement: false
+    lu: false
+    lecteurs: []
+- model: communitymanager.post
+  pk: 27
+  fields:
+    titre: "D\xE9couverte du canal"
+    description: "Il parrait que c'est goudronn\xE9"
+    date_creation: 2021-05-31 17:53:19.139341+00:00
+    communaute: 6
+    priorite: 4
+    evenementiel: true
+    date_evenement: 2021-06-30 17:03:10+00:00
+    auteur: 11
+    visible: true
+    sticky: false
+    avertissement: false
+    lu: false
+    lecteurs: []
+- model: communitymanager.post
+  pk: 30
+  fields:
+    titre: "Cette communaut\xE9 risque d'etre ferm\xE9e"
+    description: En effet, vous allez toujours plus haut, toujours plus loin, toujours
+      plus fort, mais surtout toujours plus DANGEREUX !!!
+    date_creation: 2021-05-31 19:39:06.513494+00:00
+    communaute: 5
+    priorite: 5
+    evenementiel: false
+    date_evenement: 2021-05-31 13:25:00+00:00
+    auteur: 10
+    visible: true
+    sticky: false
+    avertissement: true
+    lu: false
+    lecteurs: []
+- model: communitymanager.post
+  pk: 31
+  fields:
+    titre: "Non respect des r\xE8gles"
+    description: "Vous semblez d\xE9passer les limitations de vitesse !!"
+    date_creation: 2021-06-04 12:06:16.366153+00:00
+    communaute: 6
+    priorite: 2
+    evenementiel: false
+    date_evenement: 2021-05-31 14:12:00+00:00
+    auteur: 10
+    visible: true
+    sticky: false
+    avertissement: true
+    lu: true
+    lecteurs:
+    - 10
+- model: communitymanager.post
+  pk: 33
+  fields:
+    titre: "Cette communaut\xE9 est nulle !!!"
+    description: ouhohughoguohug
+    date_creation: 2021-05-31 15:15:25.678994+00:00
+    communaute: 5
+    priorite: 6
+    evenementiel: false
+    date_evenement: 2021-05-31 15:15:00+00:00
+    auteur: 12
+    visible: true
+    sticky: false
+    avertissement: false
+    lu: false
+    lecteurs: []
+- model: communitymanager.post
+  pk: 34
+  fields:
+    titre: "Magnifique balade dans les C\xE9vennes"
+    description: "Gonflez vous bien!\r\nEt prenez de l'eau"
+    date_creation: 2021-06-03 09:45:58.831027+00:00
+    communaute: 6
+    priorite: 4
+    evenementiel: true
+    date_evenement: 2021-06-19 07:00:00+00:00
+    auteur: 10
+    visible: false
+    sticky: true
+    avertissement: false
+    lu: false
+    lecteurs: []
+- model: communitymanager.post
+  pk: 37
+  fields:
+    titre: Tous en selle !
+    description: "Accrochez vos d\xE9railleurs !"
+    date_creation: 2021-06-03 09:14:27.584465+00:00
+    communaute: 6
+    priorite: 4
+    evenementiel: false
+    date_evenement: 2021-05-31 17:47:00+00:00
+    auteur: 10
+    visible: true
+    sticky: true
+    avertissement: false
+    lu: false
+    lecteurs: []
+- model: communitymanager.post
+  pk: 38
+  fields:
+    titre: "Le v\xE9lo c'est vraiment nul"
+    description: "Ca fait mal au post\xE9rieur !"
+    date_creation: 2021-06-04 12:06:16.374877+00:00
+    communaute: 6
+    priorite: 5
+    evenementiel: true
+    date_evenement: 2021-05-31 17:54:00+00:00
+    auteur: 12
+    visible: false
+    sticky: false
+    avertissement: false
+    lu: true
+    lecteurs:
+    - 10
+- model: communitymanager.post
+  pk: 41
+  fields:
+    titre: "V\xE9lo nul pourri"
+    description: "J'\xE9cris un message vulgaire. Ce post sera sans doute cach\xE9
+      par un manager, mais je m'exprime !"
+    date_creation: 2021-06-04 12:06:16.383544+00:00
+    communaute: 6
+    priorite: 5
+    evenementiel: true
+    date_evenement: 2021-05-05 22:00:00+00:00
+    auteur: 12
+    visible: true
+    sticky: false
+    avertissement: false
+    lu: true
+    lecteurs:
+    - 10
+- model: communitymanager.post
+  pk: 45
+  fields:
+    titre: Pique nique
+    description: Venez nombreux
+    date_creation: 2021-06-01 08:01:26.943403+00:00
+    communaute: 5
+    priorite: 2
+    evenementiel: true
+    date_evenement: 2021-06-16 22:00:00+00:00
+    auteur: 10
+    visible: true
+    sticky: false
+    avertissement: false
+    lu: false
+    lecteurs: []
+- model: communitymanager.post
+  pk: 50
+  fields:
+    titre: Grimpons
+    description: Prenez vos cordes
+    date_creation: 2021-06-02 09:04:06.610388+00:00
+    communaute: 5
+    priorite: 4
+    evenementiel: true
+    date_evenement: 2021-06-23 22:00:00+00:00
+    auteur: 10
+    visible: true
+    sticky: false
+    avertissement: false
+    lu: false
+    lecteurs: []
+- model: communitymanager.post
+  pk: 51
+  fields:
+    titre: Le caramel
+    description: "Apprenez \xE0 faire du caramel au beurre sal\xE9."
+    date_creation: 2021-06-02 13:50:03.360217+00:00
+    communaute: 4
+    priorite: 5
+    evenementiel: true
+    date_evenement: 2021-06-25 13:35:00+00:00
+    auteur: 10
+    visible: true
+    sticky: false
+    avertissement: false
+    lu: false
+    lecteurs: []
 - model: communitymanager.commentaire
   pk: 1
   fields:
@@ -502,26 +883,151 @@
     post: 1
     visible: true
 - model: communitymanager.commentaire
-  pk: 9
+  pk: 12
   fields:
-    date_creation: 2021-05-25 17:42:10.743639+00:00
-    contenu: T'as trop raison !!
-    auteur: 1
-    post: 15
+    date_creation: 2021-05-31 13:41:44.050741+00:00
+    contenu: Cela a l'air super chouette !
+    auteur: 11
+    post: 17
     visible: true
 - model: communitymanager.commentaire
-  pk: 10
+  pk: 13
   fields:
-    date_creation: 2021-05-25 17:44:22.619842+00:00
-    contenu: "J'ai h\xE2te d'y \xEAtre !!"
-    auteur: 1
-    post: 16
+    date_creation: 2021-05-27 19:42:57.619879+00:00
+    contenu: "Guillaume tu es invit\xE9"
+    auteur: 11
+    post: 18
     visible: true
 - model: communitymanager.commentaire
-  pk: 11
+  pk: 14
   fields:
-    date_creation: 2021-05-26 07:22:03.337204+00:00
-    contenu: "Ca va \xEAtre trop bon :)"
-    auteur: 1
-    post: 16
+    date_creation: 2021-05-31 08:24:23.079448+00:00
+    contenu: voire un peu chiant
+    auteur: 10
+    post: 17
+    visible: false
+- model: communitymanager.commentaire
+  pk: 15
+  fields:
+    date_creation: 2021-05-31 13:41:42.872115+00:00
+    contenu: Qu'en pensez-vous les autres ?
+    auteur: 10
+    post: 17
+    visible: true
+- model: communitymanager.commentaire
+  pk: 16
+  fields:
+    date_creation: 2021-05-30 17:03:52.592278+00:00
+    contenu: "M\xEAme asphalt\xE9"
+    auteur: 11
+    post: 27
+    visible: true
+- model: communitymanager.commentaire
+  pk: 17
+  fields:
+    date_creation: 2021-05-30 18:02:44.910500+00:00
+    contenu: "on a juste pas pr\xE9cis\xE9 jusqu'o\xF9..."
+    auteur: 10
+    post: 27
+    visible: true
+- model: communitymanager.commentaire
+  pk: 18
+  fields:
+    date_creation: 2021-05-30 18:21:21.768795+00:00
+    contenu: Ca a l'air sympa
+    auteur: 11
+    post: 27
+    visible: true
+- model: communitymanager.commentaire
+  pk: 19
+  fields:
+    date_creation: 2021-05-31 15:42:02.399665+00:00
+    contenu: "Partez aussi \xE0 plusieurs"
+    auteur: 10
+    post: 34
+    visible: true
+- model: communitymanager.commentaire
+  pk: 20
+  fields:
+    date_creation: 2021-06-01 06:28:05.293651+00:00
+    contenu: Je ne suis pas d'accord
+    auteur: 10
+    post: 38
+    visible: true
+- model: communitymanager.commentaire
+  pk: 21
+  fields:
+    date_creation: 2021-06-01 06:28:03.424495+00:00
+    contenu: Ce genre de post devrait etre interdit
+    auteur: 10
+    post: 38
+    visible: true
+- model: communitymanager.commentaire
+  pk: 22
+  fields:
+    date_creation: 2021-06-01 06:27:59.473222+00:00
+    contenu: "Tout \xE0 fait, @mechant_user, vous allez \xEAtre banni !"
+    auteur: 11
+    post: 38
+    visible: false
+- model: communitymanager.commentaire
+  pk: 23
+  fields:
+    date_creation: 2021-06-01 08:01:31.252195+00:00
+    contenu: Miam
+    auteur: 10
+    post: 45
+    visible: true
+- model: communitymanager.commentaire
+  pk: 24
+  fields:
+    date_creation: 2021-06-02 08:35:22.274427+00:00
+    contenu: "On va se r\xE9galer"
+    auteur: 10
+    post: 45
+    visible: true
+- model: communitymanager.commentaire
+  pk: 25
+  fields:
+    date_creation: 2021-06-02 09:04:15.163839+00:00
+    contenu: Chouette
+    auteur: 10
+    post: 50
+    visible: true
+- model: communitymanager.commentaire
+  pk: 26
+  fields:
+    date_creation: 2021-06-02 09:04:20.274351+00:00
+    contenu: Trop bien
+    auteur: 10
+    post: 50
+    visible: true
+- model: communitymanager.commentaire
+  pk: 27
+  fields:
+    date_creation: 2021-06-02 13:36:23.924167+00:00
+    contenu: Miam
+    auteur: 10
+    post: 51
+    visible: true
+- model: communitymanager.commentaire
+  pk: 28
+  fields:
+    date_creation: 2021-06-02 13:39:26.445876+00:00
+    contenu: "Est-ce compliqu\xE9 ?"
+    auteur: 10
+    post: 51
+    visible: true
+- model: communitymanager.commentaire
+  pk: 29
+  fields:
+    date_creation: 2021-06-02 13:49:17.890577+00:00
+    contenu: "Ce commentaire est certes tr\xE8s long mais je pense qu'il a son importance.
+      Il n'en demeure pas moins que les crepes bretonnes ne contiennent absolument
+      jamais de sucre. Ne tentez pas de croire que pour d\xE9guster vos mets vous
+      avez besoin de sucrer la pate. D'une part, vous aurez des crepes collantes \xE0
+      votre po\xEAle et d'autre part, vous n'appr\xE9cierez que d'autant moins votre
+      d\xE9licieux caramel au beurre sal\xE9 maison ! Bien \xE0 vous"
+    auteur: 10
+    post: 51
     visible: true

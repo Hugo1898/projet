@@ -45,7 +45,7 @@ def abonnement(request, action, com_id):
 
 
 @login_required
-def communaute(request, com_id, degre, event):
+def communaute(request, com_id, degre=0, event=0):
     """Page d'affichage des détails d'une communaute
             Permet aux community managers de suivre l'Etat des posts de leur communauté"""
     com = get_object_or_404(Communaute, pk=com_id)
@@ -55,18 +55,28 @@ def communaute(request, com_id, degre, event):
     if com.suspended == 2 and not request.user.is_superuser:
         return redirect("communautes")
 
-    if request.user in com.managers.all() and event == 1:
-        posts = Post.objects.filter(communaute=com_id, priorite__degre__gte=degre, evenementiel=True).order_by(
-            '-avertissement', '-sticky', '-date_creation')
-    elif request.user in com.managers.all() and event == 0:
-        posts = Post.objects.filter(communaute=com_id, visible=True, priorite__degre__gte=degre). \
-            order_by('-avertissement', '-sticky', '-date_creation')
-    elif event == 1:
-        posts = Post.objects.filter(communaute=com_id, visible=True, priorite__degre__gte=degre, evenementiel=True).\
-            order_by('-avertissement', '-sticky', '-date_creation')
+    if request.user in com.managers.all() or request.user.is_superuser:
+        if (event==1):
+            posts = Post.objects.filter(communaute=com_id).\
+                filter(Q(avertissement=True) | Q(sticky=True) | (Q(priorite__degre__gte=degre) & Q(evenementiel=True))).\
+                order_by('-avertissement', '-sticky', '-date_creation')
+
+        else:
+            posts = Post.objects.filter(communaute=com_id).\
+                filter(Q(avertissement=True) | Q(sticky=True) | Q(priorite__degre__gte=degre)).\
+                order_by('-avertissement', '-sticky', '-date_creation')
+
     else:
-        posts = Post.objects.filter(communaute=com_id, visible=True, priorite__degre__gte=degre). \
-            order_by('-avertissement', '-sticky', '-date_creation')
+        if (event == 1):
+            posts = Post.objects.filter(communaute=com_id, visible=True).\
+                filter(Q(avertissement=True) | Q(sticky=True) | (Q(priorite__degre__gte=degre) & Q(evenementiel=True))).\
+                order_by('-avertissement', '-sticky', '-date_creation')
+        else:
+            posts = Post.objects.filter(communaute=com_id, visible=True).\
+                filter(Q(avertissement=True) | Q(sticky=True) | Q(priorite__degre__gte=degre)).\
+                order_by('-avertissement', '-sticky', '-date_creation')
+
+
     counts = {}
     for post in posts:
         counts[post.id] = Commentaire.objects.filter(post=post).count()
@@ -94,13 +104,13 @@ def communaute(request, com_id, degre, event):
                 priorite = get_object_or_404(Priorite, label=label).degre
             évènement = priorite_form.cleaned_data['évènement']
             if évènement is True and 'priorite' in locals():
-                return redirect('communaute', com_id, priorite, 1)
+                return redirect('communaute_filtered', com_id, priorite, 1)
             elif évènement is False and 'priorite' in locals():
-                return redirect('communaute', com_id, priorite, 0)
+                return redirect('communaute_filtered', com_id, priorite, 0)
             elif évènement is True:
-                return redirect('communaute', com_id, 0, 1)
+                return redirect('communaute_filtered', com_id, 0, 1)
             else:
-                return redirect('communaute', com_id, 0, 0)
+                return redirect('communaute_filtered', com_id, 0, 0)
 
     # Pour vérifier si l'user est un manager
     com.user_is_manager = False

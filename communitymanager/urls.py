@@ -5,7 +5,7 @@ urlpatterns = [
     # Projet individuel - Hugo
     path('communautes/', views.communautes, name='communautes'),
     path('communautes/<str:action>/<int:com_id>/', views.abonnement, name='abonnement'),
-    path('communaute/<int:com_id>/<int:degre>/<int:event>/', views.communaute, name='communaute'),
+    path('communaute/<int:com_id>/', views.communaute, name='communaute'),
     path('post/<int:post_id>/', views.post, name='post'),
     path('nouveau_post/', views.nouveau_post, name='nouveau_post'),
     path('nouveau_post/<int:special_post>/<int:com_id>/', views.nouveau_post, name='nouveau_post_com'),
@@ -13,6 +13,9 @@ urlpatterns = [
     path('news_feed/', views.news_feed, name='news_feed'),
     path('nouvelle_communaute/', views.nouvelle_communaute, name='nouvelle_communaute'),
     path('', views.communautes, name='home'),
+
+    #Extension 1 - Come
+    path('communaute/<int:com_id>/<int:degre>/<int:event>/', views.communaute, name='communaute_filtered'),
 
     #Extention 2 - Antoine
 

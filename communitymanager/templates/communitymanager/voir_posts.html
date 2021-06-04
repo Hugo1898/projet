@@ -8,15 +8,7 @@
 {% endblock %}
 
 {% block content %}
-
-    <form action="" method="post">
-        {% csrf_token %}
-        {{ priorite_form.as_p }}
-        <input type="submit" value="Submit"/>
-    </form>
-
     <h2>{{ com.nom }}</h2>
-
 
     <!-- Sticky Post pour les Community Managers si la communauté n'est pas suspendue par l'admin
     et est bien ouverte par le community manager -->
@@ -62,8 +54,20 @@
         </button>
     {% endif %}
 
+    <!-- Filtres des communautés affichées -->
+    <h3>Filtres </h3>
+    <form method="POST" action="" style="margin-left: 0px !important; margin-top: 5px">
+                {% csrf_token %}
+                <text> Priorité minimale ? </text>
+                        {{ priorite_form.label }}
+                <text> Événement ? </text>
+                        {{ priorite_form.évènement }}
+                <input class="btn btn-primary" type="submit" value="Filtrer"/>
+    </form>
     <br>
     <br>
+
+    <!-- Affichage de la table avec les communautés et actions possibles -->
     <div class="card">
         <table class="table table-striped">
             <tbody>
@@ -76,6 +80,7 @@
                 <tr>
                 {% endif %}
                     <td>
+                    <div >
                         <h4>
                             {% if  post.avertissement %}
                                 <div id="avertissement" style="color:red">
@@ -91,10 +96,10 @@
                             {% endif %}
                             <a href={% url 'post' post.id %}>
                                 {{ post.titre }}</a>
-                            </div>
                         </h4>
-
                         <p> {{ post.description }}</p>
+
+                    </div>
                     </td>
                     <td>
                         <p>
@@ -127,10 +132,10 @@
                         <!-- L'opérateur 'and' est prioritaire sur le 'or' -->
                         {% if com.user_is_manager and not post.avertissement or post.avertissement and request.user.is_superuser %}
                             {% if  not post.visible %}
-                                <a href={% url 'visibility_post' post.id %} data-toggle="tooltip" title="Afficher le post pour les utilisateurs">
+                                <a href="{% url 'visibility_post' post.id %}" data-toggle="tooltip" title="Afficher le post pour les utilisateurs">
                                     <i class="fa fa-eye"></i> </a>
                             {% else %}
-                                <a href={% url 'visibility_post' post.id %} data-toggle="tooltip" title="Masquer le poste pour les utilisateurs">
+                                <a href="{% url 'visibility_post' post.id %}" data-toggle="tooltip" title="Masquer le poste pour les utilisateurs">
                                     <i class="fa fa-eye-slash"></i> </a>
                             {% endif %}
                             &nbsp &nbsp
@@ -140,10 +145,10 @@
                         {% endif %}
                         {% if com.user_is_manager and not post.avertissement %}
                             {%  if post.sticky %}
-                                <a href={% url 'sticky_modify_post' post.id %} data-toggle="tooltip" title="Unstick le post">
+                                <a href="{% url 'sticky_modify_post' post.id %}" data-toggle="tooltip" title="Unstick le post">
                                     <i class="fa fa-bell-slash"></i></a>
                             {% else %}
-                                <a href={% url 'sticky_modify_post' post.id %} data-toggle="tooltip" title="Stick le post">
+                                <a href="{% url 'sticky_modify_post' post.id %}" data-toggle="tooltip" title="Stick le post">
                                     <i class="fa fa-bell"></i></a>
                             {% endif %}
                             &nbsp &nbsp
