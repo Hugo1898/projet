@@ -235,15 +235,28 @@ def nouveau_post(request, special_post=0, com_id=0):
         post.auteur = request.user
 
         post.visible = True
-        if (special_post == 1) and request.user in post.communaute.managers.all():
-            post.sticky = True
-        if (special_post == 2) and request.user.is_superuser:
-            post.avertissement = True
 
+        # Les admin(=superuser) et les managers peuvent créer des posts dans des communautés fermées (open=0)
+        # Seuls les admin(=superuser) peuvent créer des posts dans des communautés suspended (suspended!=0)
+        if (request.user in post.communaute.managers.all()) or request.user.is_superuser:
+            if (special_post == 1) and request.user in post.communaute.managers.all():
+                post.sticky = True
+            if (special_post == 2) and request.user.is_superuser:
+                post.avertissement = True
+            if not post.communaute.suspended or (post.communaute.suspended and request.user.is_superuser):
+                post.save()
+                return redirect('post', post_id=post.id)
+            else:
+                return redirect('communaute', com_id=post.communaute.id)
 
-        if post.communaute.open:
-            post.save()
-            return redirect('post', post_id=post.id)
+        if post.communaute.open and not post.communaute.suspended:
+            if request.user not in post.communaute.banned.all():
+                post.save()
+                return redirect('post', post_id=post.id)
+            else:
+                return redirect('communaute', com_id=post.communaute.id)
+        else:
+            return redirect('communaute', com_id=post.communaute.id)
 
     # Choix de communautés dans lesquelles l'user peut créer un post,
     # Elle doit etre ouverte, non suspendue et il ne doit pas en être banni

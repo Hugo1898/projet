@@ -18,14 +18,25 @@
 
     <!-- Sticky Post pour les Community Managers si la communauté n'est pas suspendue par l'admin
     et est bien ouverte par le community manager -->
+    {% if not com.suspended %}
+        {% if com.open or com.user_is_manager or request.user.is_superuser %}
     <button type="button" class="btn btn-light">
         <a href={% url 'nouveau_post_com' 0 com.id %}>
             <h4> New Post </h4>
         </a>
     </button>
+    {% else %}
+    <h4 style="font-weight:bold"> Désolé, cette communauté est fermée par un Community Manager, les
+                    utilisateurs ne peuvent plus créer de Post !</h4>
+    {% endif %}
+    {% else %}
+            <h4 style="font-weight:bold"> Désolé, cette communauté est suspendue par un Administrateur, les
+                    utilsateurs ne peuvent plus créer de Post !</h4>
+    {% endif %}
+
+
     {% if com.user_is_manager %}
         {% if not com.suspended %}
-            {% if com.open %}
                 <button type="button" class="btn btn-light">
                     <div id="sticky" style="color:orange">
                         <a href={% url 'nouveau_special_post' 1 com.id %}>
@@ -35,15 +46,6 @@
                         </a>
                     </div>
                 </button>
-            {% else %}
-                <h4 style="font-weight:bold"> Désolé, cette communauté est fermée par un Community Manager, vous ne
-                    pouvez plus ajouter de Sticky
-                    Post !</h4>
-            {% endif %}
-        {% else %}
-            <h4 style="font-weight:bold"> Désolé, cette communauté est suspendue par un Administrateur, vous ne pouvez
-                plus ajouter de Sticky
-                Post !</h4>
         {% endif %}
     {% endif %}
     <!-- Avertissement Post pour les Administrateurs=Superuser -->
@@ -141,6 +143,11 @@
                         &nbsp &nbsp
                         {% else %}
                     <p> Par {{ post.auteur }}
+                    &nbsp &nbsp
+                    <kbd style="background-color: #b4b0b0">
+                        {{ counts|get_item:post.id }}
+                        <i class="fas fa-comment"></i>
+                    </kbd>
                     &nbsp &nbsp
                     <kbd style="background-color: #b4b0b0">
                         {{ post.number_of_likes }}
