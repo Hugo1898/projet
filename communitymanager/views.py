@@ -186,7 +186,7 @@ def post(request, post_id):
 
     return render(request, 'communitymanager/voir_commentaires.html', locals())
 
-
+@login_required
 def post_like(request, post_id, com_id):
     post = get_object_or_404(Post, id=post_id)
 
